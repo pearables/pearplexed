@@ -1,0 +1,2274 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Standard Model</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-light: #f3f4f6;
+            --bg-dark: #111827;
+            --text-light: #1f2937;
+            --text-dark: #f9fafb;
+            --card-bg-dark: rgba(31, 41, 55, 0.7);
+            --card-bg-light: #ffffff;
+            --section-bg-dark: rgba(17, 24, 39, 0.7);
+            --section-bg-light: #e5e7eb;
+            --quark-color: #ec4899;
+            --lepton-color: #22c55e;
+            --gauge-boson-color: #3b82f6;
+            --scalar-boson-color: #facc15;
+            --tensor-boson-color: #6b7280;
+            --fermion-color: #a855f7;
+
+            /* Interaction Colors */
+            --strong-color: #3b82f6;
+            --em-color: #f59e0b;
+            --weak-color: #f97316;
+            --higgs-color: #d946ef;
+            --gravity-color: #84cc16;
+
+            /* Generation Colors */
+            --gen1-color: #f87171;
+            --gen2-color: #fbbf24;
+            --gen3-color: #a78bfa;
+
+            /* Property Colors */
+            --mass-color: #fca5a5;
+            --charge-color: #93c5fd;
+            --spin-color: #a7f3d0;
+            --y-color: #d8b4fe;
+            --t3-color: #6ee7b7;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .dark body {
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-light);
+        }
+
+        #particle-container-wrapper {
+            min-height: 800px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #particle-container.view-grid {
+            display: grid;
+            grid-template-columns: auto repeat(6, minmax(0, 1fr));
+            grid-template-rows: auto auto repeat(4, minmax(0, 1fr)) auto;
+            gap: 0.75rem;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        #particle-container.view-circle {
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding-top: 2rem;
+        }
+
+        .grid-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            padding: 0.5rem;
+            text-transform: uppercase;
+            text-align: center;
+            border-width: 2px;
+            border-style: solid;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, filter 0.3s, border-color 0.3s;
+        }
+
+        .grid-label:hover {
+            transform: scale(1.05);
+            z-index: 10;
+        }
+
+        .grid-label-side {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+        }
+
+        .grid-label-side:hover {
+            transform: rotate(180deg) scale(1.05);
+        }
+
+        .particle-card {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s, opacity 0.3s, filter 0.3s, background-color 0.3s;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+            min-height: 160px;
+            position: relative;
+            overflow: hidden;
+            background-color: var(--card-bg-dark);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-radius: 0.5rem;
+            border-width: 2px;
+            border-style: solid;
+        }
+
+        html:not(.dark) .particle-card {
+            background-color: var(--card-bg-light);
+        }
+
+        html:not(.dark) .particle-card .relative.z-10 {
+            color: var(--text-light);
+        }
+
+        html:not(.dark) .particle-card .quantum-numbers span {
+            color: #555 !important;
+        }
+
+        .is-antimatter .particle-card,
+        .is-antimatter .grid-label,
+        .is-antimatter .circle-view-svg,
+        .is-antimatter .modal-content h2,
+        .is-antimatter .circle-category-button,
+        .is-antimatter .legend-item .legend-square,
+        .is-antimatter .particle-dot {
+            filter: hue-rotate(180deg);
+        }
+
+        .is-antimatter .particle-card .relative.z-10,
+        .is-antimatter .grid-label,
+        .is-antimatter .circle-view-svg .particle-label,
+        .is-antimatter .circle-view-svg .category-label,
+        .is-antimatter .modal-content h2,
+        .is-antimatter .circle-category-button span,
+        .is-antimatter .legend-item .legend-text {
+            filter: hue-rotate(-180deg);
+        }
+
+        .boson-card-bg::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 150%;
+            height: 150%;
+            background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 60%);
+            animation: pulse 4s infinite ease-in-out;
+            z-index: 1;
+        }
+
+        html:not(.dark) .boson-card-bg::before {
+            background-image: radial-gradient(circle, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0) 60%);
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.3;
+            }
+            50% {
+                opacity: 0.7;
+            }
+            100% {
+                opacity: 0.3;
+            }
+        }
+
+        .quark-card {
+            border-color: var(--quark-color);
+        }
+
+        .lepton-card {
+            border-color: var(--lepton-color);
+        }
+
+        .gauge-boson-card {
+            border-color: var(--gauge-boson-color);
+        }
+
+        .scalar-boson-card {
+            border-color: var(--scalar-boson-color);
+        }
+
+        .tensor-boson-card {
+            border-color: var(--tensor-boson-color);
+        }
+
+        .particle-card:hover {
+            transform: scale(1.05);
+            z-index: 10;
+        }
+
+        .particle-card.dimmed,
+        .circle-view-svg .dimmed {
+            opacity: 0.3;
+            transform: scale(0.98);
+        }
+
+        .particle-card.highlight,
+        .circle-view-svg .highlight {
+            opacity: 1;
+            transform: scale(1.02);
+        }
+
+        .highlight.highlight-strong {
+            box-shadow: 0 0 15px 3px var(--strong-color);
+        }
+
+        .highlight.highlight-em {
+            box-shadow: 0 0 15px 3px var(--em-color);
+        }
+
+        .highlight.highlight-weak {
+            box-shadow: 0 0 15px 3px var(--weak-color);
+        }
+
+        .highlight.highlight-higgs {
+            box-shadow: 0 0 15px 3px var(--higgs-color);
+        }
+
+        .highlight.highlight-gravity {
+            box-shadow: 0 0 15px 3px var(--gravity-color);
+        }
+
+        .highlight.highlight-gen1 {
+            box-shadow: 0 0 15px 3px var(--gen1-color);
+        }
+
+        .highlight.highlight-gen2 {
+            box-shadow: 0 0 15px 3px var(--gen2-color);
+        }
+
+        .highlight.highlight-gen3 {
+            box-shadow: 0 0 15px 3px var(--gen3-color);
+        }
+
+        .highlight.highlight-fermion {
+            box-shadow: 0 0 15px 3px var(--fermion-color);
+        }
+
+        .highlight.highlight-boson {
+            box-shadow: 0 0 15px 3px #2563eb;
+        }
+
+        .highlight.highlight-quark {
+            box-shadow: 0 0 15px 3px var(--quark-color);
+        }
+
+        .highlight.highlight-lepton {
+            box-shadow: 0 0 15px 3px var(--lepton-color);
+        }
+
+        .highlight.highlight-gauge {
+            box-shadow: 0 0 15px 3px var(--gauge-boson-color);
+        }
+
+        .highlight.highlight-scalar {
+            box-shadow: 0 0 15px 3px var(--scalar-boson-color);
+        }
+
+        .highlight.highlight-tensor {
+            box-shadow: 0 0 15px 3px var(--tensor-boson-color);
+        }
+
+        .card-info {
+            font-size: 0.6rem;
+            line-height: 1.3;
+        }
+
+        .quantum-numbers {
+            position: absolute;
+            top: 0.25rem;
+            right: 0.25rem;
+            font-size: 0.6rem;
+            line-height: 1.1;
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .interaction-squares {
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 2px;
+        }
+
+        .interaction-square {
+            width: 8px;
+            height: 8px;
+            transition: transform 0.2s;
+        }
+
+        .interaction-square:hover {
+            transform: scale(1.5);
+        }
+
+        .square-strong {
+            background-color: var(--strong-color);
+        }
+
+        .square-em {
+            background-color: var(--em-color);
+        }
+
+        .square-weak {
+            background-color: var(--weak-color);
+        }
+
+        .square-higgs {
+            background-color: var(--higgs-color);
+        }
+
+        .square-gravity {
+            background-color: var(--gravity-color);
+        }
+
+        /* --- LEGEND STYLES --- */
+        .legends-wrapper {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto 1rem auto;
+            gap: 1rem;
+            align-items: flex-start;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .legend-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            flex: 1 1 45%;
+        }
+
+        .legend-container h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        html.dark .legend-container h3 {
+            color: #d1d5db;
+        }
+
+        html:not(.dark) .legend-container h3 {
+            color: #374151;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 9999px;
+            background-color: #374151;
+            border: 1px solid #4b5563;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        html:not(.dark) .legend-item {
+            background-color: #e5e7eb;
+            border-color: #d1d5db;
+        }
+
+        html:not(.dark) .legend-text {
+            color: var(--text-light);
+        }
+
+        .legend-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        html.dark .legend-item:hover {
+            background-color: #4b5563;
+        }
+
+        html:not(.dark) .legend-item:hover {
+            background-color: #d1d5db;
+        }
+
+        .legend-square {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+            transition: filter 0.3s;
+        }
+
+        .legend-text {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #e5e7eb;
+            transition: filter 0.3s;
+        }
+
+        #tooltip {
+            position: fixed;
+            display: none;
+            background-color: #1f2937;
+            color: #f9fafb;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            z-index: 1000;
+            pointer-events: none;
+            white-space: pre-wrap;
+            max-width: 250px;
+            text-align: center;
+            border: 1px solid #4b5563;
+        }
+
+        .particle-visualization {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.2;
+        }
+
+        .particle-sphere {
+            position: absolute;
+            transform-style: preserve-3d;
+            animation: spin 10s linear infinite;
+            border-radius: 50%;
+            transition: filter 0.3s;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotateY(0deg) rotateX(10deg);
+            }
+            to {
+                transform: rotateY(360deg) rotateX(10deg);
+            }
+        }
+
+        @keyframes orbit {
+            from {
+                transform: rotate(0deg) translateX(50px) rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg) translateX(50px) rotate(-360deg);
+            }
+        }
+
+        @keyframes cosmic-orbit {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            position: relative;
+            margin: 5% auto;
+            width: 90%;
+            max-width: 800px;
+        }
+
+        html.dark .modal-content {
+            background-color: rgba(31, 41, 55, 0.8);
+            border: 1px solid #4b5563;
+        }
+
+        html:not(.dark) .modal-content {
+            background-color: rgba(255, 255, 255, 0.95);
+            border: 1px solid #d1d5db;
+        }
+
+        .modal-body {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        /* Heisenberg Viz */
+        #uncertaintyContainer {
+            position: relative;
+        }
+
+        #uncertaintyCanvas {
+            width: 100%;
+            height: 120px;
+            border-radius: 0.5rem;
+        }
+
+        html.dark #uncertaintyCanvas {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        html:not(.dark) #uncertaintyCanvas {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        #uncertaintyParticle {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: #3b82f6;
+            border-radius: 50%;
+            transition: opacity 0.3s, filter 0.3s;
+        }
+
+        /* Dark Universe Chart Styles */
+        .chart-bar-container {
+            border-radius: 0.5rem;
+            overflow: hidden;
+            display: flex;
+            width: 100%;
+            height: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        html.dark .chart-bar-container {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        html:not(.dark) .chart-bar-container {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-bar {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 500;
+            font-size: 0.75rem;
+            text-shadow: 1px 1px 2px black;
+            transition: width 0.5s ease-in-out, opacity 0.3s, transform 0.3s;
+            padding: 0 0.5rem;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .chart-bar-container:hover .chart-bar {
+            opacity: 0.7;
+        }
+
+        .chart-bar-container .chart-bar:hover {
+            opacity: 1;
+            transform: scale(1.02);
+            z-index: 10;
+        }
+
+        /* --- CIRCLE VIEW SVG STYLES --- */
+        .circle-view-svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .circle-view-svg .particle-shape,
+        .circle-view-svg .category-label-group {
+            transition: opacity 0.3s ease, transform 0.3s ease, filter 0.3s ease;
+            cursor: pointer;
+            transform-origin: center center;
+        }
+
+        .circle-view-svg .particle-shape:hover {
+            transform: scale(1.02);
+        }
+
+        html.dark .circle-view-svg .particle-shape:hover {
+            stroke: white !important;
+            stroke-width: 4px !important;
+        }
+
+        html:not(.dark) .circle-view-svg .particle-shape:hover {
+            stroke: black !important;
+            stroke-width: 4px !important;
+        }
+
+        .circle-view-svg .particle-label {
+            font-family: 'Inter', sans-serif;
+            font-weight: bold;
+            text-anchor: middle;
+            pointer-events: none;
+            transition: filter 0.3s;
+        }
+
+        html.dark .circle-view-svg .particle-label {
+            fill: white;
+        }
+
+        html:not(.dark) .circle-view-svg .particle-label {
+            fill: var(--text-light);
+        }
+
+        .circle-view-svg .particle-symbol {
+            font-size: 22px;
+        }
+
+        .circle-view-svg .particle-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        html.dark .circle-view-svg .particle-name {
+            fill: #d1d5db;
+        }
+
+        html:not(.dark) .circle-view-svg .particle-name {
+            fill: #4b5563;
+        }
+
+        .circle-view-svg .highlight {
+            opacity: 1;
+        }
+
+        /* --- CIRCLE VIEW GLOW EFFECT --- */
+        .circle-view-svg .highlight.highlight-strong path,
+        .circle-view-svg .highlight.highlight-strong circle {
+            filter: drop-shadow(0 0 8px var(--strong-color));
+        }
+
+        .circle-view-svg .highlight.highlight-em path,
+        .circle-view-svg .highlight.highlight-em circle {
+            filter: drop-shadow(0 0 8px var(--em-color));
+        }
+
+        .circle-view-svg .highlight.highlight-weak path,
+        .circle-view-svg .highlight.highlight-weak circle {
+            filter: drop-shadow(0 0 8px var(--weak-color));
+        }
+
+        .circle-view-svg .highlight.highlight-higgs path,
+        .circle-view-svg .highlight.highlight-higgs circle {
+            filter: drop-shadow(0 0 8px var(--higgs-color));
+        }
+
+        .circle-view-svg .highlight.highlight-gravity path,
+        .circle-view-svg .highlight.highlight-gravity circle {
+            filter: drop-shadow(0 0 8px var(--gravity-color));
+        }
+
+        .circle-view-svg .highlight.highlight-gen1 path,
+        .circle-view-svg .highlight.highlight-gen1 circle {
+            filter: drop-shadow(0 0 8px var(--gen1-color));
+        }
+
+        .circle-view-svg .highlight.highlight-gen2 path,
+        .circle-view-svg .highlight.highlight-gen2 circle {
+            filter: drop-shadow(0 0 8px var(--gen2-color));
+        }
+
+        .circle-view-svg .highlight.highlight-gen3 path,
+        .circle-view-svg .highlight.highlight-gen3 circle {
+            filter: drop-shadow(0 0 8px var(--gen3-color));
+        }
+
+        .circle-view-svg .highlight.highlight-fermion path,
+        .circle-view-svg .highlight.highlight-fermion circle {
+            filter: drop-shadow(0 0 8px var(--fermion-color));
+        }
+
+        .circle-view-svg .highlight.highlight-boson path,
+        .circle-view-svg .highlight.highlight-boson circle {
+            filter: drop-shadow(0 0 8px #2563eb);
+        }
+
+        .circle-view-svg .highlight.highlight-quark path,
+        .circle-view-svg .highlight.highlight-quark circle {
+            filter: drop-shadow(0 0 8px var(--quark-color));
+        }
+
+        .circle-view-svg .highlight.highlight-lepton path,
+        .circle-view-svg .highlight.highlight-lepton circle {
+            filter: drop-shadow(0 0 8px var(--lepton-color));
+        }
+
+        .circle-view-svg .highlight.highlight-gauge path,
+        .circle-view-svg .highlight.highlight-gauge circle {
+            filter: drop-shadow(0 0 8px var(--gauge-boson-color));
+        }
+
+        .circle-view-svg .highlight.highlight-scalar path,
+        .circle-view-svg .highlight.highlight-scalar circle {
+            filter: drop-shadow(0 0 8px var(--scalar-boson-color));
+        }
+
+        .circle-view-svg .highlight.highlight-tensor path,
+        .circle-view-svg .highlight.highlight-tensor circle {
+            filter: drop-shadow(0 0 8px var(--tensor-boson-color));
+        }
+
+        .circle-view-svg .background-ring {
+            stroke-width: 1px;
+        }
+
+        html.dark .circle-view-svg .background-ring {
+            stroke: #374151;
+        }
+
+        html:not(.dark) .circle-view-svg .background-ring {
+            stroke: #d1d5db;
+        }
+
+        .circle-view-svg .category-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            text-anchor: middle;
+            text-transform: uppercase;
+            pointer-events: none;
+            transition: fill 0.2s, transform 0.2s, filter 0.2s;
+            transform-origin: center center;
+        }
+
+        .circle-view-svg .category-label-group:hover .category-label {
+            transform: scale(1.1);
+        }
+
+        html.dark .circle-view-svg .category-label-group:hover .category-label {
+            filter: drop-shadow(0 0 5px white);
+        }
+
+        html:not(.dark) .circle-view-svg .category-label-group:hover .category-label {
+            filter: drop-shadow(0 0 5px black);
+        }
+
+
+        /* --- VIEW TOGGLE BUTTONS --- */
+        .view-btn {
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        html.dark .view-btn {
+            color: #9ca3af;
+        }
+
+        html:not(.dark) .view-btn {
+            color: #4b5563;
+        }
+
+        .view-btn.active {
+            background-color: #4f46e5;
+            color: white !important;
+        }
+
+        /* --- SCALE SECTION --- */
+        .section-bg {
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        html.dark .section-bg {
+            background-color: var(--section-bg-dark);
+        }
+
+        html:not(.dark) .section-bg {
+            background-color: var(--section-bg-light);
+        }
+
+        .number-line {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            margin-top: 2rem;
+        }
+
+        .number-line-track {
+            position: absolute;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        html.dark .number-line-track {
+            background-color: #4b5563;
+        }
+
+        html:not(.dark) .number-line-track {
+            background-color: #d1d5db;
+        }
+
+        .particle-dot {
+            position: absolute;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, filter 0.3s;
+        }
+
+        .particle-dot:hover {
+            transform: scale(1.5);
+            z-index: 20;
+        }
+
+        html.dark .particle-dot:hover {
+            box-shadow: 0 0 10px white;
+        }
+
+        html:not(.dark) .particle-dot:hover {
+            box-shadow: 0 0 10px black;
+        }
+
+        #number-line-labels {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-top: 1rem;
+        }
+
+        .tick-label {
+            position: absolute;
+            transform: translateX(-50%);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        html.dark .tick-label {
+            color: #d1d5db;
+        }
+
+        html:not(.dark) .tick-label {
+            color: #374151;
+        }
+
+        .unit-toggle-btn {
+            border: 1px solid;
+        }
+
+        html.dark .unit-toggle-btn {
+            background-color: #374151;
+            border-color: #4b5563;
+        }
+
+        html:not(.dark) .unit-toggle-btn {
+            background-color: #d1d5db;
+            border-color: #9ca3af;
+        }
+
+        .unit-toggle-btn.active {
+            background-color: #4f46e5 !important;
+            border-color: #4f46e5 !important;
+            color: white !important;
+        }
+
+        /* Flip Card Styles */
+        .scale-card {
+            background-color: transparent;
+            perspective: 1000px;
+        }
+
+        .scale-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            min-height: 150px;
+        }
+
+        .scale-card:hover .scale-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .scale-card-front,
+        .scale-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid;
+        }
+
+        html.dark .scale-card-front,
+        html.dark .scale-card-back {
+            background-color: #374151;
+            border-color: #4b5563;
+        }
+
+        html:not(.dark) .scale-card-front,
+        html:not(.dark) .scale-card-back {
+            background-color: #e5e7eb;
+            border-color: #d1d5db;
+        }
+
+        .scale-card-back {
+            transform: rotateY(180deg);
+            font-size: 0.8rem;
+            justify-content: space-around;
+        }
+
+        /* Discovery Timeline Style */
+        .discovery-timeline-container {
+            position: relative;
+            height: 50px;
+            width: 100%;
+            margin: 1rem 0;
+        }
+
+        .discovery-timeline-track {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            transform: translateY(-50%);
+        }
+
+        html.dark .discovery-timeline-track {
+            background-color: #6b7280;
+        }
+
+        html:not(.dark) .discovery-timeline-track {
+            background-color: #9ca3af;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            top: 50%;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .timeline-dot-theorized {
+            background-color: #3b82f6;
+        }
+
+        .timeline-dot-discovered {
+            background-color: #22c55e;
+        }
+
+        .timeline-label {
+            position: absolute;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+
+        html.dark .timeline-label {
+            color: #d1d5db;
+        }
+
+        html:not(.dark) .timeline-label {
+            color: #4b5563;
+        }
+
+        .timeline-label-top {
+            bottom: 100%;
+            margin-bottom: 4px;
+        }
+
+        .timeline-label-bottom {
+            top: 100%;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-8 relative">
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight">The Interactive Standard Model</h1>
+            <p class="mt-4 text-lg max-w-3xl mx-auto">
+                <span class="dark:text-gray-400 text-gray-600">An explorable visualization of the fundamental particles and forces that make up our universe.</span>
+            </p>
+        </header>
+
+        <div class="flex justify-center items-center flex-wrap gap-x-8 gap-y-4 mb-4">
+            <div class="flex items-center space-x-4">
+                <span class="text-sm font-medium dark:text-gray-300 text-gray-700">Matter</span>
+                <label for="antimatterToggle" class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="antimatterToggle" class="sr-only peer">
+                    <div class="w-11 h-6 bg-gray-700 rounded-full peer peer-checked:bg-purple-600 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full peer-checked:after:border-white"></div>
+                </label>
+                <span class="text-sm font-medium dark:text-gray-300 text-gray-700">Anti-Matter</span>
+            </div>
+            <div id="viewSelector" class="flex items-center space-x-2 dark:bg-gray-700 bg-gray-300 rounded-full p-1">
+                <button data-view="grid1" class="view-btn active px-4 py-1 text-sm font-medium rounded-full">Grid</button>
+                <button data-view="circle" class="view-btn px-4 py-1 text-sm font-medium rounded-full">Circle</button>
+            </div>
+            <label for="darkModeToggle" class="flex items-center cursor-pointer">
+                <span class="mr-3 text-sm font-medium dark:text-gray-300 text-gray-700">Dark Mode</span>
+                <div class="relative">
+                    <input type="checkbox" id="darkModeToggle" class="sr-only peer" checked>
+                    <div class="w-11 h-6 bg-gray-400 rounded-full peer peer-checked:bg-blue-600"></div>
+                    <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform peer-checked:translate-x-full"></div>
+                </div>
+            </label>
+        </div>
+
+        <div id="legends-wrapper" class="legends-wrapper">
+            <div id="interaction-legend-container" class="legend-container"></div>
+            <div id="particle-type-legend-container" class="legend-container"></div>
+        </div>
+
+        <div id="particle-container-wrapper">
+            <div id="particle-container" class="view-grid"></div>
+        </div>
+
+        <div id="other-sections">
+            <div id="scale-section" class="my-16 p-6 section-bg rounded-xl">
+                <h2 class="text-3xl font-bold mb-2 text-center">A Matter of Scale</h2>
+                <p class="mb-8 text-sm dark:text-gray-400 text-gray-600 text-center max-w-3xl mx-auto">Visualizing the immense differences in size and other properties between the fundamental particles and the world we know.</p>
+
+                <div class="mb-12">
+                    <h3 class="text-xl font-semibold mb-4 text-center">Particle Properties on a Line</h3>
+                    <div class="flex justify-center items-center gap-4 mb-4">
+                        <label for="property-select" class="font-medium">Compare particles by:</label>
+                        <select id="property-select" class="dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-white border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
+                            <option value="massVal" selected>Mass (log scale)</option>
+                            <option value="charge">Electric Charge</option>
+                            <option value="spin">Spin</option>
+                            <option value="theorized">Year Theorized</option>
+                            <option value="discovered">Year Discovered</option>
+                        </select>
+                    </div>
+                    <div id="number-line-container" class="relative p-4">
+                        <div class="number-line">
+                            <div class="number-line-track"></div>
+                        </div>
+                        <div id="number-line-labels"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-center">Cosmic Scale Comparison</h3>
+                    <div class="flex flex-col md:flex-row justify-center items-center gap-4 mb-2">
+                        <span>If the</span>
+                        <select id="scale-particle-select" class="dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-white border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"></select>
+                        <span>is the size of a</span>
+                        <select id="scale-object-select" class="dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-white border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"></select>
+                        <div id="unit-toggle" class="flex rounded-md shadow-sm">
+                            <button type="button" data-unit="metric" class="unit-toggle-btn relative inline-flex items-center px-4 py-2 rounded-l-md text-sm font-medium">Metric</button>
+                            <button type="button" data-unit="imperial" class="unit-toggle-btn active -ml-px relative inline-flex items-center px-4 py-2 rounded-r-md text-sm font-medium">Imperial</button>
+                        </div>
+                    </div>
+                    <div id="scale-multiplier" class="text-center text-sm dark:text-gray-400 text-gray-600 mb-6"></div>
+                    <div id="scale-results-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    </div>
+                </div>
+            </div>
+
+            <div class="my-16 p-6 section-bg rounded-xl">
+                <h2 class="text-3xl font-bold mb-6 text-center">The Cosmic Inventory</h2>
+                <p class="mb-8 text-sm dark:text-gray-400 text-gray-600 text-center max-w-2xl mx-auto">The Standard Model is incredibly successful, but it only describes the "Normal Matter" that makes up a tiny fraction of the universe's total mass-energy content.</p>
+
+                <div class="grid md:grid-cols-5 gap-8 items-start">
+                    <div class="md:col-span-2">
+                        <h3 class="text-xl font-semibold mb-4 text-center">Total Universe Composition</h3>
+                        <div class="w-full max-w-xs mx-auto mb-4">
+                            <div class="chart-bar-container" title="Estimated composition of the universe's mass-energy content.">
+                                <div class="chart-bar" style="width: 68%; background-color: #4c1d95;" title="68% Dark Energy">Dark Energy (68%)</div>
+                                <div class="chart-bar" style="width: 27%; background-color: #4b5563;" title="27% Dark Matter">Dark Matter (27%)</div>
+                                <div id="normal-matter-bar" class="chart-bar" style="width: 5%; background-color: #3b82f6; overflow: hidden; justify-content: flex-start;" title="5% Normal Matter">
+                                    <span class="px-2">5%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-xs dark:text-gray-400 text-gray-600">
+                            <b class="dark:text-white text-black">Dark Energy (68%):</b> A mysterious repulsive force causing the accelerated expansion of the universe. <br>
+                            <b class="dark:text-white text-black">Dark Matter (27%):</b> An unseen form of matter that interacts gravitationally but doesn't emit or reflect light. <br>
+                            <b class="dark:text-white text-black">Normal Matter (5%):</b> The ordinary, baryonic matter that makes up stars, planets, and life. It's composed of protons, neutrons, and electrons—everything described by the Standard Model.
+                        </p>
+                    </div>
+
+                    <div class="md:col-span-3">
+                        <h3 class="text-xl font-semibold mb-4 text-center">Breakdown of Normal Matter (The 5%)</h3>
+                        <div>
+                            <p class="text-sm dark:text-gray-300 text-gray-800 mb-2 text-center">1. By Elemental Abundance (by mass):</p>
+                            <div class="chart-bar-container">
+                                <div class="chart-bar" style="width: 75%; background-color: #9ca3af;" title="~75% Hydrogen">Hydrogen (75%)</div>
+                                <div class="chart-bar" style="width: 24%; background-color: #6b7280;" title="~24% Helium">Helium (24%)</div>
+                                <div class="chart-bar" style="width: 1%; background-color: #a16207;" title="~1% Heavier Elements">Other (1%)</div>
+                            </div>
+                        </div>
+                        <div class="mt-6">
+                            <p class="text-sm dark:text-gray-300 text-gray-800 mb-2 text-center">2. Breakdown of "Heavier Elements" (by mass):</p>
+                            <div class="chart-bar-container">
+                                <div class="chart-bar" style="width: 49.5%; background-color: #f87171;" title="~49.5% Oxygen">Oxygen (49.5%)</div>
+                                <div class="chart-bar" style="width: 23.9%; background-color: #d1d5db;" title="~23.9% Carbon">Carbon (23.9%)</div>
+                                <div class="chart-bar" style="width: 11.7%; background-color: #6ee7b7;" title="~11.7% Neon">Neon (11.7%)</div>
+                                <div class="chart-bar" style="width: 10.4%; background-color: #fbbf24;" title="~10.4% Iron">Iron (10.4%)</div>
+                                <div class="chart-bar" style="width: 4.5%; background-color: #93c5fd;" title="~4.5% Nitrogen">N (4.5%)</div>
+                            </div>
+                        </div>
+                        <p class="text-center dark:text-gray-500 text-gray-400 text-xs mt-2">Source: Lodders, K. (2020). Solar elemental abundances. The Oxford Research Encyclopedia of Planetary Science.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="my-16 p-6 section-bg rounded-xl">
+                <h2 class="text-3xl font-bold mb-6 text-center">Heisenberg's Uncertainty Principle</h2>
+                <div class="text-center max-w-3xl mx-auto">
+                    <p class="mb-4 dark:text-gray-400 text-gray-800">A fundamental limit to our knowledge. A particle's wave-like nature means we can't know its <b class="text-blue-500 dark:text-blue-400">exact position</b> and <b class="text-green-600 dark:text-green-400">exact momentum</b> at the same time.</p>
+                    <p class="text-sm dark:text-gray-400 text-gray-700 mb-4">
+                        Think of it like sound: a pure <b class="text-green-600 dark:text-green-400">pitch (a single frequency)</b> is spread out over time. To make a sharp <b class="text-blue-500 dark:text-blue-400">"click" (a precise moment in time)</b>, you must combine many frequencies. Similarly, a particle with a certain momentum has a clear frequency but a blurry position. A particle with a certain position is a "click" made of many uncertain momenta.
+                    </p>
+                    <div id="uncertaintyContainer">
+                        <canvas id="uncertaintyCanvas"></canvas>
+                        <div id="uncertaintyParticle"></div>
+                    </div>
+                    <input type="range" id="positionSlider" min="0" max="100" value="0" class="w-full mt-4">
+                    <div class="flex justify-between text-xs dark:text-gray-400 text-gray-600 mt-1">
+                        <span>Certain Position (Sharp "Click")</span>
+                        <span>Certain Momentum (Pure "Pitch")</span>
+                    </div>
+                    <button id="playSoundBtn" class="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">Play Sound</button>
+                    <p class="text-xs dark:text-gray-500 text-gray-500 mt-6 max-w-xl mx-auto"><b>A final caveat:</b> Because of quantum fluctuations, a particle doesn't have a definite location until it's measured. The universe is a sea of probabilities, and we only "know" where a particle is when we interact with it.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tooltip"></div>
+    <div id="particleModal" class="modal"></div>
+
+    <script>
+        // --- DATA OBJECTS --- //
+        const particleData = {
+            // Quarks
+            up: { name: 'Up', antiName: 'Antiup', symbol: 'u', antiSymbol: 'u̅', type: 'Quark', family: 'fermion', generation: 1, mass: '~2.2 MeV/c²', massVal: 2.2, charge: '+2/3', spin: '1/2', y_l: '1/3', t3_l: '+1/2', y_r: '4/3', t3_r: '0', groups: ['fermion', 'quark', 'gen1'], interactions: ['strong', 'em', 'weak', 'higgs', 'gravity'], color: 'var(--quark-color)', cardClass: 'quark-card', summary: 'One of the two fundamental quarks that form protons and neutrons inside atomic nuclei. It is the lightest of all quarks.', massRatio: 4, longLived: true, theorized: 1964, discovered: 1968, info: { discovery: 'The existence of quarks was proposed by Murray Gell-Mann and George Zweig in 1964. They were first observed in deep inelastic scattering experiments at SLAC in 1968.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-u-quark.pdf' } },
+            down: { name: 'Down', antiName: 'Antidown', symbol: 'd', antiSymbol: 'd̅', type: 'Quark', family: 'fermion', generation: 1, mass: '~4.7 MeV/c²', massVal: 4.7, charge: '-1/3', spin: '1/2', y_l: '1/3', t3_l: '-1/2', y_r: '-2/3', t3_r: '0', groups: ['fermion', 'quark', 'gen1'], interactions: ['strong', 'em', 'weak', 'higgs', 'gravity'], color: 'var(--quark-color)', cardClass: 'quark-card', summary: 'The second type of quark that makes up protons and neutrons. It is slightly more massive than the up quark.', massRatio: 10, longLived: true, theorized: 1964, discovered: 1968, info: { discovery: 'Proposed in 1964 and observed at SLAC in 1968 alongside the up quark.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-d-quark.pdf' } },
+            charm: { name: 'Charm', antiName: 'Anticharm', symbol: 'c', antiSymbol: 'c̅', type: 'Quark', family: 'fermion', generation: 2, mass: '~1.27 GeV/c²', massVal: 1270, charge: '+2/3', spin: '1/2', y_l: '1/3', t3_l: '+1/2', y_r: '4/3', t3_r: '0', groups: ['fermion', 'quark', 'gen2'], interactions: ['strong', 'em', 'weak', 'higgs', 'gravity'], color: 'var(--quark-color)', cardClass: 'quark-card', summary: 'A heavier, less stable version of the up quark. It is found in exotic, short-lived particles.', massRatio: 2500, longLived: false, theorized: 1970, discovered: 1974, info: { discovery: 'Its existence was postulated in 1970 to explain the absence of certain decays. It was discovered in 1974 at SLAC and Brookhaven (the "November Revolution").', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-c-quark.pdf' } },
+            strange: { name: 'Strange', antiName: 'Antistrange', symbol: 's', antiSymbol: 's̅', type: 'Quark', family: 'fermion', generation: 2, mass: '~95 MeV/c²', massVal: 95, charge: '-1/3', spin: '1/2', y_l: '1/3', t3_l: '-1/2', y_r: '-2/3', t3_r: '0', groups: ['fermion', 'quark', 'gen2'], interactions: ['strong', 'em', 'weak', 'higgs', 'gravity'], color: 'var(--quark-color)', cardClass: 'quark-card', summary: 'A second-generation quark, named for the "strangely" long lifetime of particles that contain it. It is the third-lightest of the quarks.', massRatio: 170, longLived: false, theorized: 1964, discovered: 1968, info: { discovery: 'The existence of "strange" particles was noted in the 1940s, leading to the proposal of the strange quark in 1964.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-s-quark.pdf' } },
+            top: { name: 'Top', antiName: 'Antitop', symbol: 't', antiSymbol: 't̅', type: 'Quark', family: 'fermion', generation: 3, mass: '~173 GeV/c²', massVal: 173000, charge: '+2/3', spin: '1/2', y_l: '1/3', t3_l: '+1/2', y_r: '4/3', t3_r: '0', groups: ['fermion', 'quark', 'gen3'], interactions: ['strong', 'em', 'weak', 'higgs', 'gravity'], color: 'var(--quark-color)', cardClass: 'quark-card', summary: 'The most massive elementary particle discovered, with a mass similar to a gold atom. It decays almost instantly.', massRatio: 340000, longLived: false, theorized: 1973, discovered: 1995, info: { discovery: 'Discovered in 1995 at Fermilab. Its immense mass makes it extremely difficult to produce and causes it to decay before it can form hadrons.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-t-quark.pdf' } },
+            bottom: { name: 'Bottom', antiName: 'Antibottom', symbol: 'b', antiSymbol: 'b̅', type: 'Quark', family: 'fermion', generation: 3, mass: '~4.18 GeV/c²', massVal: 4180, charge: '-1/3', spin: '1/2', y_l: '1/3', t3_l: '-1/2', y_r: '-2/3', t3_r: '0', groups: ['fermion', 'quark', 'gen3'], interactions: ['strong', 'em', 'weak', 'higgs', 'gravity'], color: 'var(--quark-color)', cardClass: 'quark-card', summary: 'The second-most-massive quark and the third-generation partner to the down quark. It is a key component of studies into matter-antimatter asymmetry.', massRatio: 8200, longLived: false, theorized: 1973, discovered: 1977, info: { discovery: 'Discovered at Fermilab in 1977 as part of the Upsilon meson.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-b-quark.pdf' } },
+            // Leptons
+            electron: { name: 'Electron', antiName: 'Positron', symbol: 'e⁻', antiSymbol: 'e⁺', type: 'Lepton', family: 'fermion', generation: 1, mass: '~0.511 MeV/c²', massVal: 0.511, charge: '-1', spin: '1/2', y_l: '-1', t3_l: '-1/2', y_r: '-2', t3_r: '0', groups: ['fermion', 'lepton', 'gen1'], interactions: ['em', 'weak', 'higgs', 'gravity'], color: 'var(--lepton-color)', cardClass: 'lepton-card', summary: 'The well-known particle responsible for electricity and chemistry. It is stable and the lightest of the charged leptons.', massRatio: 1, longLived: true, discovered: 1897, info: { discovery: 'Discovered by J.J. Thomson in 1897 through experiments with cathode rays.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-e.pdf' } },
+            muon: { name: 'Muon', antiName: 'Antimuon', symbol: 'μ⁻', antiSymbol: 'μ⁺', type: 'Lepton', family: 'fermion', generation: 2, mass: '~105.7 MeV/c²', massVal: 105.7, charge: '-1', spin: '1/2', y_l: '-1', t3_l: '-1/2', y_r: '-2', t3_r: '0', groups: ['fermion', 'lepton', 'gen2'], interactions: ['em', 'weak', 'higgs', 'gravity'], color: 'var(--lepton-color)', cardClass: 'lepton-card', summary: 'A heavier, unstable version of the electron, about 200 times more massive. It is a common product of cosmic ray interactions in the atmosphere.', massRatio: 210, longLived: false, discovered: 1936, info: { discovery: 'Discovered by Carl D. Anderson and Seth Neddermeyer in 1936 while studying cosmic radiation.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-muon.pdf' } },
+            tau: { name: 'Tau', antiName: 'Antitau', symbol: 'τ⁻', antiSymbol: 'τ⁺', type: 'Lepton', family: 'fermion', generation: 3, mass: '~1.777 GeV/c²', massVal: 1777, charge: '-1', spin: '1/2', y_l: '-1', t3_l: '-1/2', y_r: '-2', t3_r: '0', groups: ['fermion', 'lepton', 'gen3'], interactions: ['em', 'weak', 'higgs', 'gravity'], color: 'var(--lepton-color)', cardClass: 'lepton-card', summary: 'A much heavier, very unstable version of the electron, about 3,500 times more massive. It decays very rapidly into other particles.', massRatio: 3500, longLived: false, discovered: 1975, info: { discovery: 'Discovered between 1974 and 1977 by Martin Perl and his colleagues at SLAC.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-tau.pdf' } },
+            electron_neutrino: { name: 'Electron Neutrino', antiName: 'Electron Antineutrino', symbol: 'νe', antiSymbol: 'ν̅e', type: 'Lepton', family: 'fermion', generation: 1, mass: '< 1 eV/c²', massVal: 1e-6, charge: '0', spin: '1/2', y_l: '-1', t3_l: '+1/2', y_r: '0', t3_r: '0', groups: ['fermion', 'lepton', 'gen1'], interactions: ['weak', 'gravity'], color: 'var(--lepton-color)', cardClass: 'lepton-card', summary: 'An almost massless "ghost" particle that rarely interacts with anything. Trillions pass through you every second, mostly from the Sun.', massRatio: 0.000002, longLived: true, theorized: 1930, discovered: 1956, info: { discovery: 'Postulated by Wolfgang Pauli in 1930 to explain conservation of energy in beta decay, first detected in the Cowan–Reines neutrino experiment in 1956.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-neutrino-properties.pdf' } },
+            muon_neutrino: { name: 'Muon Neutrino', antiName: 'Muon Antineutrino', symbol: 'νμ', antiSymbol: 'ν̅μ', type: 'Lepton', family: 'fermion', generation: 2, mass: '< 0.17 MeV/c²', massVal: 0.17, charge: '0', spin: '1/2', y_l: '-1', t3_l: '+1/2', y_r: '0', t3_r: '0', groups: ['fermion', 'lepton', 'gen2'], interactions: ['weak', 'gravity'], color: 'var(--lepton-color)', cardClass: 'lepton-card', summary: 'A second-generation neutrino associated with the muon. It was the first type of neutrino discovered to be distinct from the electron neutrino.', massRatio: 0.33, longLived: true, discovered: 1962, info: { discovery: 'Discovered in 1962 by Lederman, Schwartz, and Steinberger, which earned them the 1988 Nobel Prize in Physics.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-neutrino-properties.pdf' } },
+            tau_neutrino: { name: 'Tau Neutrino', antiName: 'Tau Antineutrino', symbol: 'ντ', antiSymbol: 'ν̅τ', type: 'Lepton', family: 'fermion', generation: 3, mass: '< 18.2 MeV/c²', massVal: 18.2, charge: '0', spin: '1/2', y_l: '-1', t3_l: '+1/2', y_r: '0', t3_r: '0', groups: ['fermion', 'lepton', 'gen3'], interactions: ['weak', 'gravity'], color: 'var(--lepton-color)', cardClass: 'lepton-card', summary: 'The third and heaviest type of neutrino, associated with the tau lepton. Its existence was confirmed long after its charged partner.', massRatio: 35616, longLived: true, discovered: 2000, info: { discovery: 'After the tau lepton was discovered in the mid-1970s, the tau neutrino was expected. It was directly observed by the DONUT collaboration at Fermilab in 2000.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-neutrino-properties.pdf' } },
+            // Bosons
+            gluon: { name: 'Gluon', antiName: 'Gluon', symbol: 'g', type: 'Gauge Boson', family: 'boson', mass: '0', massVal: 0, charge: '0', spin: '1', y_l: '0', t3_l: '0', y_r: '0', t3_r: '0', groups: ['boson', 'gauge'], interactions: ['strong'], color: 'var(--gauge-boson-color)', cardClass: 'gauge-boson-card boson-card-bg', summary: 'The force carrier for the strong nuclear force, it "glues" quarks together inside protons and neutrons. Gluons also interact with each other.', massRatio: 0, longLived: true, theorized: 1960, discovered: 1979, info: { discovery: 'The concept of gluons emerged with the theory of quantum chromodynamics (QCD) in the 1960s. Evidence was first seen in three-jet events at the DESY collider in 1979.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-gluon.pdf' } },
+            photon: { name: 'Photon', antiName: 'Photon', symbol: 'γ', type: 'Gauge Boson', family: 'boson', mass: '0', massVal: 0, charge: '0', spin: '1', y_l: '0', t3_l: '0', y_r: '0', t3_r: '0', groups: ['boson', 'gauge'], interactions: ['em'], color: 'var(--gauge-boson-color)', cardClass: 'gauge-boson-card boson-card-bg', summary: 'The particle of light and the carrier for the electromagnetic force. It is a massless packet of energy that travels at the speed of light.', massRatio: 0, longLived: true, theorized: 1905, discovered: 1923, info: { discovery: 'The concept was developed by Albert Einstein between 1905-1917 to explain phenomena like the photoelectric effect. The particle nature was confirmed by Arthur Compton in 1923.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-photon.pdf' } },
+            z_boson: { name: 'Z Boson', antiName: 'Z Boson', symbol: 'Z', type: 'Gauge Boson', family: 'boson', mass: '~91.2 GeV/c²', massVal: 91200, charge: '0', spin: '1', y_l: '0', t3_l: '0', y_r: '0', t3_r: '0', groups: ['boson', 'gauge'], interactions: ['weak', 'gravity'], color: 'var(--gauge-boson-color)', cardClass: 'gauge-boson-card boson-card-bg', summary: 'A carrier of the weak nuclear force that mediates "neutral current" interactions. Unlike photons, it is very massive.', massRatio: 178473, longLived: false, theorized: 1968, discovered: 1983, info: { discovery: 'Predicted by the electroweak theory of Glashow, Weinberg, and Salam. Discovered at CERN in 1983 by the UA1 and UA2 collaborations.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-z-boson.pdf' } },
+            w_boson: { name: 'W Boson', antiName: 'W Boson', symbol: 'W±', antiSymbol: 'W∓', type: 'Gauge Boson', family: 'boson', mass: '~80.4 GeV/c²', massVal: 80400, charge: '±1', spin: '1', y_l: '0', t3_l: '±1', y_r: '0', t3_r: '0', groups: ['boson', 'gauge'], interactions: ['weak', 'gravity'], color: 'var(--gauge-boson-color)', cardClass: 'gauge-boson-card boson-card-bg', summary: 'A carrier of the weak nuclear force responsible for radioactive decay. Its charge allows it to change the flavor of other particles.', massRatio: 157338, longLived: false, theorized: 1968, discovered: 1983, info: { discovery: 'Also predicted by electroweak theory and discovered at CERN in 1983.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-w-boson.pdf' } },
+            higgs_boson: { name: 'Higgs Boson', antiName: 'Higgs Boson', symbol: 'H', type: 'Scalar Boson', family: 'boson', mass: '~125 GeV/c²', massVal: 125000, charge: '0', spin: '0', y_l: '-1', t3_l: '-1/2', y_r: 'n/a', t3_r: 'n/a', groups: ['boson', 'scalar'], interactions: ['higgs', 'gravity'], color: 'var(--scalar-boson-color)', cardClass: 'scalar-boson-card boson-card-bg', summary: 'The particle associated with the Higgs field, which gives other fundamental particles their mass. It is the only elementary particle with zero spin.', massRatio: 244618, longLived: false, theorized: 1964, discovered: 2012, info: { discovery: 'The Higgs mechanism was proposed in 1964 by several physicists. The particle was finally discovered at the LHC at CERN in 2012.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-h-boson.pdf' } },
+            graviton: { name: 'Graviton', antiName: 'Graviton', symbol: 'G', type: 'Tensor Boson', family: 'boson', mass: '0', massVal: 0, charge: '0', spin: '2', y_l: '0', t3_l: '0', y_r: '0', t3_r: '0', groups: ['boson', 'tensor'], interactions: ['gravity'], color: 'var(--tensor-boson-color)', cardClass: 'tensor-boson-card boson-card-bg', summary: 'A hypothetical particle that mediates the force of gravity in quantum gravity theories. It has not yet been discovered.', massRatio: 0, longLived: true, theorized: 1930, info: { discovery: 'Postulated in the 1930s. As a quantum theory of gravity has not been successfully formulated, the graviton remains theoretical.', sourceURL: 'https://en.wikipedia.org/wiki/Graviton' } }
+        };
+
+        const categoryData = {
+            quark: { name: "Quarks", antiName: "Antiquarks", color: 'var(--quark-color)', summary: "A class of fermions that are the only fundamental particles to experience the strong nuclear force. They are always found inside composite particles called hadrons.", info: { 'Confinement': "Quarks exhibit a property called 'color confinement', meaning they cannot be isolated. If you try to pull two quarks apart, the energy in the strong force field between them becomes so large that it creates a new quark-antiquark pair.", 'Hadrons': "Quarks combine to form hadrons. The most stable are <b>protons</b> (uud) and <b>neutrons</b> (udd)." }, visual: `<div class="modal-visual"><h4 class="font-bold mb-2 text-lg">Building Blocks of Hadrons</h4><div class="flex justify-center items-center text-2xl"><div class="w-16 h-16 border-2 rounded-full flex items-center justify-center mr-2">p⁺</div><div class="w-16 h-16 border-2 rounded-full flex items-center justify-center">n⁰</div></div><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Quarks are the fundamental constituents of protons and neutrons.</p></div>` },
+            lepton: { name: "Leptons", antiName: "Antileptons", color: 'var(--lepton-color)', summary: "A family of fundamental particles that, unlike quarks, do not experience the strong nuclear force.", info: { 'Key Members': "The most famous lepton is the <b>electron</b>, which orbits the nucleus of atoms and is responsible for chemistry. The heavier, unstable muons and taus are like the electron's cousins. The other three leptons are the elusive, nearly massless <b>neutrinos</b>.", 'Role in the Universe': "Leptons can exist on their own. Electrons form the shells of atoms, defining how atoms bond. Neutrinos are produced in nuclear reactions, like those in the Sun, and travel across the universe almost without interacting with anything." }, visual: `<div class="text-center p-4 rounded-lg dark:bg-gray-900 bg-gray-200"><h4 class="font-bold mb-2">Example: Helium Atom</h4><div class="flex justify-center items-center space-x-2"><div class="relative w-32 h-32"><div class="absolute w-12 h-12 dark:bg-gray-600 bg-gray-400 rounded-full" style="top:50%; left:50%; transform: translate(-50%, -50%);"><span class="absolute text-xs" style="top:50%; left:50%; transform: translate(-50%, -50%);">Nucleus</span></div><div class="absolute w-full h-full border-2 border-dashed border-lepton-color rounded-full animate-spin" style="animation-duration: 4s;"><div class="absolute w-4 h-4 rounded-full" style="background-color:var(--lepton-color); top: -8px; left: 50%; transform: translateX(-50%);">e⁻</div></div><div class="absolute w-2/3 h-2/3 border border-dashed border-lepton-color rounded-full animate-spin" style="animation-duration: 2s; top:50%; left:50%; transform: translate(-50%, -50%); animation-direction: reverse;"><div class="absolute w-4 h-4 rounded-full" style="background-color:var(--lepton-color); bottom: -8px; left: 50%; transform: translateX(-50%);">e⁻</div></div></div></div><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Electrons (a type of lepton) orbit the atomic nucleus.</p></div>` }
+        };
+
+        const bosonTypeData = {
+            gauge: { name: "Gauge Bosons", antiName: "Gauge Bosons", color: 'var(--gauge-boson-color)', summary: "The messengers of force, also known as Vector Bosons because they have a spin of 1.", info: { 'Role': "Particles interact by exchanging gauge bosons. For example, two electrons repel each other by exchanging photons.", 'Members': "<b>Photon</b> (electromagnetism), <b>Gluon</b> (strong force), <b>W and Z bosons</b> (weak force)." }, visual: `<svg viewBox="0 0 100 100" class="w-24 h-24"><defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="var(--gauge-boson-color)" /></marker></defs><circle cx="20" cy="50" r="10" fill="var(--lepton-color)" /><circle cx="80" cy="50" r="10" fill="var(--lepton-color)" /><line x1="30" y1="50" x2="70" y2="50" stroke="var(--gauge-boson-color)" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrowhead)" class="animate-pulse" /></svg><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Gauge bosons (spin 1) are like messengers carrying force information between particles.</p>` },
+            scalar: { name: "Scalar Boson", antiName: "Scalar Boson", color: 'var(--scalar-boson-color)', summary: "Particles with a spin of 0. They are unique because they have magnitude but no direction.", info: { 'Role': "The Higgs Boson is the only known fundamental scalar particle. It is the quantum excitation of the Higgs field, which gives mass to other fundamental particles.", 'Uniqueness': "Unlike force-carrying vector bosons, the Higgs field is a scalar field. It has a constant value everywhere in space." }, visual: `<svg viewBox="0 0 100 100" class="w-24 h-24"><circle cx="50" cy="50" r="10" fill="var(--scalar-boson-color)" class="animate-pulse" /><path d="M 50 20 A 30 30 0 1 1 20 50" fill="none" stroke="var(--scalar-boson-color)" stroke-width="2" stroke-linecap="round" opacity="0.5" /><path d="M 50 80 A 30 30 0 1 1 80 50" fill="none" stroke="var(--scalar-boson-color)" stroke-width="2" stroke-linecap="round" opacity="0.5" /></svg><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Scalar bosons (spin 0) are like points; they have a value but no inherent direction.</p>` },
+            tensor: { name: "Tensor Boson", antiName: "Tensor Boson", color: 'var(--tensor-boson-color)', summary: "Hypothetical particles with a spin of 2. They are predicted by theories that extend the Standard Model.", info: { 'The Graviton': "The most famous hypothetical tensor boson is the <b>Graviton</b>. If it exists, it would be the quantum messenger particle for the force of gravity.", 'Challenge': "Detecting a single graviton is likely impossible with current technology due to the extreme weakness of the gravitational force at the particle level." }, visual: `<svg viewBox="0 0 100 100" class="w-24 h-24"><path d="M20,50 C40,20 60,20 80,50 M20,50 C40,80 60,80 80,50" fill="none" stroke="var(--tensor-boson-color)" stroke-width="2" /><path d="M50,20 C20,40 20,60 50,80 M50,20 C80,40 80,60 50,80" fill="none" stroke="var(--tensor-boson-color)" stroke-width="2" opacity="0.6" /></svg><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Tensor bosons (spin 2) describe more complex, multi-directional interactions, like gravity warping spacetime.</p>` }
+        };
+
+        const mainLabelData = {
+            fermion: {
+                name: "Three Generations of Matter",
+                antiName: "Three Generations of Antimatter",
+                color: 'var(--text-dark)',
+                summary: "These are the Fermions (spin-1/2 particles), the building blocks of all matter.",
+                info: {
+                    'The Rule of Matter (Pauli Exclusion Principle)': "Fermions are fundamentally 'antisocial'. The Pauli Exclusion Principle states that no two identical fermions can occupy the same quantum state at the same time. This is why matter is stable, takes up space, and you can't walk through a wall. Their 1/2-integer spin leads to this behavior.",
+                    'The Three Tiers': "Matter comes in three 'generations', each a heavier copy of the one before it. All stable matter in the universe is made from the lightest, first-generation particles (Up/Down quarks, electrons)."
+                },
+                visual: `<div class="flex justify-around items-center w-full">
+                    <!-- Generation 1: Stable -->
+                    <div class="text-center">
+                        <div class="w-16 h-16 rounded-lg shadow-lg" style="background-color: var(--gen1-color);"></div>
+                        <p class="text-sm font-semibold mt-2">Gen I</p>
+                        <p class="text-xs dark:text-gray-400 text-gray-600">Stable</p>
+                    </div>
+                    <!-- Generation 2: Unstable -->
+                    <div class="text-center">
+                        <div class="w-16 h-16 rounded-lg shadow-lg relative" style="background-color: var(--gen2-color); opacity: 0.8;">
+                            <div class="absolute w-full h-full animate-ping rounded-lg" style="background-color: var(--gen2-color); opacity: 0.5;"></div>
+                        </div>
+                        <p class="text-sm font-semibold mt-2">Gen II</p>
+                        <p class="text-xs dark:text-gray-400 text-gray-600">Unstable</p>
+                    </div>
+                    <!-- Generation 3: Decaying Instantly -->
+                    <div class="text-center">
+                        <div class="w-16 h-16 relative">
+                            <svg width="100%" height="100%" viewBox="0 0 64 64" class="absolute top-0 left-0 overflow-visible">
+                                <!-- Main decaying square -->
+                                <rect x="0" y="0" width="64" height="64" rx="8" class="shadow-lg" style="fill: var(--gen3-color);">
+                                    <animate attributeName="opacity" values="0.7;0.2" dur="1.2s" repeatCount="indefinite" />
+                                </rect>
+                                <!-- Particle 1 -->
+                                <circle cx="32" cy="32" r="4" style="fill: var(--gen3-color);">
+                                    <animateMotion path="M0,0 L-30,-30" begin="0s" dur="1.2s" repeatCount="indefinite" />
+                                    <animate attributeName="opacity" values="1;0" dur="1.2s" repeatCount="indefinite" />
+                                </circle>
+                                <!-- Particle 2 -->
+                                <circle cx="32" cy="32" r="3" style="fill: var(--gen3-color);">
+                                    <animateMotion path="M0,0 L35,10" begin="0.3s" dur="1.2s" repeatCount="indefinite" />
+                                    <animate attributeName="opacity" values="1;0" dur="1.2s" repeatCount="indefinite" />
+                                </circle>
+                                <!-- Particle 3 -->
+                                <circle cx="32" cy="32" r="5" style="fill: var(--gen3-color);">
+                                    <animateMotion path="M0,0 L-10,35" begin="0.6s" dur="1.2s" repeatCount="indefinite" />
+                                    <animate attributeName="opacity" values="1;0" dur="1.2s" repeatCount="indefinite" />
+                                </circle>
+                            </svg>
+                        </div>
+                        <p class="text-sm font-semibold mt-2">Gen III</p>
+                        <p class="text-xs dark:text-gray-400 text-gray-600">Decays Instantly</p>
+                    </div>
+                </div>
+                <p class="text-xs mt-4 text-center dark:text-gray-400 text-gray-600">Fermions get heavier and more unstable with each generation.</p>`
+            },
+            boson: { name: "Interactions / Force Carriers", antiName: "Interactions / Force Carriers", color: 'var(--text-dark)', summary: "These are the Bosons (integer-spin particles), which mediate the fundamental forces of nature.", info: { 'The Rule of Forces': "Bosons are fundamentally 'social'. Unlike fermions, any number of identical bosons can occupy the same quantum state at the same time. This allows them to build up and create powerful, large-scale force fields, like the electromagnetic field that creates light. Their integer spin (0, 1, 2...) is responsible for this property.", 'The Messengers': "The Gauge Bosons (spin-1) carry the forces, while the Scalar Boson (spin-0 Higgs) is responsible for giving particles mass." }, visual: `<svg viewBox="0 0 100 100" class="w-24 h-24"><circle cx="25" cy="25" r="10" fill="var(--fermion-color)"/><circle cx="75" cy="75" r="10" fill="var(--fermion-color)"/><path d="M 35,35 C 50,50 50,50 65,65" stroke="var(--gauge-boson-color)" stroke-width="3" stroke-dasharray="5" fill="none"><animate attributeName="stroke-dashoffset" from="10" to="0" dur="1s" repeatCount="indefinite" /></path><text x="50" y="55" font-size="12" fill="var(--gauge-boson-color)">Boson</text></svg><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Bosons are exchanged between fermions to create forces.</p>` }
+        };
+
+        const quantumLegendData = {
+            name: "Electroweak Quantum Numbers",
+            color: 'var(--text-dark)',
+            summary: "These numbers are conserved in electroweak interactions and are crucial for understanding how the electromagnetic and weak forces are unified.",
+            info: {
+                'Weak Hypercharge (Y)': "A quantum number relating electric charge and the third component of weak isospin. It's denoted Y for both left-handed (L) and right-handed (R) particles, though its value can differ. The Gell-Mann-Nishijima formula defines electric charge Q as `Q = T₃ + Y/2`.",
+                'Weak Isospin (T₃ or I₃)': "A quantum number related to how particles interact via the weak force. A key feature of the Standard Model is that the weak force acts differently on left-handed (L) and right-handed (R) particles. Left-handed fermions are arranged in pairs (doublets) with T₃ = ±1/2, while right-handed fermions are singlets with T₃ = 0 and thus do not feel the charged weak interaction (mediated by W± bosons)."
+            },
+            visual: `<svg viewBox="0 0 120 70" class="w-32"><text x="60" y="20" font-size="16" text-anchor="middle" class="dark:fill-white fill-black">Q = T₃ + Y/2</text><line x1="10" y1="30" x2="110" y2="30" class="dark:stroke-gray-500 stroke-gray-400" /><text x="10" y="50" font-size="10" class="fill-[var(--charge-color)]">Charge</text><text x="50" y="50" font-size="10" class="fill-[var(--t3-color)]">Isospin</text><text x="90" y="50" font-size="10" class="fill-[var(--y-color)]">Hypercharge</text></svg><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">The Gell-Mann–Nishijima formula unifies key quantum numbers.</p>`
+        };
+
+        const fundamentalPropertiesData = {
+            name: "Mass, Charge, and Spin",
+            color: 'var(--text-dark)',
+            summary: "These three intrinsic properties define a particle's identity and how it interacts with the universe.",
+            info: {},
+            visual: `<div class="w-full space-y-4">
+                <!-- Mass -->
+                <div class="grid grid-cols-[auto,1fr] items-center gap-4 text-left">
+                    <div class="w-20 h-20 flex-shrink-0 flex items-center justify-center rounded-lg dark:bg-gray-900/50 bg-gray-200/50">
+                        <svg class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--mass-color);">
+                            <defs>
+                                <pattern id="grid" width="4" height="4" patternUnits="userSpaceOnUse">
+                                    <path d="M 4 0 L 0 0 0 4" fill="none" class="dark:stroke-gray-700 stroke-gray-300" stroke-width="0.5"/>
+                                </pattern>
+                            </defs>
+                            <rect width="24" height="24" fill="url(#grid)" />
+                            <circle cx="12" cy="12" r="8" fill="currentColor" opacity="0.3" />
+                            <circle cx="12" cy="12" r="3" fill="currentColor" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg" style="color: var(--mass-color)">Mass</h4>
+                        <p class="text-sm dark:text-gray-400 text-gray-600">A measure of inertia and how strongly a particle interacts with the Higgs field. More interaction means more mass.</p>
+                    </div>
+                </div>
+                <!-- Charge -->
+                <div class="grid grid-cols-[auto,1fr] items-center gap-4 text-left">
+                    <div class="w-20 h-20 flex-shrink-0 flex items-center justify-center rounded-lg dark:bg-gray-900/50 bg-gray-200/50">
+                        <svg class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--charge-color);">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="8" y1="12" x2="16" y2="12" />
+                            <line x1="12" y1="8" x2="12" y2="16" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg" style="color: var(--charge-color)">Electric Charge</h4>
+                        <p class="text-sm dark:text-gray-400 text-gray-600">Determines how a particle responds to electromagnetism. It can be positive (+), negative (-), or neutral (0).</p>
+                    </div>
+                </div>
+                <!-- Spin -->
+                <div class="grid grid-cols-[auto,1fr] items-center gap-4 text-left">
+                    <div class="w-20 h-20 flex-shrink-0 flex items-center justify-center rounded-lg dark:bg-gray-900/50 bg-gray-200/50">
+                        <svg class="w-16 h-16" viewBox="0 0 100 100">
+                            <g opacity="0.7">
+                                <path d="M10 20 C 30 10, 40 30, 60 20" stroke="var(--spin-color)" stroke-width="2" fill="none" stroke-dasharray="4 2" />
+                                <path d="M10 50 C 30 40, 40 60, 60 50" stroke="var(--spin-color)" stroke-width="2" fill="none" />
+                                <path d="M10 80 C 30 70, 40 90, 60 80" stroke="var(--spin-color)" stroke-width="2" fill="none" stroke-dasharray="4 2" />
+                            </g>
+                            <rect x="65" y="5" width="5" height="90" rx="2" fill="var(--spin-color)" opacity="0.8"/>
+                            <path d="M75 50 C 85 40, 90 60, 100 50" stroke="var(--spin-color)" stroke-width="2" fill="none" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg" style="color: var(--spin-color)">Spin</h4>
+                        <p class="text-sm dark:text-gray-400 text-gray-600">An intrinsic form of angular momentum. For light particles (photons), spin is called <b>polarization</b>. This is how polarized sunglasses work—they block light with a specific spin to reduce glare!</p>
+                    </div>
+                </div>
+            </div>`
+        };
+
+        const interactionData = {
+            strong: { name: 'Strong Nuclear Force', antiName: 'Strong Nuclear Force', symbol: 'S', color: 'var(--strong-color)', summary: 'The strongest force, but with a very short range. It binds quarks into protons and neutrons, and holds atomic nuclei together.', info: { 'Who Feels It?': 'Quarks and Gluons.', 'Force Carrier (Boson)': '<b>Gluon (g)</b>. Gluons themselves have "color charge", so they interact with each other, which is what makes the strong force so powerful at short distances.', 'Range & Analogy': 'Extremely short, about the diameter of a proton. The force between quarks behaves like a <b>rubber band</b>; it gets stronger as you pull them apart, preventing them from ever being isolated (confinement). The residual force that holds protons and neutrons together in a nucleus is more like <b>Velcro</b>, a powerful short-range attraction.' }, visual: `<div class="modal-visual"><h4 class="font-bold mb-2 text-lg">Nuclear Binding</h4><div class="flex justify-center items-center text-center text-xl"><div class="relative w-16 h-16 border-2 dark:border-gray-500 border-gray-400 rounded-full flex justify-center items-center mr-2">P+</div><div class="font-bold" style="color: var(--strong-color)">↔ g ↔</div><div class="relative w-16 h-16 border-2 dark:border-gray-500 border-gray-400 rounded-full flex justify-center items-center ml-2">N⁰</div></div><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Gluons bind quarks inside Protons (P+) and Neutrons (N⁰), and the residual force holds them together in a nucleus.</p></div>` },
+            em: { name: 'Electromagnetism', antiName: 'Electromagnetism', symbol: 'E', color: 'var(--em-color)', summary: 'The force responsible for electricity, magnetism, and light. It acts on any particle with an electric charge.', info: { 'Who Feels It?': 'Any particle with electric charge (all quarks, electron, muon, tau, W± bosons).', 'Force Carrier (Boson)': '<b>Photon (γ)</b>. Photons are massless packets of light.', 'Range': 'Infinite. The force gets weaker with distance (inverse-square law), but never truly disappears.' }, visual: `<div class="modal-visual"><h4 class="font-bold mb-2 text-lg">Atomic Structure</h4><div class="relative w-32 h-32 mx-auto"><div class="absolute w-12 h-12 bg-red-500/50 rounded-full" style="top:50%; left:50%; transform: translate(-50%, -50%);"><span class="absolute text-lg" style="top:50%; left:50%; transform: translate(-50%, -50%);">P+</span></div><div class="absolute w-full h-full border-2 border-dashed rounded-full" style="border-color: var(--em-color); animation: cosmic-orbit 4s linear infinite;"><div class="absolute w-4 h-4 rounded-full flex items-center justify-center text-xs" style="background-color:var(--lepton-color); top: -8px; left: 50%; transform: translateX(-50%);">e⁻</div></div></div><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">The electromagnetic force (via photon exchange) binds electrons to the positive nucleus.</p></div>` },
+            weak: { name: 'Weak Nuclear Force', antiName: 'Weak Nuclear Force', symbol: 'W', color: 'var(--weak-color)', summary: 'The force responsible for radioactive decay and nuclear fusion. It is unique in its ability to change one type of particle into another.', info: { 'Who Feels It?': 'All Quarks and all Leptons.', 'Force Carriers (Bosons)': '<b>W+, W-, and Z bosons</b>. These bosons are very heavy, which makes the weak force very short-ranged.', 'Key Role': 'The weak force allows quarks to change their "flavor". For example, it can turn a Down quark into an Up quark, which changes a neutron into a proton (beta decay).' }, visual: `<div class="modal-visual"><h4 class="font-bold mb-2 text-lg">Beta Decay</h4><div class="flex justify-around items-center text-center"><div class="text-center"><div class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-white mx-auto" style="background-color:var(--quark-color);">d</div><p class="text-xs mt-1">Down Quark</p></div><div class="text-center font-bold text-xl" style="color: var(--weak-color)">→ W⁻ →</div><div class="text-center"><div class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-white mx-auto" style="background-color:var(--quark-color);">u</div><p class="text-xs mt-1">Up Quark</p></div></div><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">A down quark emits a W⁻ boson and changes into an up quark. The W⁻ then decays into an electron and an antineutrino.</p></div>` },
+            higgs: { name: 'Higgs Field Interaction', antiName: 'Higgs Field Interaction', symbol: 'H', color: 'var(--higgs-color)', summary: 'Not a force in the traditional sense, but a field that permeates all of space and gives fundamental particles their mass.', info: { 'Who Feels It?': 'All massive fundamental particles (Quarks, charged Leptons, W/Z Bosons, and the Higgs boson itself). Massless particles like photons and gluons do not interact with it.', 'Field "Carrier" (Boson)': '<b>Higgs Boson (H)</b>. This is the quantum excitation of the Higgs field, not a force carrier.', 'Analogy': 'Imagine the field as a room full of people (the field). A very famous person (like the Top quark) will be mobbed and find it hard to move—they have high mass. A less-known person (like an electron) can move more easily—they have less mass. Someone nobody knows (a photon) zips right through—they are massless.' }, visual: `<div class="modal-visual"><h4 class="font-bold mb-2 text-lg">Mass Generation</h4><div class="relative w-full h-24 bg-purple-900/30 rounded-lg flex items-center justify-around px-4"><div class="text-center"><div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-white mx-auto" style="background-color:var(--quark-color);">t</div><p class="text-xs mt-1">Top Quark<br>(High Mass)</p></div><div class="text-center"><div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-white mx-auto" style="background-color:var(--lepton-color);">e⁻</div><p class="text-xs mt-1">Electron<br>(Low Mass)</p></div><div class="text-center"><div class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-white mx-auto" style="background-color:var(--gauge-boson-color);">γ</div><p class="text-xs mt-1">Photon<br>(Massless)</p></div><span class="absolute text-sm text-purple-300 inset-0 flex items-center justify-center opacity-50 pointer-events-none">Higgs Field</span></div><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Particles gain mass by interacting with the Higgs Field.</p></div>` },
+            gravity: { name: 'Gravity', antiName: 'Gravity', symbol: 'G', color: 'var(--gravity-color)', summary: 'The force of attraction between any two objects with mass or energy. It is by far the weakest force, but it dominates on cosmic scales.', info: { 'Who Feels It?': 'Everything with mass or energy.', 'Force Carrier (Boson)': '<b>Graviton (G)</b> (Hypothetical). A quantum theory of gravity is a major unsolved problem in physics. If it exists, the graviton would be the boson that mediates this force.', 'Standard Model Status': 'Gravity is not included in the Standard Model. Unifying gravity with the other three forces (a "Theory of Everything") is the ultimate goal for many physicists.' }, visual: `<div class="modal-visual"><h4 class="font-bold mb-2 text-lg">Cosmic Structure</h4><div class="relative w-32 h-32 mx-auto"><div class="absolute w-16 h-16 bg-yellow-400 rounded-full" style="top:50%; left:50%; transform:translate(-50%, -50%);"></div><div class="absolute w-full h-full border border-dashed rounded-full" style="border-color: var(--gravity-color); animation: cosmic-orbit 20s linear infinite;"><div class="absolute w-6 h-6 rounded-full bg-blue-500" style="top: -12px; left: 50%; transform: translateX(-50%);"></div></div></div><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Gravity governs the orbits of planets around stars and holds galaxies together.</p></div>` }
+        };
+
+        const generationData = {
+            1: { name: "Generation I", antiName: "Generation I (Anti)", color: 'var(--gen1-color)', summary: "The first and most stable generation of matter. It makes up all the stable matter in the universe.", info: { 'Particles': 'Up Quark, Down Quark, Electron, Electron Neutrino.', 'Role': 'These are the workhorses of the universe. Everything you see and interact with daily is made of first-generation particles.' }, visual: `<div class="modal-visual"><h4 class="font-bold mb-2 text-lg">The Stuff of Life</h4><p class="text-6xl">p⁺, n⁰, e⁻</p><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Protons, neutrons, and electrons form all of chemistry and life.</p></div>` },
+            2: { name: "Generation II", antiName: "Generation II (Anti)", color: 'var(--gen2-color)', summary: "Heavier and less stable copies of the first generation particles. They decay quickly into first-generation particles.", info: { 'Particles': 'Charm Quark, Strange Quark, Muon, Muon Neutrino.', 'Role': 'Generation II particles are not found in normal matter because they are so unstable. They are produced in high-energy environments like cosmic ray collisions and particle accelerators. Their existence points to a deeper pattern in the universe.' }, visual: `<div class="modal-visual"><h4 class="font-bold mb-2 text-lg">Cosmic Ray Collision</h4><div class="relative w-full h-24 flex items-center justify-center"><p class="text-4xl text-yellow-400">⚡</p><p class="absolute text-2xl" style="left: 20%; top: 20%;">μ⁻</p><p class="absolute text-2xl" style="right: 20%; bottom: 20%;">c</p><p class="absolute text-2xl" style="right: 15%; top: 30%;">s</p></div><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Generation II particles are created in energetic events, but decay in fractions of a second.</p></div>` },
+            3: { name: "Generation III", antiName: "Generation III (Anti)", color: 'var(--gen3-color)', summary: "The heaviest and most unstable generation of particles. They decay almost instantaneously.", info: { 'Particles': 'Top Quark, Bottom Quark, Tau, Tau Neutrino.', 'Role': 'Like Generation II, these particles only appear in the most extreme, high-energy events. The Top quark is the most massive elementary particle ever discovered, with a mass similar to a gold atom, and it decays before it can even form a hadron.' }, visual: `<div class="modal-visual"><h4 class="font-bold mb-2 text-lg">Particle Accelerator Event</h4><div class="relative w-full h-24 flex items-center justify-center"><p class="text-6xl text-red-500 animate-ping opacity-75">💥</p><p class="text-6xl text-red-500">💥</p><p class="absolute text-3xl font-bold" style="left: 10%; top: 10%;">t</p><p class="absolute text-3xl font-bold" style="right: 10%; top: 50%;">b</p><p class="absolute text-3xl font-bold" style="left: 20%; bottom: 10%;">τ⁻</p></div><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Generation III particles are observed only in powerful particle collisions.</p></div>` }
+        };
+
+        const particleTypeData = {
+            fermion: { name: "Fermions", antiName: "Antifermions", color: 'var(--fermion-color)', summary: "The 'matter' particles (spin 1/2). They obey the Pauli exclusion principle, which means no two fermions can occupy the same quantum state. This is why matter is stable and solid.", info: { 'Defining Feature': "Fermions are the constituents of all ordinary matter. The fact that they cannot be in the same place at the same time is the basis for the structure of the periodic table of elements and the stability of matter itself.", 'Two Families': "Fermions are divided into two main groups: <b>Quarks</b> (which feel the strong force) and <b>Leptons</b> (which do not)." }, visual: `<div class="text-center p-4 rounded-lg dark:bg-gray-900 bg-gray-200"><h4 class="font-bold mb-2">Pauli Exclusion Principle</h4><div class="flex justify-center items-center text-2xl"><div class="w-16 h-16 border-2 flex items-center justify-center mr-2"><span>↑</span></div><div class="w-16 h-16 border-2 flex items-center justify-center"><span>↓</span></div></div><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Fermions cannot share the same quantum state, like two magnets repelling.</p></div>` },
+            boson: { name: "Bosons", antiName: "Bosons", color: '#2563eb', summary: "The 'force-carrier' particles and the Higgs boson (integer spin: 0, 1, 2...). Multiple bosons can occupy the same quantum state, which allows them to create powerful force fields.", info: { 'Defining Feature': "Bosons mediate the fundamental interactions of nature. Unlike fermions, they are 'social' particles and can clump together in the same state, a property which leads to macroscopic phenomena like laser light (many photons in the same state) or superconductivity.", 'Two Main Types': "<b>Gauge Bosons</b> (spin 1) mediate forces. The <b>Scalar Boson</b> (spin 0), the Higgs, gives other particles mass." }, visual: `<div class="text-center p-4 rounded-lg dark:bg-gray-900 bg-gray-200"><h4 class="font-bold mb-2">Force Fields</h4><div class="relative w-24 h-24 mx-auto"><div class="absolute inset-0 border-2 border-blue-500 rounded-full animate-ping"></div><div class="absolute inset-2 border-2 border-blue-500 rounded-full animate-ping delay-500"></div><span class="text-3xl">γ</span></div><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Bosons can overlap to create strong fields, like light waves.</p></div>` },
+            quark: { name: "Quarks", antiName: "Antiquarks", color: 'var(--quark-color)', summary: "A class of fermions that are the only fundamental particles to experience the strong nuclear force. They are always found inside composite particles called hadrons.", info: { 'Confinement': "Quarks exhibit a property called 'color confinement', meaning they cannot be isolated. If you try to pull two quarks apart, the energy in the strong force field between them becomes so large that it creates a new quark-antiquark pair.", 'Hadrons': "Quarks combine to form hadrons. The most stable are <b>protons</b> (uud) and <b>neutrons</b> (udd)." }, visual: `<div class="text-center p-4 rounded-lg dark:bg-gray-900 bg-gray-200"><h4 class="font-bold mb-2">Building Blocks of Hadrons</h4><div class="flex justify-center items-center text-2xl"><div class="w-16 h-16 border-2 rounded-full flex items-center justify-center mr-2">p⁺</div><div class="w-16 h-16 border-2 rounded-full flex items-center justify-center">n⁰</div></div><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Quarks are the fundamental constituents of protons and neutrons.</p></div>` },
+            lepton: { name: "Leptons", antiName: "Antileptons", color: 'var(--lepton-color)', summary: "A class of fermions that do not feel the strong nuclear force. The electron is the most well-known lepton.", info: { 'Independence': "Unlike quarks, leptons can exist individually. The electron is the particle that orbits the nucleus in an atom, forming the basis for all of chemistry.", 'Two Sub-families': "Leptons consist of the three charged leptons (<b>electron, muon, tau</b>) and the three neutral, almost massless neutrinos (<b>electron neutrino, muon neutrino, tau neutrino</b>)." }, visual: `<div class="text-center p-4 rounded-lg dark:bg-gray-900 bg-gray-200"><h4 class="font-bold mb-2">Fundamental & Free</h4><div class="text-6xl">e⁻</div><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Leptons, like the electron, are fundamental particles that can exist on their own.</p></div>` }
+        };
+
+        const scaleData = {
+            // Sizes are approximate effective diameters in meters.
+            particles: {
+                'proton': { name: 'Proton', size: 1.7e-15 },
+                'electron': { name: 'Electron', size: 2.8e-15 },
+                'down': { name: 'Down Quark', size: 4.8e-18 },
+                'up': { name: 'Up Quark', size: 2.4e-18 },
+                'atom': { name: 'Hydrogen Atom', size: 1.1e-10 },
+            },
+            objects: {
+                'virus': { name: 'Virus (Influenza)', size: 1e-7, icon: '🦠' },
+                'red-blood-cell': { name: 'Red Blood Cell', size: 7.5e-6, icon: '🩸' },
+                'pollen-grain': { name: 'Pollen Grain', size: 3e-5, icon: '🌼' },
+                'grain-of-sand': { name: 'Grain of Sand', size: 5e-4, icon: '🏖️' },
+                'pea': { name: 'Pea', size: 5e-3, icon: '🫛' },
+                'marble': { name: 'Marble', size: 1.5e-2, icon: '🔮' },
+                'person': { name: 'Person (avg.)', size: 1.7, icon: '🧍' },
+            },
+            // Data for the scale comparison cards.
+            targets: [
+                { name: 'Proton', size: 1.7e-15, icon: '⚛️', description: '<p><b>Mass:</b> ~1.7×10<sup>-27</sup> kg (~2,000x electron mass).</p><p><b>Size:</b> ~100,000x smaller than its own atom.</p>' },
+                { name: 'Hydrogen Atom', size: 1.0e-10, icon: '🧪', description: '<p><b>Mass:</b> ~1.7×10<sup>-27</sup> kg (electron is <0.1% of total).</p><p><b>Size:</b> A million times smaller than a grain of sand.</p>' },
+                { name: 'Virus (Influenza)', size: 1e-7, icon: '🦠', description: '<p><b>Mass:</b> ~1×10<sup>-18</sup> kg. Trillions are needed to equal the mass of a salt grain.</p><p><b>Size:</b> ~100 nm. 1,000x smaller than a hair\'s width.</p>' },
+                { name: 'Red Blood Cell', size: 7.5e-6, icon: '🩸', description: '<p><b>Mass:</b> ~5×10<sup>-14</sup> kg. Billions weigh less than a gram.</p><p><b>Size:</b> ~8 μm. About one-tenth a human hair\'s width.</p>' },
+                { name: 'Pollen Grain', size: 3.0e-5, icon: '🌼', description: '<p><b>Mass:</b> ~1×10<sup>-11</sup> kg. 100 million weigh about 1 gram.</p><p><b>Size:</b> ~30 μm. Roughly half a human hair\'s width.</p>' },
+                { name: 'Pea', size: 5.0e-3, icon: '?', description: '<p><b>Mass:</b> ~0.2 g (about 1/5 of a paperclip).</p><p><b>Size:</b> ~5 mm, the width of a pencil eraser.</p>' },
+                { name: 'Person', size: 1.7, icon: '🧍', description: '<p><b>Mass:</b> ~70 kg (~150 lbs), like 10 bowling balls.</p><p><b>Size:</b> ~1.7 m tall (~5 ft 7 in), like a refrigerator.</p>' },
+                { name: 'School Bus', size: 11, icon: '🚌', description: '<p><b>Mass:</b> ~10,000 kg (10 tons), like 2 adult elephants.</p><p><b>Size:</b> ~11 m long (~36 ft).</p>' },
+                { name: 'Eiffel Tower', size: 330, icon: '🗼', description: '<p><b>Mass:</b> ~10,000,000 kg (10k tons), like 2,000 elephants.</p><p><b>Size:</b> ~330 m tall (~1,080 ft), 3 football fields high.</p>' },
+                { name: 'Mount Everest', size: 8848, icon: '⛰️', description: '<p><b>Mass:</b> ~1×10<sup>15</sup> kg (est.), a trillion tonnes.</p><p><b>Size:</b> ~8.8 km high (~5.5 miles), a jet\'s cruising altitude.</p>' },
+                { name: 'Earth', size: 1.2742e7, icon: '🌍', description: '<p><b>Mass:</b> ~6×10<sup>24</sup> kg, about 81x the Moon\'s mass.</p><p><b>Size:</b> ~12,742 km across (≈7,900 miles).</p>' },
+                { name: 'Sun', size: 1.39e9, icon: '☀️', description: '<p><b>Mass:</b> ~2×10<sup>30</sup> kg, ~333,000x Earth\'s mass.</p><p><b>Size:</b> ~1.39 million km across, 109 Earths wide.</p>' }
+            ]
+        };
+
+        const gridLayout = [
+            ['up', 'charm', 'top', 'gluon', 'higgs_boson', 'graviton'],
+            ['down', 'strange', 'bottom', 'photon', null, null],
+            ['electron', 'muon', 'tau', 'z_boson', null, null],
+            ['electron_neutrino', 'muon_neutrino', 'tau_neutrino', 'w_boson', null, null]
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('particle-container');
+            const antimatterToggle = document.getElementById('antimatterToggle');
+            const viewSelector = document.getElementById('viewSelector');
+            const interactionLegendContainer = document.getElementById('interaction-legend-container');
+            const particleTypeLegendContainer = document.getElementById('particle-type-legend-container');
+            const tooltip = document.getElementById('tooltip');
+            const modalContainer = document.getElementById('particleModal');
+            const darkModeToggle = document.getElementById('darkModeToggle');
+
+            let isAntimatter = false;
+            let currentView = 'grid1';
+            let currentUnit = 'imperial';
+
+            const getSphereSize = (mass) => {
+                const masses = Object.values(particleData).map(p => p.massVal).filter(m => m > 0);
+                const minMass = Math.min(...masses);
+                const maxMass = Math.max(...masses);
+                const logMinMass = Math.log1p(minMass);
+                const logMaxMass = Math.log1p(maxMass);
+                if (mass === 0) return 20;
+                const logMass = Math.log1p(mass);
+                const scale = (logMass - logMinMass) / (logMaxMass - logMinMass);
+                return 20 + (scale * (120 - 20));
+            };
+
+            const invertCharge = (charge) => {
+                if (typeof charge === 'string') {
+                    if (charge.startsWith('+')) return charge.replace('+', '-');
+                    if (charge.startsWith('-')) return charge.replace('-', '+');
+                    if (charge === '±1') return '∓1';
+                }
+                return charge;
+            };
+
+            const createParticleCard = (id, particle) => {
+                const card = document.createElement('div');
+                card.className = `particle-card ${particle.cardClass}`;
+                card.dataset.id = id;
+                Object.entries(particle.groups).forEach(([_, group]) => card.classList.add(`group-${group}`));
+                card.addEventListener('click', () => showModal(id));
+
+                const charge = isAntimatter ? invertCharge(particle.charge) : particle.charge;
+                const name = isAntimatter ? (particle.antiName || `Anti-${particle.name}`) : particle.name;
+                const symbol = isAntimatter ? (particle.antiSymbol || particle.symbol) : particle.symbol;
+                const sphereSize = getSphereSize(particle.massVal);
+
+                card.innerHTML = `
+                    <div class="particle-visualization">
+                         <div class="particle-sphere" style="width: ${sphereSize}px; height: ${sphereSize}px; background-color: ${particle.color}; animation-duration: ${4 + 20 / Math.log1p(particle.massVal || 1)}s;"></div>
+                    </div>
+                    <div class="relative z-10 p-1 h-full flex flex-col justify-between">
+                        <div class="flex justify-between text-xs">
+                            <div class="card-info text-left">
+                                <div>mass: <span style="color: var(--mass-color)">${particle.mass}</span></div>
+                                <div>charge: <span style="color: var(--charge-color)">${charge}</span></div>
+                                <div>spin: <span style="color: var(--spin-color)">${particle.spin}</span></div>
+                            </div>
+                        </div>
+                         <div class="quantum-numbers">
+                            <div><span>Y(L):</span> <span style="color: var(--y-color);">${particle.y_l}</span></div>
+                            <div><span>Y(R):</span> <span style="color: var(--y-color);">${particle.y_r}</span></div>
+                            <div><span>T₃(L):</span> <span style="color: var(--t3-color);">${particle.t3_l}</span></div>
+                            <div><span>T₃(R):</span> <span style="color: var(--t3-color);">${particle.t3_r}</span></div>
+                        </div>
+                        <div class="flex-grow flex flex-col items-center justify-center">
+                            <h3 class="text-3xl font-bold text-center">${symbol}</h3>
+                            <p class="text-center text-xs font-semibold h-4">${name}</p>
+                        </div>
+                        <div class="interaction-squares">
+                            ${particle.interactions.map(int => `<div class="interaction-square square-${int}" data-interaction="${int}" title="${interactionData[int].name}"></div>`).join('')}
+                        </div>
+                    </div>
+                `;
+                return card;
+            };
+
+            const createLabel = (text, style, borderColor, categoryId, categoryType) => {
+                const label = document.createElement('div');
+                label.className = `grid-label`;
+                if (style.writingMode === 'vertical-rl') label.classList.add('grid-label-side');
+                if (style.fontSize) label.style.fontSize = style.fontSize;
+                if (categoryId) {
+                    label.dataset.highlightId = categoryId;
+                    label.dataset.highlightType = categoryType;
+                    const dataMap = { 'particleFamily': categoryData, 'bosonType': bosonTypeData, 'mainLabel': mainLabelData, 'generation': generationData, 'interaction': interactionData };
+                    if (dataMap[categoryType] && dataMap[categoryType][categoryId]) {
+                        label.addEventListener('click', () => showGenericModal(dataMap[categoryType][categoryId]));
+                    }
+                }
+                label.innerHTML = text;
+                Object.assign(label.style, style);
+                label.style.borderColor = borderColor;
+                if (style.color) label.style.color = style.color;
+                return label;
+            };
+
+            const updateParticleTypeLegend = () => {
+                const particleTypeLegend = document.getElementById('particle-type-legend');
+                if (!particleTypeLegend) return;
+                particleTypeLegend.innerHTML = ''; // Clear it
+                const pTypes = { ...particleTypeData, ...bosonTypeData };
+                const pOrder = ['fermion', 'quark', 'lepton', 'boson', 'gauge', 'scalar', 'tensor'];
+
+                pOrder.forEach(key => {
+                    const value = pTypes[key];
+                    const item = document.createElement('div');
+                    item.className = 'legend-item';
+                    item.dataset.highlightId = key;
+                    item.dataset.highlightType = bosonTypeData[key] ? 'bosonType' : 'particleFamily';
+                    const name = isAntimatter ? (value.antiName || value.name) : value.name;
+                    item.innerHTML = `<div class="legend-square" style="background-color: ${value.color};"></div><span class="legend-text">${name}</span>`;
+                    item.addEventListener('click', () => showGenericModal(value));
+                    particleTypeLegend.appendChild(item);
+                });
+            };
+
+            const createLegends = () => {
+                particleTypeLegendContainer.innerHTML = '<h3>Particle Types</h3><div id="particle-type-legend" class="legend"></div>';
+                interactionLegendContainer.innerHTML = '<h3>Fundamental Forces</h3><div id="interaction-legend" class="legend"></div>';
+
+                const interactionLegend = document.getElementById('interaction-legend');
+                for (const [key, value] of Object.entries(interactionData)) {
+                    const item = document.createElement('div');
+                    item.className = 'legend-item';
+                    item.dataset.highlightId = key;
+                    item.dataset.highlightType = 'interaction';
+                    item.innerHTML = `<div class="legend-square" style="background-color: ${value.color};"></div><span class="legend-text">${value.name}</span>`;
+                    item.addEventListener('click', () => showGenericModal(value));
+                    interactionLegend.appendChild(item);
+                }
+
+                updateParticleTypeLegend();
+            };
+
+            const populateGridView = () => {
+                container.innerHTML = '';
+                container.className = 'view-grid';
+                container.style.display = 'grid';
+
+                const matterLabelText = isAntimatter ? mainLabelData.fermion.antiName : mainLabelData.fermion.name;
+                const matterLabel = createLabel(matterLabelText, { gridRow: '1', gridColumn: '2 / span 3', fontSize: '0.8rem', lineHeight: '1.2' }, '#ccc', 'fermion', 'mainLabel');
+                const forceLabel = createLabel(mainLabelData.boson.name, { gridRow: '1', gridColumn: '5 / span 3', fontSize: '0.8rem', lineHeight: '1.2' }, '#ccc', 'boson', 'mainLabel');
+                container.appendChild(matterLabel);
+                container.appendChild(forceLabel);
+
+                const gen1Label = createLabel('I', { gridRow: '2', gridColumn: '2', color: 'var(--gen1-color)' }, 'var(--gen1-color)', '1', 'generation');
+                const gen2Label = createLabel('II', { gridRow: '2', gridColumn: '3', color: 'var(--gen2-color)' }, 'var(--gen2-color)', '2', 'generation');
+                const gen3Label = createLabel('III', { gridRow: '2', gridColumn: '4', color: 'var(--gen3-color)' }, 'var(--gen3-color)', '3', 'generation');
+                container.appendChild(gen1Label);
+                container.appendChild(gen2Label);
+                container.appendChild(gen3Label);
+
+                const gaugeLabel = createLabel('Gauge Bosons', { gridRow: '2', gridColumn: '5', fontSize: '0.8rem', color: 'var(--gauge-boson-color)' }, 'var(--gauge-boson-color)', 'gauge', 'bosonType');
+                const scalarLabel = createLabel('Scalar Boson', { gridRow: '2', gridColumn: '6', fontSize: '0.8rem', color: 'var(--scalar-boson-color)' }, 'var(--scalar-boson-color)', 'scalar', 'bosonType');
+                const tensorLabel = createLabel('Tensor Boson', { gridRow: '2', gridColumn: '7', fontSize: '0.8rem', color: 'var(--tensor-boson-color)' }, 'var(--tensor-boson-color)', 'tensor', 'bosonType');
+                container.appendChild(gaugeLabel);
+                container.appendChild(scalarLabel);
+                container.appendChild(tensorLabel);
+
+                const quarkLabelText = isAntimatter ? categoryData.quark.antiName : categoryData.quark.name;
+                const leptonLabelText = isAntimatter ? categoryData.lepton.antiName : categoryData.lepton.name;
+                const quarkLabel = createLabel(quarkLabelText, { gridRow: '3 / span 2', gridColumn: '1', writingMode: 'vertical-rl', color: 'var(--quark-color)' }, 'var(--quark-color)', 'quark', 'particleFamily');
+                const leptonLabel = createLabel(leptonLabelText, { gridRow: '5 / span 2', gridColumn: '1', writingMode: 'vertical-rl', color: 'var(--lepton-color)' }, 'var(--lepton-color)', 'lepton', 'particleFamily');
+                container.appendChild(quarkLabel);
+                container.appendChild(leptonLabel);
+
+                gridLayout.forEach((row, rowIndex) => {
+                    row.forEach((id, colIndex) => {
+                        const cell = document.createElement('div');
+                        cell.style.gridRow = rowIndex + 3;
+                        cell.style.gridColumn = colIndex + 2;
+                        if (id && particleData[id]) {
+                            cell.appendChild(createParticleCard(id, particleData[id]));
+                        }
+                        container.appendChild(cell);
+                    });
+                });
+
+                const propertiesLegendCell = document.createElement('div');
+                propertiesLegendCell.style.gridRow = '7';
+                propertiesLegendCell.style.gridColumn = '2 / span 3';
+                propertiesLegendCell.className = 'flex justify-start items-end p-1 text-xs cursor-pointer h-full';
+                propertiesLegendCell.innerHTML = `<div id="fundamental-properties-legend" class="dark:text-white text-black cursor-pointer hover:underline">Mass, Charge, & Spin</div>`;
+                container.appendChild(propertiesLegendCell);
+                propertiesLegendCell.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    showGenericModal(fundamentalPropertiesData);
+                });
+
+
+                const quantumLegendCell = document.createElement('div');
+                quantumLegendCell.id = 'quantum-legend';
+                quantumLegendCell.style.gridRow = '7';
+                quantumLegendCell.style.gridColumn = '5 / span 3';
+                quantumLegendCell.className = 'flex flex-col justify-end items-end p-1 text-xs cursor-pointer h-full';
+                quantumLegendCell.addEventListener('click', () => showGenericModal(quantumLegendData));
+                quantumLegendCell.innerHTML = `
+                    <div style="color: var(--y-color);">Y: Weak Hypercharge (L/R)</div>
+                    <div style="color: var(--t3-color);">T₃: Weak Isospin (L/R)</div>
+                `;
+                container.appendChild(quantumLegendCell);
+            };
+
+            const populateCircleView = () => {
+                container.innerHTML = `<svg id="circle-view-svg" class="circle-view-svg" viewBox="0 0 1000 1000"></svg>`;
+                container.className = 'view-circle';
+                container.style.display = 'block';
+                const svg = document.getElementById('circle-view-svg');
+
+                const defs = {
+                    quarks: { color: 'rgba(236, 72, 153, 0.4)' },
+                    leptons: { color: 'rgba(34, 197, 94, 0.4)' },
+                    gauge: { ids: ['gluon', 'photon', 'z_boson', 'w_boson'], color: 'rgba(59, 130, 246, 0.4)' },
+                    scalar: { color: 'rgba(250, 204, 21, 0.4)' },
+                    tensor: { color: 'rgba(107, 114, 128, 0.4)' },
+                    gen1: { color: 'rgba(248, 113, 113, 0.4)' },
+                    gen2: { color: 'rgba(251, 191, 36, 0.4)' },
+                    gen3: { color: 'rgba(167, 139, 250, 0.4)' }
+                };
+                const center = { x: 500, y: 500 };
+                const radii = { fermionOuter: 420, fermionInner: 280, bosonOuter: 270, bosonInner: 90, higgsOuter: 80, generationOuter: 490, generationInner: 430 };
+
+                const createWedge = (startAngle, endAngle, innerRadius, outerRadius) => {
+                    const largeArcFlag = endAngle - startAngle <= Math.PI ? "0" : "1";
+                    const start = { x: center.x + outerRadius * Math.cos(startAngle), y: center.y + outerRadius * Math.sin(startAngle) };
+                    const end = { x: center.x + outerRadius * Math.cos(endAngle), y: center.y + outerRadius * Math.sin(endAngle) };
+                    const start_inner = { x: center.x + innerRadius * Math.cos(startAngle), y: center.y + innerRadius * Math.sin(startAngle) };
+                    const end_inner = { x: center.x + innerRadius * Math.cos(endAngle), y: center.y + innerRadius * Math.sin(endAngle) };
+                    return `M ${start_inner.x} ${start_inner.y} L ${start.x} ${start.y} A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${end.x} ${end.y} L ${end_inner.x} ${end_inner.y} A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${start_inner.x} ${start_inner.y} Z`;
+                };
+
+                const strokeStyle = `stroke-width="1"`;
+                let svgContent = '';
+                const quarkIds = ['up', 'charm', 'top', 'down', 'strange', 'bottom'];
+                const leptonIds = ['electron', 'muon', 'tau', 'electron_neutrino', 'muon_neutrino', 'tau_neutrino'];
+
+                for (let i = 0; i < 6; i++) {
+                    const startAngle = (i / 6) * Math.PI - (Math.PI / 2);
+                    const endAngle = ((i + 1) / 6) * Math.PI - (Math.PI / 2);
+                    svgContent += `<path class="particle-shape background-ring" data-id="${quarkIds[i]}" d="${createWedge(startAngle, endAngle, radii.fermionInner, radii.fermionOuter)}" fill="${defs.quarks.color}" ${strokeStyle} />`;
+                    svgContent += `<path class="particle-shape background-ring" data-id="${leptonIds[i]}" d="${createWedge(startAngle + Math.PI, endAngle + Math.PI, radii.fermionInner, radii.fermionOuter)}" fill="${defs.leptons.color}" ${strokeStyle} />`;
+                }
+                defs.gauge.ids.forEach((id, i) => {
+                    const startAngle = (i / 4 * 2 * Math.PI) - (Math.PI / 2);
+                    const endAngle = ((i + 1) / 4 * 2 * Math.PI) - (Math.PI / 2);
+                    svgContent += `<path class="particle-shape background-ring" data-id="${id}" d="${createWedge(startAngle, endAngle, radii.bosonInner, radii.bosonOuter)}" fill="${defs.gauge.color}" ${strokeStyle} />`;
+                });
+                svgContent += `<circle class="particle-shape background-ring" data-id="higgs_boson" cx="${center.x}" cy="${center.y}" r="${radii.higgsOuter}" fill="${defs.scalar.color}" ${strokeStyle} />`;
+
+                const genAngleSize = (Math.PI / 2) / 3;
+                svgContent += `<path class="particle-shape background-ring" data-id="1" data-highlight-type="generation" d="${createWedge(-Math.PI / 2, -Math.PI / 2 + genAngleSize, radii.generationInner, radii.generationOuter)}" fill="${defs.gen1.color}" ${strokeStyle} />`;
+                svgContent += `<path class="particle-shape background-ring" data-id="2" data-highlight-type="generation" d="${createWedge(-Math.PI / 2 + genAngleSize, -Math.PI / 2 + 2 * genAngleSize, radii.generationInner, radii.generationOuter)}" fill="${defs.gen2.color}" ${strokeStyle} />`;
+                svgContent += `<path class="particle-shape background-ring" data-id="3" data-highlight-type="generation" d="${createWedge(-Math.PI / 2 + 2 * genAngleSize, 0, radii.generationInner, radii.generationOuter)}" fill="${defs.gen3.color}" ${strokeStyle} />`;
+                svg.innerHTML = svgContent;
+
+                const addTextToSVG = (id, angle, radius, customName = null, customSymbol = null) => {
+                    const particle = particleData[id];
+                    const name = customName || (isAntimatter ? (particle.antiName || `Anti-${particle.name}`) : particle.name);
+                    const symbol = customSymbol || (isAntimatter ? (particle.antiSymbol || particle.symbol) : particle.symbol);
+                    const x = center.x + radius * Math.cos(angle);
+                    const y = center.y + radius * Math.sin(angle);
+                    const textGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                    textGroup.setAttribute('class', 'particle-text-group');
+                    textGroup.innerHTML = `<text class="particle-label particle-symbol" x="${x}" y="${y}">${symbol}</text><text class="particle-label particle-name" x="${x}" y="${y + 22}">${name}</text>`;
+                    svg.appendChild(textGroup);
+                };
+
+                for (let i = 0; i < 6; i++) {
+                    const angle = (i + 0.5) / 6 * Math.PI - (Math.PI / 2);
+                    addTextToSVG(quarkIds[i], angle, (radii.fermionInner + radii.fermionOuter) / 2);
+                    addTextToSVG(leptonIds[i], angle + Math.PI, (radii.fermionInner + radii.fermionOuter) / 2);
+                }
+                defs.gauge.ids.forEach((id, i) => {
+                    const angle = (i + 0.5) / 4 * 2 * Math.PI - (Math.PI / 2);
+                    addTextToSVG(id, angle, (radii.bosonInner + radii.bosonOuter) / 2);
+                });
+                addTextToSVG('higgs_boson', -Math.PI / 2, 0, 'Higgs Boson');
+                const genTextRadius = (radii.generationInner + radii.generationOuter) / 2;
+                addTextToSVG('up', -Math.PI / 2 + genAngleSize * 0.5, genTextRadius, 'Gen I', 'I');
+                addTextToSVG('charm', -Math.PI / 2 + genAngleSize * 1.5, genTextRadius, 'Gen II', 'II');
+                addTextToSVG('top', -Math.PI / 2 + genAngleSize * 2.5, genTextRadius, 'Gen III', 'III');
+
+                const gravitonGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                gravitonGroup.setAttribute('class', 'category-label-group');
+                gravitonGroup.dataset.id = 'graviton';
+                gravitonGroup.innerHTML = `<circle cx="870" cy="870" r="35" fill="${defs.tensor.color}" class="particle-shape background-ring" data-id="graviton"></circle><text class="particle-label particle-symbol" x="870" y="870">G</text><text class="particle-label particle-name" x="870" y="892">Graviton</text>`;
+                svg.appendChild(gravitonGroup);
+
+                svg.querySelectorAll('.particle-shape, .category-label-group').forEach(el => {
+                    const id = el.dataset.id;
+                    const type = el.dataset.highlightType;
+                    if (id) {
+                        el.addEventListener('click', (e) => { e.stopPropagation(); if (type === 'generation') { showGenericModal(generationData[id]); } else { showModal(id); } });
+                    }
+                });
+            };
+
+            const populateView = () => {
+                if (currentView === 'grid1') populateGridView();
+                else if (currentView === 'circle') populateCircleView();
+            };
+
+            const showModal = (id) => {
+                const particle = particleData[id];
+                showGenericModal(particle);
+            };
+
+            const createDiscoveryTimeline = (particle) => {
+                if (!particle.theorized && !particle.discovered) return '';
+
+                const allDates = Object.values(particleData)
+                    .flatMap(p => [p.theorized, p.discovered])
+                    .filter(date => date != null);
+                const minYear = Math.min(...allDates);
+                const maxYear = Math.max(...allDates);
+                const yearRange = maxYear - minYear;
+
+                let timelineHTML = `<h3 class="text-lg font-semibold dark:text-gray-200 text-gray-800 border-b dark:border-gray-700 border-gray-300 pb-2">Discovery Timeline</h3>
+                <div class="discovery-timeline-container">
+                    <div class="discovery-timeline-track"></div>`;
+
+                if (particle.theorized) {
+                    const left = ((particle.theorized - minYear) / yearRange) * 100;
+                    timelineHTML += `<div class="timeline-dot timeline-dot-theorized" style="left: ${left}%"></div>
+                                     <div class="timeline-label timeline-label-top" style="left: ${left}%">Theorized: ${particle.theorized}</div>`;
+                }
+                if (particle.discovered) {
+                    const left = ((particle.discovered - minYear) / yearRange) * 100;
+                    timelineHTML += `<div class="timeline-dot timeline-dot-discovered" style="left: ${left}%"></div>
+                                     <div class="timeline-label timeline-label-bottom" style="left: ${left}%">Discovered: ${particle.discovered}</div>`;
+                }
+
+                timelineHTML += `</div>`;
+                return timelineHTML;
+            };
+
+            const showGenericModal = (data) => {
+                if (!data) {
+                    console.error("showGenericModal called with undefined data.");
+                    return;
+                }
+                const name = isAntimatter ? (data.antiName || data.name) : data.name;
+                const charge = isAntimatter && data.charge ? invertCharge(data.charge) : data.charge;
+                const symbol = isAntimatter ? (data.antiSymbol || data.symbol) : data.symbol;
+                const timelineHTML = data.type ? createDiscoveryTimeline(data) : '';
+
+                modalContainer.innerHTML = `
+                    <div class="modal-content rounded-xl shadow-2xl">
+                        <div class="flex justify-between items-center p-4 border-b dark:border-gray-700 border-gray-300">
+                            <h2 class="text-3xl font-bold" style="color: ${data.color}">${name} ${symbol ? `(${symbol})` : ''}</h2>
+                            <button id="closeModal" class="dark:text-gray-400 text-gray-600 hover:dark:text-white hover:text-black transition text-4xl leading-none">&times;</button>
+                        </div>
+                        <div class="modal-body p-6 md:p-8">
+                            <div class="flex flex-col md:flex-row gap-8">
+                                <div class="w-full md:w-2/5 text-center flex flex-col items-center">
+                                    ${data.visual ? data.visual : ''}
+                                    ${data.type && !data.visual ? `<div class="mx-auto my-4 particle-card ${data.cardClass}" style="width:150px; height: 170px; cursor:default; transform: none;">
+                                        ${createParticleCard(Object.keys(particleData).find(k => particleData[k] === data), data).innerHTML.replace('cursor: pointer;', 'cursor: default;')}
+                                    </div>` : ''}
+                                    <p class="text-sm dark:text-gray-300 text-gray-700 mt-2">${data.summary}</p>
+                                </div>
+                                <div class="w-full md:w-3/5 space-y-4 text-sm">
+                                    ${data.type ? `<h3 class="text-lg font-semibold dark:text-gray-200 text-gray-800 border-b dark:border-gray-700 border-gray-300 pb-2">Properties</h3>
+                                    <div class="grid grid-cols-2 gap-2 dark:text-gray-300 text-gray-700">
+                                        <div><strong>Type:</strong> ${data.type}</div>
+                                        <div><strong>Family:</strong> ${data.family}</div>
+                                        <div><strong>Generation:</strong> ${data.generation ? `Generation ${data.generation}` : 'N/A'}</div>
+                                        <div><strong>Mass:</strong> ${data.mass}</div>
+                                        <div><strong>Charge:</strong> ${charge}</div>
+                                        <div><strong>Spin:</strong> ${data.spin}</div>
+                                    </div>` : ''}
+                                    ${timelineHTML}
+                                    ${data.info ? Object.entries(data.info).map(([key, value]) => {
+                    if (key === 'sourceURL') return `<div class="pt-4 border-t dark:border-gray-700 border-gray-300 text-xs dark:text-gray-500 text-gray-400">Source: <a href="${value}" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">Particle Data Group (PDG)</a></div>`;
+                    return `<div>
+                                            <h4 class="font-semibold dark:text-gray-300 text-gray-700">${key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</h4>
+                                            <p class="dark:text-gray-400 text-gray-600">${value}</p>
+                                        </div>`
+                }).join('') : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                modalContainer.style.display = 'block';
+                modalContainer.querySelector('#closeModal').addEventListener('click', () => modalContainer.style.display = 'none');
+            };
+
+            const showTooltip = (e, text) => { tooltip.style.display = 'block'; tooltip.innerHTML = text; tooltip.style.left = `${e.pageX + 15}px`; tooltip.style.top = `${e.pageY + 15}px`; };
+            const hideTooltip = () => { tooltip.style.display = 'none'; };
+
+            const handleHighlight = (id, type) => {
+                if (!id || !type) return;
+                const allElements = document.querySelectorAll('.particle-card, .particle-shape, .category-label-group, .grid-label');
+                allElements.forEach(el => {
+                    const pId = el.dataset.id || el.dataset.highlightId;
+                    const particle = particleData[pId];
+                    let isMatch = false;
+                    if (pId == id && (el.dataset.highlightType === type || type === 'particleFamily' || type === 'interaction' || type === 'generation')) isMatch = true;
+                    else if (particle) {
+                        switch (type) {
+                            case 'interaction': isMatch = particle.interactions.includes(id); break;
+                            case 'generation': isMatch = particle.generation == id; break;
+                            case 'particleFamily': case 'bosonType': case 'mainLabel': isMatch = particle.groups.includes(id); break;
+                        }
+                    }
+                    if (isMatch) {
+                        el.classList.add('highlight');
+                        el.classList.remove('dimmed');
+                        let highlightClass = `highlight-${id.replace('1', 'gen1').replace('2', 'gen2').replace('3', 'gen3')}`;
+                        el.classList.add(highlightClass);
+                    } else {
+                        el.classList.add('dimmed');
+                        el.classList.remove('highlight');
+                        el.className = (el.className.baseVal === undefined) ? Array.from(el.classList).filter(c => !c.startsWith('highlight-')).join(' ') : Array.from(el.classList).filter(c => !c.startsWith('highlight-')).join(' ');
+                    }
+                });
+            };
+
+            const clearHighlights = () => {
+                document.querySelectorAll('.dimmed, .highlight').forEach(el => {
+                    el.classList.remove('dimmed', 'highlight');
+                    const classList = (el.className.baseVal === undefined) ? el.classList : el.className.baseVal.split(' ');
+                    const classesToRemove = Array.from(classList).filter(c => c.startsWith('highlight-'));
+                    el.classList.remove(...classesToRemove);
+                    if (el.className.baseVal !== undefined) el.setAttribute('class', Array.from(el.classList).join(' '));
+                });
+            };
+
+            const setupEventListeners = () => {
+                document.body.addEventListener('mousemove', (e) => { if (tooltip.style.display === 'block') { tooltip.style.left = `${e.pageX + 15}px`; tooltip.style.top = `${e.pageY + 15}px`; } });
+
+                document.body.addEventListener('mouseover', (e) => {
+                    const legendItem = e.target.closest('.legend-item');
+                    const interactionSquare = e.target.closest('.interaction-square');
+                    const quantumLegend = e.target.closest('#quantum-legend, #fundamental-properties-legend');
+                    const particleDot = e.target.closest('.particle-dot');
+                    const gridLabel = e.target.closest('.grid-label');
+                    const circleShape = e.target.closest('.particle-shape, .category-label-group');
+
+                    if (legendItem) {
+                        const id = legendItem.dataset.highlightId;
+                        const type = legendItem.dataset.highlightType;
+                        let data;
+                        if (type === 'interaction') data = interactionData[id];
+                        else if (type === 'bosonType') data = bosonTypeData[id];
+                        else data = particleTypeData[id];
+                        if (data) showTooltip(e, isAntimatter && data.antiName ? data.antiName : data.name);
+                        handleHighlight(id, type);
+                    } else if (interactionSquare) {
+                        const id = interactionSquare.dataset.interaction;
+                        showTooltip(e, interactionData[id].name);
+                        handleHighlight(id, 'interaction');
+                    } else if (quantumLegend) {
+                        showTooltip(e, 'Click for Details');
+                    } else if (particleDot) {
+                        const particle = particleData[particleDot.dataset.id];
+                        const name = isAntimatter ? (particle.antiName || `Anti-${particle.name}`) : particle.name;
+                        showTooltip(e, name);
+                    } else if (gridLabel) {
+                        const id = gridLabel.dataset.highlightId;
+                        const type = gridLabel.dataset.highlightType;
+                        handleHighlight(id, type);
+                    } else if (circleShape) {
+                        const id = circleShape.dataset.id;
+                        const type = circleShape.dataset.highlightType || 'particleFamily';
+                        handleHighlight(id, type);
+                    }
+                });
+
+                document.body.addEventListener('mouseout', (e) => {
+                    const target = e.target.closest('.legend-item, .interaction-square, #quantum-legend, #fundamental-properties-legend, .particle-dot, .grid-label, .particle-shape, .category-label-group');
+                    if (target) {
+                        hideTooltip();
+                        clearHighlights();
+                    }
+                });
+
+                antimatterToggle.addEventListener('change', (e) => {
+                    isAntimatter = e.target.checked;
+                    document.body.classList.toggle('is-antimatter', isAntimatter);
+                    populateView();
+                    generateNumberLine();
+                    updateParticleTypeLegend();
+                });
+
+                viewSelector.addEventListener('click', (e) => {
+                    if (e.target.matches('.view-btn')) {
+                        const view = e.target.dataset.view;
+                        if (view !== currentView) {
+                            currentView = view;
+                            viewSelector.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+                            e.target.classList.add('active');
+                            populateView();
+                        }
+                    }
+                });
+
+                darkModeToggle.addEventListener('change', (e) => {
+                    document.documentElement.classList.toggle('dark', e.target.checked);
+                });
+                window.addEventListener('click', (event) => { if (event.target == modalContainer) { modalContainer.style.display = 'none'; } });
+            };
+
+            // --- SCALE SECTION LOGIC --- //
+            const propertySelect = document.getElementById('property-select');
+            const numberLineContainer = document.querySelector('#number-line-container .number-line');
+            const numberLineLabels = document.getElementById('number-line-labels');
+
+            function generateNumberLine() {
+                const prop = propertySelect.value;
+                const isLog = prop.includes('mass');
+
+                const rawValues = Object.entries(particleData).map(([id, p]) => {
+                    let val = p[prop];
+                    if (prop === 'theorized' || prop === 'discovered') val = p[prop];
+                    else if (typeof val === 'string' && val.includes('/')) val = eval(val);
+                    else if (typeof val === 'string' && val.includes('±')) val = parseFloat(val.substring(1));
+                    return { id, value: Number(val) };
+                }).filter(item => !isNaN(item.value) && (isLog ? item.value > 0 : true));
+
+                const valueMap = new Map();
+                rawValues.forEach(item => {
+                    const key = item.value;
+                    if (!valueMap.has(key)) valueMap.set(key, []);
+                    valueMap.get(key).push(item.id);
+                });
+
+                const values = Array.from(valueMap.keys());
+                let minVal = Math.min(...values);
+                let maxVal = Math.max(...values);
+
+                let ticks = [];
+                if (prop === 'charge') {
+                    minVal = -1; maxVal = 1;
+                    ticks = [-1, -1 / 3, 0, 2 / 3, 1];
+                } else if (prop === 'spin') {
+                    minVal = 0; maxVal = 2;
+                    ticks = [0, 0.5, 1, 2];
+                } else if (prop === 'theorized' || prop === 'discovered') {
+                    const startYear = Math.floor(minVal / 10) * 10;
+                    const endYear = Math.ceil(maxVal / 10) * 10;
+                    ticks.push(minVal);
+                    for (let year = startYear; year <= endYear; year += 10) {
+                        if (year > minVal && year < maxVal) ticks.push(year);
+                    }
+                    ticks.push(maxVal);
+                } else { // Mass
+                    const startPower = Math.floor(Math.log10(minVal));
+                    const endPower = Math.ceil(Math.log10(maxVal));
+                    ticks.push(minVal);
+                    for (let i = startPower; i <= endPower; i += 3) {
+                        const tickVal = Math.pow(10, i);
+                        if (tickVal > minVal && tickVal < maxVal) ticks.push(tickVal);
+                    }
+                    ticks.push(maxVal);
+                }
+
+                ticks = [...new Set(ticks)].sort((a, b) => a - b);
+
+                const range = (isLog ? Math.log10(maxVal) : maxVal) - (isLog ? Math.log10(minVal) : minVal);
+                if (range === 0) { // Avoid division by zero if all values are the same
+                    numberLineContainer.innerHTML = '<div class="number-line-track"></div>';
+                    numberLineLabels.innerHTML = `<div class="tick-label" style="left: 50%;">${minVal}</div>`;
+                    return;
+                }
+
+                numberLineContainer.innerHTML = '<div class="number-line-track"></div>'; // Clear previous dots
+
+                for (const [value, ids] of valueMap.entries()) {
+                    const logVal = isLog ? Math.log10(value) : value;
+                    const logMin = isLog ? Math.log10(minVal) : minVal;
+                    const percent = ((logVal - logMin) / range) * 100;
+
+                    ids.forEach((id, index) => {
+                        const particle = particleData[id];
+                        const dot = document.createElement('div');
+                        dot.className = 'particle-dot';
+                        dot.dataset.id = id;
+                        dot.style.left = `${percent}%`;
+
+                        const verticalOffset = (index - (ids.length - 1) / 2) * 15;
+                        dot.style.top = `calc(50% + ${verticalOffset}px)`;
+                        dot.style.transform = `translate(-50%, -50%)`;
+
+                        dot.style.backgroundColor = particle.color;
+                        const size = 10 + (percent / 100) * 15;
+                        dot.style.width = `${size}px`;
+                        dot.style.height = `${size}px`;
+                        dot.addEventListener('click', () => showModal(id));
+
+                        numberLineContainer.appendChild(dot);
+                    });
+                }
+
+                numberLineLabels.innerHTML = '';
+                ticks.forEach(tick => {
+                    const logTick = isLog ? Math.log10(tick) : tick;
+                    const logMin = isLog ? Math.log10(minVal) : minVal;
+                    const percent = ((logTick - logMin) / range) * 100;
+                    if (percent >= 0 && percent <= 100) {
+                        const label = document.createElement('div');
+                        label.className = 'tick-label';
+                        label.style.left = `${percent}%`;
+                        if (prop === 'charge') label.textContent = tick === -1 / 3 ? '-¹/₃' : tick === 2 / 3 ? '²/₃' : tick.toFixed(0);
+                        else if (prop === 'spin') label.textContent = tick === 0.5 ? '¹/₂' : tick;
+                        else if (isLog) label.innerHTML = `10<sup>${Math.round(Math.log10(tick))}</sup>`;
+                        else label.textContent = Math.round(tick);
+                        numberLineLabels.appendChild(label);
+                    }
+                });
+            }
+
+            const scaleParticleSelect = document.getElementById('scale-particle-select');
+            const scaleObjectSelect = document.getElementById('scale-object-select');
+            const scaleResultsContainer = document.getElementById('scale-results-container');
+            const scaleMultiplier = document.getElementById('scale-multiplier');
+            const unitToggle = document.getElementById('unit-toggle');
+
+            function formatScientificHTML(num) {
+                if (num === 0) return "0";
+                const exponential = num.toExponential(1);
+                const parts = exponential.split('e');
+                const mantissa = parts[0];
+                const exponent = parts[1];
+                return `${mantissa} × 10<sup>${parseInt(exponent, 10)}</sup>`;
+            }
+
+            function formatNumberHTML(num) {
+                if (num === 0) return "0";
+                if (Math.abs(num) > 1e4 || Math.abs(num) < 1e-2) {
+                    return formatScientificHTML(num);
+                }
+                return num.toLocaleString(undefined, { maximumFractionDigits: 2 });
+            }
+
+            function setupScaleVisualizer() {
+                const sortBySize = (data) => Object.entries(data).sort(([, a], [, b]) => a.size - b.size);
+
+                scaleParticleSelect.innerHTML = sortBySize(scaleData.particles)
+                    .map(([id, data]) => `<option value="${id}">${data.name}</option>`).join('');
+
+                scaleObjectSelect.innerHTML = sortBySize(scaleData.objects)
+                    .map(([id, data]) => `<option value="${id}">${data.name}</option>`).join('');
+
+                updateRelativeScale();
+            }
+
+            function formatActualSize(meters, unitSystem) {
+                if (unitSystem === 'metric') {
+                    if (meters < 1) return `${formatNumberHTML(meters * 100)} cm`;
+                    if (meters < 1000) return `${formatNumberHTML(meters)} m`;
+                    return `${formatNumberHTML(meters / 1000)} km`;
+                } else { // Imperial
+                    const ft = meters * 3.28084;
+                    const inches = ft * 12;
+                    const miles = ft / 5280;
+                    if (inches < 12) return `${formatNumberHTML(inches)} in`;
+                    if (ft < 5280) return `${formatNumberHTML(ft)} ft`;
+                    return `${formatNumberHTML(miles)} mi`;
+                }
+            }
+
+            function formatSize(meters, unitSystem) {
+                const isMetric = unitSystem === 'metric';
+                const ft = meters * 3.28084;
+                const inches = ft * 12;
+                const miles = ft / 5280;
+                const lightYears = meters / 9.461e15;
+
+                if (lightYears > 0.1) return `${formatNumberHTML(lightYears)} light-years`;
+
+                let formattedSize;
+                if (isMetric) {
+                    if (meters < 1e-12) formattedSize = `${formatNumberHTML(meters / 1e-15)} fm`;
+                    else if (meters < 1e-9) formattedSize = `${formatNumberHTML(meters / 1e-12)} pm`;
+                    else if (meters < 1e-6) formattedSize = `${formatNumberHTML(meters / 1e-9)} nm`;
+                    else if (meters < 1e-3) formattedSize = `${formatNumberHTML(meters / 1e-6)} μm`;
+                    else if (meters < 1) formattedSize = `${formatNumberHTML(meters * 100)} cm`;
+                    else if (meters < 1000) formattedSize = `${formatNumberHTML(meters)} m`;
+                    else formattedSize = `${formatNumberHTML(meters / 1000)} km`;
+                } else { // Imperial
+                    if (inches < 0.01 && inches > 0) formattedSize = `${formatScientificHTML(inches)} in`;
+                    else if (inches < 12) formattedSize = `${formatNumberHTML(inches)} in`;
+                    else if (ft < 5280) formattedSize = `${formatNumberHTML(ft)} ft`;
+                    else formattedSize = `${formatNumberHTML(miles)} mi`;
+                }
+                return formattedSize;
+            }
+
+            function updateRelativeScale() {
+                const baseParticleId = scaleParticleSelect.value;
+                const baseObjectId = scaleObjectSelect.value;
+                if (!baseParticleId || !baseObjectId) return;
+
+                const baseParticleSize = scaleData.particles[baseParticleId].size;
+                const baseObjectSize = scaleData.objects[baseObjectId].size;
+                const scaleFactor = baseObjectSize / baseParticleSize;
+
+                scaleMultiplier.innerHTML = `Scale Multiplier: 1 to ${formatScientificHTML(scaleFactor)}`;
+                scaleResultsContainer.innerHTML = '';
+
+                for (const data of scaleData.targets) {
+                    const scaledSize = data.size * scaleFactor;
+                    const sizeText = formatSize(scaledSize, currentUnit);
+                    const actualSizeText = formatActualSize(data.size, currentUnit);
+
+                    const card = document.createElement('div');
+                    card.className = 'scale-card';
+                    card.innerHTML = `
+                        <div class="scale-card-inner">
+                            <div class="scale-card-front">
+                                <div class="text-4xl mb-2">${data.icon}</div>
+                                <h4 class="font-semibold">${data.name}</h4>
+                                <p class="text-lg font-bold text-blue-500 dark:text-blue-300">${sizeText}</p>
+                                <p class="text-xs dark:text-gray-400 text-gray-600 h-8">Actual: ${actualSizeText}</p>
+                            </div>
+                            <div class="scale-card-back">
+                                <p class="font-semibold">${data.name}</p>
+                                <div class="text-xs dark:text-gray-300 text-gray-700 text-left px-2 space-y-2">
+                                    ${data.description}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    scaleResultsContainer.appendChild(card);
+                }
+            }
+
+            unitToggle.addEventListener('click', (e) => {
+                if (e.target.matches('.unit-toggle-btn')) {
+                    currentUnit = e.target.dataset.unit;
+                    unitToggle.querySelectorAll('.unit-toggle-btn').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                    updateRelativeScale();
+                }
+            });
+
+            propertySelect.addEventListener('change', generateNumberLine);
+            scaleParticleSelect.addEventListener('change', updateRelativeScale);
+            scaleObjectSelect.addEventListener('change', updateRelativeScale);
+
+
+            // --- HEISENBERG SECTION LOGIC --- //
+            const canvas = document.getElementById('uncertaintyCanvas');
+            const ctx = canvas.getContext('2d');
+            const slider = document.getElementById('positionSlider');
+            const playBtn = document.getElementById('playSoundBtn');
+            const particleEl = document.getElementById('uncertaintyParticle');
+            let audioCtx, animationFrameId;
+
+            function draw() {
+                if (!canvas) return;
+                cancelAnimationFrame(animationFrameId);
+                const value = slider.value / 100;
+                const positionCertainty = 1 - value;
+                const momentumCertainty = value;
+
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                const waveAmplitude = 40 * momentumCertainty;
+                const waveFrequency = 5 + 40 * momentumCertainty;
+                const envelopeWidth = canvas.width / 2 * (1 - positionCertainty * 0.95);
+
+                ctx.beginPath();
+                ctx.moveTo(0, canvas.height / 2);
+                for (let x = 0; x < canvas.width; x++) {
+                    const envelope = Math.exp(-Math.pow((x - canvas.width / 2) / (envelopeWidth + 1), 2));
+                    const y = canvas.height / 2 + waveAmplitude * Math.sin((x * waveFrequency) / canvas.width) * envelope;
+                    ctx.lineTo(x, y);
+                }
+                ctx.strokeStyle = '#22c55e';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                const particleX = canvas.width / 2;
+                const particleY = canvas.height / 2;
+                particleEl.style.left = `${particleX - particleEl.offsetWidth / 2}px`;
+                particleEl.style.top = `${particleY - particleEl.offsetHeight / 2}px`;
+                particleEl.style.opacity = positionCertainty;
+                particleEl.style.filter = `blur(${momentumCertainty * 10}px)`;
+
+                if (momentumCertainty > 0.01) {
+                    animationFrameId = requestAnimationFrame(drawParticleAnimation);
+                }
+            }
+
+            function drawParticleAnimation() {
+                const value = slider.value / 100;
+                const momentumCertainty = value;
+                const envelopeWidth = canvas.width / 2 * (1 - (1 - momentumCertainty) * 0.95);
+                const particleSpread = envelopeWidth * 0.8;
+                const particleX = canvas.width / 2 + (Math.random() * 2 - 1) * particleSpread;
+                particleEl.style.left = `${particleX - particleEl.offsetWidth / 2}px`;
+                animationFrameId = requestAnimationFrame(drawParticleAnimation);
+            }
+
+            slider.addEventListener('input', draw);
+
+            function playSound() {
+                if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+                const value = slider.value / 100;
+                const positionCertainty = 1 - value;
+                const momentumCertainty = value;
+                const now = audioCtx.currentTime;
+
+                if (momentumCertainty > 0.33) {
+                    const toneGain = audioCtx.createGain();
+                    toneGain.connect(audioCtx.destination);
+                    const scaledMomentum = (momentumCertainty - 0.33) / (1 - 0.33);
+                    toneGain.gain.setValueAtTime(scaledMomentum * 0.3, now);
+                    const oscillator = audioCtx.createOscillator();
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(220 + 440 * scaledMomentum, now);
+                    oscillator.connect(toneGain);
+                    oscillator.start(now);
+                    oscillator.stop(now + 0.1);
+                }
+
+                if (positionCertainty > 0.01) {
+                    const clickGain = audioCtx.createGain();
+                    clickGain.connect(audioCtx.destination);
+                    clickGain.gain.setValueAtTime(0, now);
+                    const noiseSource = audioCtx.createBufferSource();
+                    const bufferSize = audioCtx.sampleRate * 0.05;
+                    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                    const data = buffer.getChannelData(0);
+                    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+                    noiseSource.buffer = buffer;
+                    noiseSource.connect(clickGain);
+                    clickGain.gain.exponentialRampToValueAtTime(positionCertainty * 0.5, now + 0.005);
+                    clickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
+                    noiseSource.start(now);
+                    noiseSource.stop(now + 0.1);
+                }
+            }
+            playBtn.addEventListener('click', playSound);
+
+            // --- INITIAL SETUP --- //
+            createLegends();
+            populateView();
+            setupEventListeners();
+            generateNumberLine();
+            setupScaleVisualizer();
+            draw();
+            darkModeToggle.checked = document.documentElement.classList.contains('dark');
+
+            window.addEventListener('resize', () => {
+                populateView();
+                draw();
+            });
+        });
+    </script>
+</body>
+
+</html>
