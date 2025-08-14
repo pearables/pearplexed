@@ -1079,6 +1079,7 @@
                             <option value="massVal" selected>Mass (log scale)</option>
                             <option value="charge">Electric Charge</option>
                             <option value="spin">Spin</option>
+			    <option value="longLived">Lifespan > 1 sec.</option>
                             <option value="theorized">Year Theorized</option>
                             <option value="discovered">Year Discovered</option>
                         </select>
@@ -1139,7 +1140,7 @@
                             <div class="chart-bar-container">
                                 <div class="chart-bar" style="width: 75%; background-color: #9ca3af;" title="~75% Hydrogen">Hydrogen (75%)</div>
                                 <div class="chart-bar" style="width: 24%; background-color: #6b7280;" title="~24% Helium">Helium (24%)</div>
-                                <div class="chart-bar" style="width: 1%; background-color: #a16207;" title="~1% Heavier Elements">Heavy Elem. (1%)</div>
+                                <div class="chart-bar" style="width: 1%; background-color: #a16207;" title="~1% Heavier Elements">Heavier Elem. (1%)</div>
                             </div>
                         </div>
                         <div class="mt-6">
@@ -1210,7 +1211,7 @@
         };
 
         const categoryData = {
-            quark: { name: "Quarks", antiName: "Antiquarks", color: 'var(--quark-color)', summary: "A class of fermions that are the only fundamental particles to experience the strong nuclear force. They are always found inside composite particles called hadrons.", info: { 'Confinement': "Quarks exhibit a property called 'color confinement', meaning they cannot be isolated. If you try to pull two quarks apart, the energy in the strong force field between them becomes so large that it creates a new quark-antiquark pair.", 'Hadrons': "Quarks combine to form hadrons. The most stable are <b>protons</b> (2 up quarks + 1 down quark) and <b>neutrons</b> (1 up quark + 2 down quarks)." }, visual: `<div class="modal-visual"><h4 class="font-bold mb-2 text-lg">Building Blocks of Hadrons</h4><div class="flex justify-center items-center text-2xl"><div class="w-16 h-16 border-2 rounded-full flex items-center justify-center mr-2">p⁺</div><div class="w-16 h-16 border-2 rounded-full flex items-center justify-center">n⁰</div></div><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Quarks are the fundamental constituents of protons and neutrons.</p></div>` },
+            quark: { name: "Quarks", antiName: "Antiquarks", color: 'var(--quark-color)', summary: "A class of fermions that are the only fundamental particles to experience the strong nuclear force. They are always found inside composite particles called hadrons.", info: { 'Confinement': "Quarks exhibit a property called 'color confinement', meaning they cannot be isolated. If you try to pull two quarks apart, the energy in the strong force field between them becomes so large that it creates a new quark-antiquark pair.", 'Hadrons': "Quarks combine to form hadrons. The most stable are <b>protons</b> (uud) and <b>neutrons</b> (udd)." }, visual: `<div class="modal-visual"><h4 class="font-bold mb-2 text-lg">Building Blocks of Hadrons</h4><div class="flex justify-center items-center text-2xl"><div class="w-16 h-16 border-2 rounded-full flex items-center justify-center mr-2">p⁺</div><div class="w-16 h-16 border-2 rounded-full flex items-center justify-center">n⁰</div></div><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Quarks are the fundamental constituents of protons and neutrons.</p></div>` },
             lepton: { name: "Leptons", antiName: "Antileptons", color: 'var(--lepton-color)', summary: "A family of fundamental particles that, unlike quarks, do not experience the strong nuclear force.", info: { 'Key Members': "The most famous lepton is the <b>electron</b>, which orbits the nucleus of atoms and is responsible for chemistry. The heavier, unstable muons and taus are like the electron's cousins. The other three leptons are the elusive, nearly massless <b>neutrinos</b>.", 'Role in the Universe': "Leptons can exist on their own. Electrons form the shells of atoms, defining how atoms bond. Neutrinos are produced in nuclear reactions, like those in the Sun, and travel across the universe almost without interacting with anything." }, visual: `<div class="text-center p-4 rounded-lg dark:bg-gray-900 bg-gray-200"><h4 class="font-bold mb-2">Example: Helium Atom</h4><div class="flex justify-center items-center space-x-2"><div class="relative w-32 h-32"><div class="absolute w-12 h-12 dark:bg-gray-600 bg-gray-400 rounded-full" style="top:50%; left:50%; transform: translate(-50%, -50%);"><span class="absolute text-xs" style="top:50%; left:50%; transform: translate(-50%, -50%);">Nucleus</span></div><div class="absolute w-full h-full border-2 border-dashed border-lepton-color rounded-full animate-spin" style="animation-duration: 4s;"><div class="absolute w-4 h-4 rounded-full" style="background-color:var(--lepton-color); top: -8px; left: 50%; transform: translateX(-50%);">e⁻</div></div><div class="absolute w-2/3 h-2/3 border border-dashed border-lepton-color rounded-full animate-spin" style="animation-duration: 2s; top:50%; left:50%; transform: translate(-50%, -50%); animation-direction: reverse;"><div class="absolute w-4 h-4 rounded-full" style="background-color:var(--lepton-color); bottom: -8px; left: 50%; transform: translateX(-50%);">e⁻</div></div></div></div><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Electrons (a type of lepton) orbit the atomic nucleus.</p></div>` }
         };
 
@@ -1387,7 +1388,7 @@
         const particleTypeData = {
             fermion: { name: "Fermions", antiName: "Antifermions", color: 'var(--fermion-color)', summary: "The 'matter' particles (spin 1/2). They obey the Pauli exclusion principle, which means no two fermions can occupy the same quantum state. This is why matter is stable and solid.", info: { 'Defining Feature': "Fermions are the constituents of all ordinary matter. The fact that they cannot be in the same place at the same time is the basis for the structure of the periodic table of elements and the stability of matter itself.", 'Two Families': "Fermions are divided into two main groups: <b>Quarks</b> (which feel the strong force) and <b>Leptons</b> (which do not)." }, visual: `<div class="text-center p-4 rounded-lg dark:bg-gray-900 bg-gray-200"><h4 class="font-bold mb-2">Pauli Exclusion Principle</h4><div class="flex justify-center items-center text-2xl"><div class="w-16 h-16 border-2 flex items-center justify-center mr-2"><span>↑</span></div><div class="w-16 h-16 border-2 flex items-center justify-center"><span>↓</span></div></div><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Fermions cannot share the same quantum state, like two magnets repelling.</p></div>` },
             boson: { name: "Bosons", antiName: "Bosons", color: '#2563eb', summary: "The 'force-carrier' particles and the Higgs boson (integer spin: 0, 1, 2...). Multiple bosons can occupy the same quantum state, which allows them to create powerful force fields.", info: { 'Defining Feature': "Bosons mediate the fundamental interactions of nature. Unlike fermions, they are 'social' particles and can clump together in the same state, a property which leads to macroscopic phenomena like laser light (many photons in the same state) or superconductivity.", 'Two Main Types': "<b>Gauge Bosons</b> (spin 1) mediate forces. The <b>Scalar Boson</b> (spin 0), the Higgs, gives other particles mass." }, visual: `<div class="text-center p-4 rounded-lg dark:bg-gray-900 bg-gray-200"><h4 class="font-bold mb-2">Force Fields</h4><div class="relative w-24 h-24 mx-auto"><div class="absolute inset-0 border-2 border-blue-500 rounded-full animate-ping"></div><div class="absolute inset-2 border-2 border-blue-500 rounded-full animate-ping delay-500"></div><span class="text-3xl">γ</span></div><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Bosons can overlap to create strong fields, like light waves.</p></div>` },
-            quark: { name: "Quarks", antiName: "Antiquarks", color: 'var(--quark-color)', summary: "A class of fermions that are the only fundamental particles to experience the strong nuclear force. They are always found inside composite particles called hadrons.", info: { 'Confinement': "Quarks exhibit a property called 'color confinement', meaning they cannot be isolated. If you try to pull two quarks apart, the energy in the strong force field between them becomes so large that it creates a new quark-antiquark pair.", 'Hadrons': "Quarks combine to form hadrons. The most stable are <b>protons</b> (uud) and <b>neutrons</b> (udd)." }, visual: `<div class="text-center p-4 rounded-lg dark:bg-gray-900 bg-gray-200"><h4 class="font-bold mb-2">Building Blocks of Hadrons</h4><div class="flex justify-center items-center text-2xl"><div class="w-16 h-16 border-2 rounded-full flex items-center justify-center mr-2">p⁺</div><div class="w-16 h-16 border-2 rounded-full flex items-center justify-center">n⁰</div></div><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Quarks are the fundamental constituents of protons and neutrons.</p></div>` },
+            quark: { name: "Quarks", antiName: "Antiquarks", color: 'var(--quark-color)', summary: "A class of fermions that are the only fundamental particles to experience the strong nuclear force. They are always found inside composite particles called hadrons.", info: { 'Confinement': "Quarks exhibit a property called 'color confinement', meaning they cannot be isolated. If you try to pull two quarks apart, the energy in the strong force field between them becomes so large that it creates a new quark-antiquark pair.", 'Hadrons': "Quarks combine to form hadrons. The most stable are <b>protons</b> (2 up quarks + 1 down quark) and <b>neutrons</b> (1 up quark + 2 down quarks)." }, visual: `<div class="text-center p-4 rounded-lg dark:bg-gray-900 bg-gray-200"><h4 class="font-bold mb-2">Building Blocks of Hadrons</h4><div class="flex justify-center items-center text-2xl"><div class="w-16 h-16 border-2 rounded-full flex items-center justify-center mr-2">p⁺</div><div class="w-16 h-16 border-2 rounded-full flex items-center justify-center">n⁰</div></div><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Quarks are the fundamental constituents of protons and neutrons.</p></div>` },
             lepton: { name: "Leptons", antiName: "Antileptons", color: 'var(--lepton-color)', summary: "A class of fermions that do not feel the strong nuclear force. The electron is the most well-known lepton.", info: { 'Independence': "Unlike quarks, leptons can exist individually. The electron is the particle that orbits the nucleus in an atom, forming the basis for all of chemistry.", 'Two Sub-families': "Leptons consist of the three charged leptons (<b>electron, muon, tau</b>) and the three neutral, almost massless neutrinos (<b>electron neutrino, muon neutrino, tau neutrino</b>)." }, visual: `<div class="text-center p-4 rounded-lg dark:bg-gray-900 bg-gray-200"><h4 class="font-bold mb-2">Fundamental & Free</h4><div class="text-6xl">e⁻</div><p class="text-xs mt-2 dark:text-gray-400 text-gray-600">Leptons, like the electron, are fundamental particles that can exist on their own.</p></div>` }
         };
 
@@ -1982,14 +1983,17 @@ const rawValues = Object.entries(particleData).map(([id, p]) => {
                 let maxVal = Math.max(...values);
 
                 let ticks = [];
-                if (prop === 'charge') {
-                    minVal = -1; maxVal = 1;
-                    ticks = [-1, -2 / 3, -1 / 3, 0, 1 / 3, 2 / 3, 1];
-                } else if (prop === 'spin') {
-                    minVal = 0; maxVal = 2;
-                    ticks = [0, 0.5, 1, 2];
-                } else if (prop === 'theorized' || prop === 'discovered') {
-                    const startYear = Math.floor(minVal / 10) * 10;
+if (prop === 'charge') {
+    minVal = -1; maxVal = 1;
+    ticks = [-1, -2 / 3, -1 / 3, 0, 1 / 3, 2 / 3, 1];
+} else if (prop === 'spin') {
+    minVal = 0; maxVal = 2;
+    ticks = [0, 0.5, 1, 2];
+} else if (prop === 'longLived') {   // PASTE THE NEW BLOCK HERE
+    minVal = 0; maxVal = 1;
+    ticks = [0, 1];
+} else if (prop === 'theorized' || prop === 'discovered') {
+    const startYear = Math.floor(minVal / 10) * 10;
                     const endYear = Math.ceil(maxVal / 10) * 10;
                     ticks.push(minVal);
                     for (let year = startYear; year <= endYear; year += 10) {
@@ -2059,8 +2063,9 @@ const rawValues = Object.entries(particleData).map(([id, p]) => {
      else label.textContent = tick.toFixed(0);
 }
                         else if (prop === 'spin') label.textContent = tick === 0.5 ? '¹/₂' : tick;
-                        else if (isLog) label.innerHTML = `10<sup>${Math.round(Math.log10(tick))}</sup>`;
-                        else label.textContent = Math.round(tick);
+else if (prop === 'longLived') label.textContent = tick === 0 ? 'No' : 'Yes'; // Add this new line
+else if (isLog) label.innerHTML = `10<sup>${Math.round(Math.log10(tick))}</sup>`;
+else label.textContent = Math.round(tick);
                         numberLineLabels.appendChild(label);
                     }
                 });
