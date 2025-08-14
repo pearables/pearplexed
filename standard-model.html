@@ -1293,61 +1293,81 @@
         const fundamentalPropertiesData = {
             name: "Mass, Charge, and Spin",
             color: 'var(--text-dark)',
-            summary: "These three intrinsic properties define a particle's identity and how it interacts with the universe.",
-            info: {},
-            visual: `<div class="w-full space-y-4">
+            summary: "These three intrinsic properties define a particle's identity and how it interacts with the universe. Mass, in particular, has two distinct origins.",
+            info: {
+                ' ': `
+                    <div class="flex items-center gap-4 mb-2">
+                        <div class="w-16 h-16 flex-shrink-0 flex items-center justify-center rounded-lg dark:bg-gray-900/50 bg-gray-200/50">
+                            <svg class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--charge-color);">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="8" y1="12" x2="16" y2="12" />
+                                <line x1="12" y1="8" x2="12" y2="16" />
+                            </svg>
+                        </div>
+                        <h4 class="font-bold text-xl" style="color: var(--charge-color)">Electric Charge (Q)</h4>
+                    </div>
+                    <p class="text-sm dark:text-gray-300 text-gray-700 text-left">
+                        Electric charge is the fundamental property that dictates how a particle interacts with the electromagnetic field. It is a conserved quantity that is also <strong>quantized</strong>, meaning it only exists in discrete multiples of the elementary charge, <em>e</em>. For example, a proton has a charge of +1 <em>e</em>, and an electron has -1 <em>e</em>. While quarks have fractional charges (e.g., -¹/₃), they are always confined within composite particles like protons and neutrons, whose total charge is always an integer multiple of <em>e</em>. This property arises from a deep symmetry in the laws of physics (called U(1) gauge symmetry), which mathematically requires the existence of both charge and the electromagnetic field for the universe to be self-consistent.
+                    </p>`,
+                '': `
+                    <div class="flex items-center gap-4 mb-2 mt-6">
+                        <div class="w-16 h-16 flex-shrink-0 flex items-center justify-center rounded-lg dark:bg-gray-900/50 bg-gray-200/50">
+                             <svg class="w-16 h-16" viewBox="0 0 100 100">
+                                <g opacity="0.7">
+                                    <path d="M10 20 C 30 10, 40 30, 60 20" stroke="var(--spin-color)" stroke-width="2" fill="none" stroke-dasharray="4 2" />
+                                    <path d="M10 50 C 30 40, 40 60, 60 50" stroke="var(--spin-color)" stroke-width="2" fill="none" />
+                                    <path d="M10 80 C 30 70, 40 90, 60 80" stroke="var(--spin-color)" stroke-width="2" fill="none" stroke-dasharray="4 2" />
+                                </g>
+                                <rect x="65" y="5" width="5" height="90" rx="2" fill="var(--spin-color)" opacity="0.8"/>
+                                <path d="M75 50 C 85 40, 90 60, 100 50" stroke="var(--spin-color)" stroke-width="2" fill="none" />
+                            </svg>
+                        </div>
+                        <h4 class="font-bold text-xl" style="color: var(--spin-color)">Spin (S)</h4>
+                    </div>
+                    <div class="space-y-3 text-sm dark:text-gray-300 text-gray-700 text-left">
+                        <p>
+                            Spin is an intrinsic form of angular momentum, but it is not a physical rotation. It’s a quantum property describing a particle's rotational symmetry.
+                        </p>
+                        <p>
+                            <strong>Fermions (matter particles)</strong> have half-integer spin (e.g., ¹/₂). They must rotate 720° to return to their original state, which leads to the Pauli Exclusion Principle that keeps matter solid.
+                        </p>
+                        <p>
+                            <strong>Bosons (force/field particles)</strong> have integer spin (0, 1, 2). A <strong>spin-1</strong> particle (like a photon) needs a 360° rotation and its spin manifests as polarization. A <strong>spin-2</strong> particle (like the hypothetical graviton) needs only a 180° rotation. A <strong>spin-0</strong> particle (the Higgs boson) is a scalar, having no intrinsic direction, and looks the same from all angles.
+                        </p>
+                    </div>
+                `
+            },
+            visual: `
                 <!-- Mass -->
-                <div class="grid grid-cols-[auto,1fr] items-center gap-4 text-left">
-                    <div class="w-20 h-20 flex-shrink-0 flex items-center justify-center rounded-lg dark:bg-gray-900/50 bg-gray-200/50">
-                        <svg class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--mass-color);">
-                            <defs>
-                                <pattern id="grid" width="4" height="4" patternUnits="userSpaceOnUse">
-                                    <path d="M 4 0 L 0 0 0 4" fill="none" class="dark:stroke-gray-700 stroke-gray-300" stroke-width="0.5"/>
-                                </pattern>
-                            </defs>
-                            <rect width="24" height="24" fill="url(#grid)" />
-                            <circle cx="12" cy="12" r="8" fill="currentColor" opacity="0.3" />
-                            <circle cx="12" cy="12" r="3" fill="currentColor" />
-                        </svg>
+                <div>
+                    <div class="flex items-center gap-4 mb-2">
+                        <div class="w-16 h-16 flex-shrink-0 flex items-center justify-center rounded-lg dark:bg-gray-900/50 bg-gray-200/50">
+                            <svg class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--mass-color);">
+                                <defs>
+                                    <pattern id="grid" width="4" height="4" patternUnits="userSpaceOnUse">
+                                        <path d="M 4 0 L 0 0 0 4" fill="none" class="dark:stroke-gray-700 stroke-gray-300" stroke-width="0.5"/>
+                                    </pattern>
+                                </defs>
+                                <rect width="24" height="24" fill="url(#grid)" />
+                                <circle cx="12" cy="12" r="8" fill="currentColor" opacity="0.3" />
+                                <circle cx="12" cy="12" r="3" fill="currentColor" />
+                            </svg>
+                        </div>
+                        <h4 class="font-bold text-xl" style="color: var(--mass-color)">Mass (m)</h4>
                     </div>
-                    <div>
-                        <h4 class="font-bold text-lg" style="color: var(--mass-color)">Mass</h4>
-                        <p class="text-sm dark:text-gray-400 text-gray-600">A measure of inertia and how strongly a particle interacts with the Higgs field. More interaction means more mass.</p>
-                    </div>
-                </div>
-                <!-- Charge -->
-                <div class="grid grid-cols-[auto,1fr] items-center gap-4 text-left">
-                    <div class="w-20 h-20 flex-shrink-0 flex items-center justify-center rounded-lg dark:bg-gray-900/50 bg-gray-200/50">
-                        <svg class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--charge-color);">
-                            <circle cx="12" cy="12" r="10" />
-                            <line x1="8" y1="12" x2="16" y2="12" />
-                            <line x1="12" y1="8" x2="12" y2="16" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-lg" style="color: var(--charge-color)">Electric Charge</h4>
-                        <p class="text-sm dark:text-gray-400 text-gray-600">Determines how a particle responds to electromagnetism. It can be positive (+), negative (-), or neutral (0).</p>
+                    <div class="text-sm dark:text-gray-300 text-gray-700 space-y-3 text-left">
+                        <p>
+                           <strong>Intrinsic Mass (~1%):</strong> This is the mass of fundamental particles (quarks, electrons) in isolation. It's generated by their interaction with the <strong>Higgs field</strong>—the more a particle "drags" against this field, the more intrinsic mass it has.
+                        </p>
+                        <p>
+                           <strong>Emergent Mass (~99%):</strong> The vast majority of the mass of protons and neutrons (and thus, you) comes from the immense energy required to hold their constituent quarks together. This is the energy of the <strong>strong nuclear force</strong>, via E=mc².
+                        </p>
+                         <p>
+                           This binding energy arises from <strong>color charge</strong>, the charge of the strong force. Quarks have a "color" (red, green, or blue) and are perpetually exchanging force-carrying gluons to maintain a "color neutral" state inside a proton. This frantic, high-energy dance is what gives the matter we see most of its mass.
+                        </p>
                     </div>
                 </div>
-                <!-- Spin -->
-                <div class="grid grid-cols-[auto,1fr] items-center gap-4 text-left">
-                    <div class="w-20 h-20 flex-shrink-0 flex items-center justify-center rounded-lg dark:bg-gray-900/50 bg-gray-200/50">
-                        <svg class="w-16 h-16" viewBox="0 0 100 100">
-                            <g opacity="0.7">
-                                <path d="M10 20 C 30 10, 40 30, 60 20" stroke="var(--spin-color)" stroke-width="2" fill="none" stroke-dasharray="4 2" />
-                                <path d="M10 50 C 30 40, 40 60, 60 50" stroke="var(--spin-color)" stroke-width="2" fill="none" />
-                                <path d="M10 80 C 30 70, 40 90, 60 80" stroke="var(--spin-color)" stroke-width="2" fill="none" stroke-dasharray="4 2" />
-                            </g>
-                            <rect x="65" y="5" width="5" height="90" rx="2" fill="var(--spin-color)" opacity="0.8"/>
-                            <path d="M75 50 C 85 40, 90 60, 100 50" stroke="var(--spin-color)" stroke-width="2" fill="none" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-lg" style="color: var(--spin-color)">Spin</h4>
-                        <p class="text-sm dark:text-gray-400 text-gray-600">An intrinsic form of angular momentum. For light particles (photons), spin is called <b>polarization</b>. This is how polarized sunglasses work—they block light with a specific spin to reduce glare!</p>
-                    </div>
-                </div>
-            </div>`
+            `
         };
 
         const interactionData = {
