@@ -1945,11 +1945,24 @@
             const numberLineContainer = document.querySelector('#number-line-container .number-line');
             const numberLineLabels = document.getElementById('number-line-labels');
 
+            // NEW HELPER FUNCTION: Calculates dot size based only on mass
+            const getDotSize = (massVal) => {
+                if (massVal === 0) return 12; // Base size for massless particles
+                const masses = Object.values(particleData).map(p => p.massVal).filter(m => m > 0);
+                const minMass = Math.min(...masses);
+                const maxMass = Math.max(...masses);
+                const logMin = Math.log1p(minMass);
+                const logMax = Math.log1p(maxMass);
+                const logMass = Math.log1p(massVal);
+                const scale = (logMass - logMin) / (logMax - logMin);
+                // Map the scale to a pixel range, e.g., 10px to 25px
+                return 10 + (scale * 15);
+            };
+
             function generateNumberLine() {
                 const prop = propertySelect.value;
                 const isLog = prop.includes('mass') || prop.includes('Ratio');
 
-                // Get all particles, including those with value 0
                 const allParticles = Object.entries(particleData).map(([id, p]) => {
                     let val = p[prop];
                     let numVal;
@@ -1970,18 +1983,13 @@
                     return { id, value: numVal };
                 }).filter(item => !isNaN(item.value));
 
-                // Clear previous state
                 numberLineContainer.innerHTML = '<div class="number-line-track"></div>';
                 numberLineLabels.innerHTML = '';
 
                 if (isLog) {
-                    // --- SPECIAL LOGIC FOR LOG SCALE WITH ZERO ---
-
-                    // 1. Separate massless and massive particles
                     const masslessParticles = allParticles.filter(p => p.value === 0);
                     const massiveParticles = allParticles.filter(p => p.value > 0);
 
-                    // 2. Group and place massless particles at the 0% mark
                     const masslessMap = new Map();
                     masslessParticles.forEach(item => {
                         if (!masslessMap.has(0)) masslessMap.set(0, []);
@@ -1995,17 +2003,17 @@
                             const dot = document.createElement('div');
                             dot.className = 'particle-dot';
                             dot.dataset.id = id;
-                            dot.style.left = `0%`; // Position at the very beginning
+                            dot.style.left = `0%`;
                             const verticalOffset = (index - (ids.length - 1) / 2) * 15;
                             dot.style.top = `calc(50% + ${verticalOffset}px)`;
                             dot.style.transform = `translate(-50%, -50%)`;
                             dot.style.backgroundColor = particle.color;
-                            dot.style.width = `12px`;
-                            dot.style.height = `12px`;
+                            const size = getDotSize(particle.massVal); // Use new function
+                            dot.style.width = `${size}px`;
+                            dot.style.height = `${size}px`;
                             dot.addEventListener('click', () => showModal(id));
                             numberLineContainer.appendChild(dot);
                         });
-                        // Add a "0" label for the massless group
                         const zeroLabel = document.createElement('div');
                         zeroLabel.className = 'tick-label';
                         zeroLabel.style.left = '0%';
@@ -2013,7 +2021,6 @@
                         numberLineLabels.appendChild(zeroLabel);
                     }
 
-                    // 3. Process massive particles on a logarithmic scale from 15% to 100%
                     const valueMap = new Map();
                     massiveParticles.forEach(item => {
                         const key = item.value;
@@ -2030,9 +2037,7 @@
                         for (const [value, ids] of valueMap.entries()) {
                             const logVal = Math.log10(value);
                             const logMin = Math.log10(minVal);
-                            // Scale percentage between 15% and 100%
                             const percent = range === 0 ? 15 : 15 + (((logVal - logMin) / range) * 85);
-
 
                             ids.forEach((id, index) => {
                                 const particle = particleData[id];
@@ -2044,7 +2049,7 @@
                                 dot.style.top = `calc(50% + ${verticalOffset}px)`;
                                 dot.style.transform = `translate(-50%, -50%)`;
                                 dot.style.backgroundColor = particle.color;
-                                const size = 10 + (percent / 100) * 15;
+                                const size = getDotSize(particle.massVal); // Use new function
                                 dot.style.width = `${size}px`;
                                 dot.style.height = `${size}px`;
                                 dot.addEventListener('click', () => showModal(id));
@@ -2052,7 +2057,6 @@
                             });
                         }
                         
-                        // Add labels for the massive part of the scale
                         const startPower = Math.floor(Math.log10(minVal));
                         const endPower = Math.ceil(Math.log10(maxVal));
                         let ticks = [minVal];
@@ -2069,14 +2073,11 @@
                                 const label = document.createElement('div');
                                 label.className = 'tick-label';
                                 label.style.left = `${percent}%`;
-                                
-                                // FIX: Adjust alignment for the last label
                                 if (percent > 98) {
                                     label.style.transform = 'translateX(-100%)';
                                 } else {
                                     label.style.transform = 'translateX(-50%)';
                                 }
-
                                 const parts = tick.toExponential(0).split('e');
                                 const exponent = parseInt(parts[1]);
                                 label.innerHTML = `${parts[0]} &times; 10<sup>${exponent}</sup>`;
@@ -2086,7 +2087,7 @@
                     }
 
                 } else {
-                    // --- ORIGINAL LOGIC FOR NON-LOG SCALES ---
+                    // --- LOGIC FOR NON-LOG SCALES ---
                     const valueMap = new Map();
                     allParticles.forEach(item => {
                         const key = item.value;
@@ -2115,7 +2116,7 @@
                             dot.style.top = `calc(50% + ${verticalOffset}px)`;
                             dot.style.transform = `translate(-50%, -50%)`;
                             dot.style.backgroundColor = particle.color;
-                            const size = 10 + (percent / 100) * 15;
+                            const size = getDotSize(particle.massVal); // Use new function
                             dot.style.width = `${size}px`;
                             dot.style.height = `${size}px`;
                             dot.addEventListener('click', () => showModal(id));
@@ -2147,7 +2148,6 @@
                             const label = document.createElement('div');
                             label.className = 'tick-label';
                             label.style.left = `${percent}%`;
-                             // FIX: Adjust alignment for the last label
                             if (percent > 98) {
                                 label.style.transform = 'translateX(-100%)';
                             } else {
@@ -2178,7 +2178,7 @@
                 const parts = exponential.split('e');
                 const mantissa = parts[0];
                 const exponent = parts[1];
-                return `${mantissa} × 10<sup>${parseInt(exponent, 10)}</sup>`;
+                return `${mantissa} &times; 10<sup>${parseInt(exponent, 10)}</sup>`;
             }
 
             function formatNumberHTML(num) {
@@ -2294,7 +2294,6 @@
             propertySelect.addEventListener('change', generateNumberLine);
             scaleParticleSelect.addEventListener('change', updateRelativeScale);
             scaleObjectSelect.addEventListener('change', updateRelativeScale);
-
 
             // --- HEISENBERG SECTION LOGIC --- //
             const canvas = document.getElementById('uncertaintyCanvas');
