@@ -197,7 +197,7 @@
                         <!-- Music Icon with Hover Links -->
                         <div class="group relative text-center">
                              <div class="absolute w-full -top-8 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                <p id="how-it-works-link" class="text-teal-300 hover:text-yellow-300 font-vt323 text-lg cursor-pointer flicker-animation">How it Works</p>
+                                 <p id="how-it-works-link" class="text-teal-300 hover:text-yellow-300 font-vt323 text-lg cursor-pointer flicker-animation">How it Works</p>
                             </div>
                             <div id="music-icon-nav" class="cursor-pointer transform group-hover:scale-110 transition-transform">
                                 <div class="bg-indigo-800 p-4 rounded-lg border-4 border-dashed border-pink-500">
@@ -377,6 +377,8 @@
     { name: 'sus4', steps: [0, 5, 7] },
     { name: 'sus#4', steps: [0, 6, 7] },
     { name: '°sus4', steps: [0, 5, 6] },
+    // Quintal
+    { name: 'Quintal Triad', steps: [0, 7, 14] },
     // 7 no 3
     { name: 'Major 7th (no 3rd)', steps: [0, 7, 11] },
     { name: 'Dominant 7th (no 3rd)', steps: [0, 7, 10] },
@@ -413,7 +415,7 @@
     { name: 'D6/A', steps: [0, 2, 9] },
     { name: 'Lydian Quartal', steps: [0, 5, 11] },
     { name: 'Dissonant Cluster', steps: [0, 6, 8] },
-    { name: 'D# dim (1st inv)', steps: [0, 6, 9] }, // <-- THE MISSING CHORD
+    { name: 'D# dim (1st inv)', steps: [0, 6, 9] },
     { name: 'AMaj7#11 (shell)', steps: [0, 6, 11] },
     { name: 'FMaj7/A (no 3rd)', steps: [0, 7, 8] },
 ];
@@ -455,16 +457,60 @@
     { name: 'Dominant 7th sus2', steps: [0, 2, 7, 10] },
     { name: 'Major 6/9 (no 5th)', steps: [0, 2, 4, 9] },
     { name: 'Dominant 7th (b9) (no 5th)', steps: [0, 1, 4, 10] },
-    { name: '"So What" Chord (Quartal)', steps: [0, 5, 10, 15] },
-    { name: '"Elektra" Chord', steps: [0, 2, 6, 9] },
-    { name: '"Hendrix" Chord - Dominant 7th (#9) (no 5th)', steps: [0, 3, 4, 10] },
+    { name: 'Dominant 7th (b9)', steps: [0, 4, 7, 13] },
+    { name: 'So What Chord (Quartal)', steps: [0, 5, 10, 15] },
+    { name: 'Elektra Chord', steps: [0, 2, 6, 9] },
+    { name: 'Hendrix Chord (Dominant 7th #9)', steps: [0, 4, 10, 15] },
     { name: 'Quintal Voicing (sus2 add6)', steps: [0, 2, 7, 9] },
 ];
             const PSEUDO_DYAD_DEFS = [{ name: 'Pseudo Octave', partials: [0, 1] }, { name: 'Pseudo Fifth', partials: [1, 2] }]; const PSEUDO_TRIAD_DEFS = [{ name: 'Pseudo Major Triad', partials: [3, 4, 5] }, { name: 'Pseudo Minor Triad', partials: [9, 11, 14] }]; const PSEUDO_TETRAD_DEFS = [{ name: 'Pseudo Dom 7th', partials: [3, 4, 5, 6] }];
             function centsToRatio(cents) { return 2 ** (cents / 1200); }
             function getTuningByKey(key) { for (const group in TUNING_SYSTEMS) { if (TUNING_SYSTEMS[group][key]) { return TUNING_SYSTEMS[group][key]; } } return null; }
             function getPseudoChords() { const instrumentType = dom.instrument.value; const isHarmonic = ['sine', 'square', 'saw', 'string', 'piano'].includes(instrumentType); if (isHarmonic) return { dyads: [], triads: [], tetrads: [] }; const partialFn = getPartialFunction(instrumentType); const calculatePseudoRatios = (partialIndices) => { const basePartial = partialFn(partialIndices[0]); if (basePartial === null || typeof basePartial === 'undefined') return null; const ratios = partialIndices.map(p_idx => { const p_val = partialFn(p_idx); return (p_val === null || typeof p_val === 'undefined') ? null : p_val / basePartial; }); return ratios.some(r => r === null) ? null : ratios; }; const dyads = PSEUDO_DYAD_DEFS.map(def => { const ratios = calculatePseudoRatios(def.partials); return ratios ? { name: def.name, ratioText: ratios.slice(1).map(r => r.toFixed(3)).join(', '), ratios: ratios } : null; }).filter(Boolean); const triads = PSEUDO_TRIAD_DEFS.map(def => { const ratios = calculatePseudoRatios(def.partials); return ratios ? { name: def.name, ratioText: ratios.slice(1).map(r => r.toFixed(3)).join(', '), ratios: ratios } : null; }).filter(Boolean); const tetrads = PSEUDO_TETRAD_DEFS.map(def => { const ratios = calculatePseudoRatios(def.partials); return ratios ? { name: def.name, ratioText: ratios.slice(1).map(r => r.toFixed(3)).join(', '), ratios: ratios } : null; }).filter(Boolean); return { dyads, triads, tetrads }; }
-            function updateTuningData() { const tuningKey = dom.tuningSystem.value; const tuning = getTuningByKey(tuningKey); if (!tuning) return; const maxSteps = tuning.cents.length; currentDyadData = DYAD_DEFS.map(def => { if (def.fixedCents) { const ratio = centsToRatio(def.fixedCents); return { name: def.name, ratioText: ratio.toFixed(3), ratios: [1, ratio] }; } if (def.step === 'wolf' && tuning.wolf) { const ratio = centsToRatio(tuning.wolf); return { name: def.name, ratioText: ratio.toFixed(3), ratios: [1, ratio] }; } if (typeof def.step === 'number' && def.step < maxSteps) { const cents = tuning.cents[def.step]; const ratio = centsToRatio(cents); return { name: def.name, ratioText: ratio.toFixed(3), ratios: [1, ratio] }; } return null; }).filter(item => item !== null); if (maxSteps >= 12) { currentDyadData.push({ name: 'Octave', ratioText: '2.000', ratios: [1, 2.0] }); } currentTriadData = TRIAD_DEFS.map(def => { if (def.steps.every(step => step < maxSteps)) { const ratios = def.steps.map(step => centsToRatio(tuning.cents[step])); return { name: def.name, ratioText: ratios.slice(1).map(r => r.toFixed(3)).join(', '), ratios: ratios }; } return null; }).filter(item => item !== null); currentTetradData = TETRAD_DEFS.map(def => { if (def.steps.every(step => step <= maxSteps)) { const ratios = def.steps.map(step => { if (step === 12) return 2.0; return (step < maxSteps) ? centsToRatio(tuning.cents[step]) : 2.0; }); return { name: def.name, ratioText: ratios.slice(1).map(r => r.toFixed(3)).join(', '), ratios: ratios }; } return null; }).filter(item => item !== null); const pseudoChords = getPseudoChords(); if (pseudoChords.dyads.length > 0) { const pseudoFifth = pseudoChords.dyads.find(d => d.name === 'Pseudo Fifth'); if (pseudoFifth) { const p5Index = currentDyadData.findIndex(d => d.name === 'Perfect 5th'); if (p5Index > -1) { currentDyadData.splice(p5Index + 1, 0, pseudoFifth); } else { currentDyadData.push(pseudoFifth); } } const pseudoOctave = pseudoChords.dyads.find(d => d.name === 'Pseudo Octave'); if (pseudoOctave) { const octIndex = currentDyadData.findIndex(d => d.name === 'Octave'); if (octIndex > -1) { currentDyadData.splice(octIndex + 1, 0, pseudoOctave); } else { currentDyadData.push(pseudoOctave); } } } currentTriadData.push(...pseudoChords.triads); currentTetradData.push(...pseudoChords.tetrads); currentAllTones = [...currentDyadData, ...currentTriadData, ...currentTetradData].reduce((acc, curr) => { const uniqueName = curr.ratios.length > 2 ? `${curr.name} ${curr.ratios.length}-tone` : curr.name; acc[uniqueName] = { ratios: curr.ratios, ratioText: curr.ratioText, originalName: curr.name }; return acc; }, {}); }
+            function updateTuningData() { const tuningKey = dom.tuningSystem.value; const tuning = getTuningByKey(tuningKey); if (!tuning) return; const maxSteps = tuning.cents.length; currentDyadData = DYAD_DEFS.map(def => { if (def.fixedCents) { const ratio = centsToRatio(def.fixedCents); return { name: def.name, ratioText: ratio.toFixed(3), ratios: [1, ratio] }; } if (def.step === 'wolf' && tuning.wolf) { const ratio = centsToRatio(tuning.wolf); return { name: def.name, ratioText: ratio.toFixed(3), ratios: [1, ratio] }; } if (typeof def.step === 'number' && def.step < maxSteps) { const cents = tuning.cents[def.step]; const ratio = centsToRatio(cents); return { name: def.name, ratioText: ratio.toFixed(3), ratios: [1, ratio] }; } return null; }).filter(item => item !== null); if (maxSteps >= 12) { currentDyadData.push({ name: 'Octave', ratioText: '2.000', ratios: [1, 2.0] }); } currentTriadData = TRIAD_DEFS.map(def => {
+    if (!def.steps.every(s => typeof s === 'number')) return null;
+    if (!tuning || !tuning.cents) return null;
+    const numStepsInOctave = tuning.cents.length;
+    const ratios = def.steps.map(step => {
+        const octaves = Math.floor(step / numStepsInOctave);
+        const scaleDegree = step % numStepsInOctave;
+        const baseCents = tuning.cents[scaleDegree];
+        if (typeof baseCents === 'undefined') return null;
+        const totalCents = baseCents + (octaves * 1200);
+        return centsToRatio(totalCents);
+    });
+    if (ratios.some(r => r === null)) return null;
+    return { name: def.name, ratioText: ratios.slice(1).map(r => r.toFixed(3)).join(', '), ratios: ratios };
+}).filter(item => item !== null); currentTetradData = TETRAD_DEFS.map(def => {
+    // Check if all steps are numbers. We can't process non-numeric steps like 'wolf'.
+    if (!def.steps.every(s => typeof s === 'number')) return null;
+
+    // Check if the tuning system is defined.
+    if (!tuning || !tuning.cents) return null;
+
+    const numStepsInOctave = tuning.cents.length;
+
+    const ratios = def.steps.map(step => {
+        // Handle compound intervals (e.g., step 15 in a 12-note scale)
+        const octaves = Math.floor(step / numStepsInOctave);
+        const scaleDegree = step % numStepsInOctave;
+        
+        const baseCents = tuning.cents[scaleDegree];
+        
+        // If the scale degree is somehow invalid, we can't calculate a ratio.
+        if (typeof baseCents === 'undefined') return null;
+
+        // Total cents = cents for the scale degree within one octave + cents for the extra octaves.
+        const totalCents = baseCents + (octaves * 1200);
+        
+        return centsToRatio(totalCents);
+    });
+
+    // If any ratio calculation failed (returned null), filter out this chord definition.
+    if (ratios.some(r => r === null)) return null;
+
+    return { name: def.name, ratioText: ratios.slice(1).map(r => r.toFixed(3)).join(', '), ratios: ratios };
+}).filter(item => item !== null); const pseudoChords = getPseudoChords(); if (pseudoChords.dyads.length > 0) { const pseudoFifth = pseudoChords.dyads.find(d => d.name === 'Pseudo Fifth'); if (pseudoFifth) { const p5Index = currentDyadData.findIndex(d => d.name === 'Perfect 5th'); if (p5Index > -1) { currentDyadData.splice(p5Index + 1, 0, pseudoFifth); } else { currentDyadData.push(pseudoFifth); } } const pseudoOctave = pseudoChords.dyads.find(d => d.name === 'Pseudo Octave'); if (pseudoOctave) { const octIndex = currentDyadData.findIndex(d => d.name === 'Octave'); if (octIndex > -1) { currentDyadData.splice(octIndex + 1, 0, pseudoOctave); } else { currentDyadData.push(pseudoOctave); } } } currentTriadData.push(...pseudoChords.triads); currentTetradData.push(...pseudoChords.tetrads); currentAllTones = [...currentDyadData, ...currentTriadData, ...currentTetradData].reduce((acc, curr) => { const uniqueName = curr.ratios.length > 2 ? `${curr.name} ${curr.ratios.length}-tone` : curr.name; acc[uniqueName] = { ratios: curr.ratios, ratioText: curr.ratioText, originalName: curr.name }; return acc; }, {}); }
             function freqToMidi(freq) { return Math.round(69 + 12 * Math.log2(freq / 440)); } function midiToNoteName(midi) { const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']; const octave = Math.floor(midi / 12) - 1; return noteNames[midi % 12] + octave; }
             function populateTables() { const settings = getSettings(); const model = settings.equation === 'dillon' ? dillonModel : setharesModel; const ampFunction = getAmpFunction(settings.instrument); const partialFn = getPartialFunction(settings.instrument); const baseFreq = +dom.baseFreq.value; const processData = (data, tableBody, isSortable) => { if (!data || data.length === 0) return; let itemsWithDissonance = data.map(item => { const freqs = item.ratios.map(r => r * baseFreq); const roughness = model(freqs, settings.overtones, ampFunction, partialFn); return { ...item, roughness }; }); if (isSortable) { const sortDir = tableBody.closest('table').querySelector('.sortable-header').dataset.sortDir; if (sortDir === 'asc') { itemsWithDissonance.sort((a, b) => a.roughness - b.roughness); } else { itemsWithDissonance.sort((a, b) => b.roughness - a.roughness); } } const allRoughnessValues = itemsWithDissonance.map(item => item.roughness).filter(r => isFinite(r)); const maxRoughness = Math.max(...allRoughnessValues); tableBody.innerHTML = ''; itemsWithDissonance.forEach(item => { const freqs = item.ratios.map(r => r * baseFreq); const normalizedRoughness = maxRoughness > 0 ? item.roughness / maxRoughness : 0; tableBody.innerHTML += createRow(item, freqs, item.roughness, normalizedRoughness); }); }; const createRow = (item, freqs, roughness, normalizedRoughness) => { const midiNotes = freqs.map(freqToMidi); const pianoNotes = midiNotes.map(midiToNoteName); const uniqueName = item.ratios.length > 2 ? `${item.name} ${item.ratios.length}-tone` : item.name; const bgColor = getColorForValue(normalizedRoughness, DISSONANCE_COLORSCALE); const textColor = getContrastColor(bgColor); return `<tr style="background-color: ${bgColor}; color: ${textColor};"><td>${item.name}</td><td>${item.ratioText}</td><td>${pianoNotes.join(', ')}</td><td>${midiNotes.join(', ')}</td><td>${roughness.toFixed(4)}</td><td><button class="play-only-btn" onclick="playSoundOnly('${uniqueName}')" style="color: var(--button-text-color); background-color: var(--button-bg-color);">Play</button></td></tr>`; }; processData(currentDyadData, dom.dyadsTableBody, false); processData(currentTriadData, dom.triadsTableBody, true); processData(currentTetradData, dom.tetradsTableBody, true); }
             function getSettings() { return { baseFreq: +dom.baseFreq.value, overtones: +dom.overtones.value, octaves: +dom.octaves.value, equation: dom.equation.value, instrument: dom.instrument.value, volume: +dom.volume.value, tones: +dom.tones.value, chartType: dom.chartType.value, invert: dom.invertRoughness.checked, theme: dom.body.dataset.theme, bubbleSize: +dom.bubbleSize.value, }; }
