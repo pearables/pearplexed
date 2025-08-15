@@ -530,7 +530,58 @@
             
             window.playSoundOnly = function(uniqueToneName) { const toneData = currentAllTones[uniqueToneName]; if (!toneData) return; const { ratios, ratioText } = toneData; const settings = getSettings(); const freqs = ratios.map(r => r * settings.baseFreq); const duration = 1.5; playFrequencies(freqs, duration); if (activeFlagTimeout) clearTimeout(activeFlagTimeout); const ampFunction = getAmpFunction(settings.instrument); const partialFn = getPartialFunction(settings.instrument); const model = settings.equation === 'dillon' ? dillonModel : setharesModel; let tempTrace; let lastCamera; if (dom.graph.layout && dom.graph.layout.scene) { lastCamera = JSON.parse(JSON.stringify(dom.graph.layout.scene.camera)); } if (ratios.length === 2 && settings.tones == 2) { if (typeof dom.graph.maxDissonance === 'undefined') return; const ratio = ratios[1]; const dissonance = model([settings.baseFreq, settings.baseFreq * ratio], settings.overtones, ampFunction, partialFn); const normalizedDissonance = dom.graph.maxDissonance > 0 ? dissonance / dom.graph.maxDissonance : 0; tempTrace = { x: [ratio], y: [normalizedDissonance], type: 'scatter', mode: 'markers', hoverinfo: 'none', marker: { color: '#ff9900', size: 12, line: { color: 'white', width: 2 } } }; } else if (ratios.length === 3 && settings.tones == 3) { if (settings.chartType === 'heatmap') { tempTrace = { x: [ratios[1]], y: [ratios[2]], type: 'scatter', mode: 'markers', hoverinfo: 'none', marker: { color: '#ff9900', size: 15, line: { color: 'white', width: 2 } } }; } else if (settings.chartType === 'surface') { if (typeof dom.graph.maxZ === 'undefined' || typeof dom.graph.minZ === 'undefined') return; const raw_z = model([settings.baseFreq, ratios[1] * settings.baseFreq, ratios[2] * settings.baseFreq], settings.overtones, ampFunction, partialFn); const norm_z = dom.graph.maxZ > dom.graph.minZ ? Math.pow((raw_z - dom.graph.minZ) / (dom.graph.maxZ - dom.graph.minZ), 0.7) : 0; tempTrace = { x: [ratios[1]], y: [ratios[2]], z: [norm_z + 0.015], type: 'scatter3d', mode: 'markers', hoverinfo: 'none', marker: { color: '#ff9900', size: 8, line: { color: 'white', width: 2 } } }; } } else if (ratios.length === 4 && settings.tones == 4) { tempTrace = { x: [ratios[1]], y: [ratios[2]], z: [ratios[3]], type: 'scatter3d', mode: 'markers', hoverinfo: 'none', marker: { color: '#ff9900', size: 10, line: { color: 'white', width: 2 } } }; } if (tempTrace) { Plotly.addTraces('graph', tempTrace).then(() => { if (lastCamera) { Plotly.relayout('graph', { 'scene.camera': lastCamera }); } }); activeFlagTimeout = setTimeout(() => { const traceCount = dom.graph.data.length; if (traceCount > 1) { Plotly.deleteTraces('graph', traceCount - 1); } }, duration * 1000); } }
             
-            function updateOvertoneControls(forceReset = false) { const settings = getSettings(); const oldAmplitudes = [...overtoneAmplitudes]; dom.overtoneSlidersContainer.innerHTML = ''; overtoneAmplitudes = []; if (settings.instrument === 'sine') { dom.overtoneStrengthDetails.setAttribute('disabled', true); dom.overtoneStrengthDetails.open = false; return; } dom.overtoneStrengthDetails.removeAttribute('disabled'); const ampFn = getAmpFunction(settings.instrument); for (let i = 1; i <= settings.overtones; i++) { const overtoneIndex = i; const partialIndex = i - 1; let ampValue; if (forceReset || settings.instrument !== 'custom') { ampValue = ampFn(overtoneIndex); } else { if (oldAmplitudes[partialIndex] !== undefined) { ampValue = oldAmplitudes[partialIndex]; } else { ampValue = 0.75; } } overtoneAmplitudes[partialIndex] = ampValue; const group = document.createElement('div'); group.className = 'overtone-slider-group'; const label = document.createElement('label'); label.setAttribute('for', `overtone-${overtoneIndex}`); label.textContent = `Overtone ${overtoneIndex} Strength`; const slider = document.createElement('input'); slider.type = 'range'; slider.id = `overtone-${overtoneIndex}`; slider.min = 0; slider.max = 1.5; slider.step = 0.01; slider.value = ampValue; slider.addEventListener('input', () => { overtoneAmplitudes[partialIndex] = +slider.value; if (dom.instrument.value !== 'custom') { currentPartialFn = getPartialFunction(dom.instrument.value); dom.instrument.value = 'custom'; } generateAndPlot(); }); group.appendChild(label); group.appendChild(slider); dom.overtoneSlidersContainer.appendChild(group); } }
+            function updateOvertoneControls(forceReset = false) {
+                const settings = getSettings();
+                const oldAmplitudes = [...overtoneAmplitudes];
+                dom.overtoneSlidersContainer.innerHTML = '';
+                overtoneAmplitudes = [];
+                if (settings.instrument === 'sine') {
+                    dom.overtoneStrengthDetails.setAttribute('disabled', true);
+                    dom.overtoneStrengthDetails.open = false;
+                    return;
+                }
+                dom.overtoneStrengthDetails.removeAttribute('disabled');
+                const ampFn = getAmpFunction(settings.instrument);
+                for (let i = 1; i <= settings.overtones; i++) {
+                    const overtoneIndex = i;
+                    const partialIndex = i - 1;
+                    let ampValue;
+                    if (forceReset || settings.instrument !== 'custom') {
+                        ampValue = ampFn(overtoneIndex);
+                    } else {
+                        if (oldAmplitudes[partialIndex] !== undefined) {
+                            ampValue = oldAmplitudes[partialIndex];
+                        } else {
+                            ampValue = 0.75;
+                        }
+                    }
+                    overtoneAmplitudes[partialIndex] = ampValue;
+                    const group = document.createElement('div');
+                    group.className = 'overtone-slider-group';
+                    const label = document.createElement('label');
+                    label.setAttribute('for', `overtone-${overtoneIndex}`);
+                    label.textContent = `Overtone ${overtoneIndex} Strength`;
+                    const slider = document.createElement('input');
+                    slider.type = 'range';
+                    slider.id = `overtone-${overtoneIndex}`;
+                    slider.min = 0;
+                    slider.max = 1.5;
+                    slider.step = 0.01;
+                    slider.value = ampValue;
+                    slider.addEventListener('input', () => {
+                        overtoneAmplitudes[partialIndex] = +slider.value;
+                        if (dom.instrument.value !== 'custom') {
+                            currentPartialFn = getPartialFunction(dom.instrument.value);
+                            dom.instrument.value = 'custom';
+                        }
+                        generateAndPlot();
+                        populateTables(); // Add this line to update the tables in real time
+                    });
+                    group.appendChild(label);
+                    group.appendChild(slider);
+                    dom.overtoneSlidersContainer.appendChild(group);
+                }
+            }
             function applyOvertonePreset(presetName) { const preset = overtonePresets[presetName]; if (!preset) return; overtoneAmplitudes = preset.slice(0, dom.overtones.value); const sliders = dom.overtoneSlidersContainer.querySelectorAll('input[type="range"]'); sliders.forEach((slider, index) => { if (overtoneAmplitudes[index] !== undefined) { slider.value = overtoneAmplitudes[index]; } }); dom.instrument.value = 'custom'; currentPartialFn = getPartialFunction('string'); generateAndPlot(); }
             function setupOvertonePresets() { dom.overtonePresetsContainer.innerHTML = ''; for (const presetName in overtonePresets) { const button = document.createElement('button'); button.textContent = presetName; button.className = 'preset-btn'; button.addEventListener('click', () => applyOvertonePreset(presetName)); dom.overtonePresetsContainer.appendChild(button); } }
             function resetOvertoneStrengths() { const sliders = dom.overtoneSlidersContainer.querySelectorAll('input[type="range"]'); const midPoint = 0.75; sliders.forEach((slider, index) => { slider.value = midPoint; overtoneAmplitudes[index] = midPoint; }); currentPartialFn = getPartialFunction(dom.instrument.value); dom.instrument.value = 'custom'; generateAndPlot(); }
