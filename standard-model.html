@@ -1077,7 +1077,8 @@
                         <label for="property-select" class="font-medium">Compare particles by:</label>
                         <select id="property-select" class="dark:bg-gray-700 dark:border-gray-600 dark:text-white bg-white border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
                             <option value="massVal" selected>Mass (log scale)</option>
-                            <option value="charge">Electric Charge</option>
+                            <option value="massRatio">Relative Mass (Electron = 1)</option>
+			    <option value="charge">Electric Charge</option>
                             <option value="spin">Spin</option>
 			    <option value="longLived">Lifespan > 1 sec.</option>
                             <option value="theorized">Year Theorized</option>
@@ -1199,14 +1200,14 @@
             muon: { name: 'Muon', antiName: 'Antimuon', symbol: 'μ⁻', antiSymbol: 'μ⁺', type: 'Lepton', family: 'fermion', generation: 2, mass: '~105.7 MeV/c²', massVal: 105.7, charge: '-1', spin: '1/2', y_l: '-1', t3_l: '-1/2', y_r: '-2', t3_r: '0', groups: ['fermion', 'lepton', 'gen2'], interactions: ['em', 'weak', 'higgs', 'gravity'], color: 'var(--lepton-color)', cardClass: 'lepton-card', summary: 'A heavier, unstable version of the electron, about 200 times more massive. It is a common product of cosmic ray interactions in the atmosphere.', massRatio: 210, longLived: false, discovered: 1936, info: { discovery: 'Discovered by Carl D. Anderson and Seth Neddermeyer in 1936 while studying cosmic radiation.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-muon.pdf' } },
             tau: { name: 'Tau', antiName: 'Antitau', symbol: 'τ⁻', antiSymbol: 'τ⁺', type: 'Lepton', family: 'fermion', generation: 3, mass: '~1.777 GeV/c²', massVal: 1777, charge: '-1', spin: '1/2', y_l: '-1', t3_l: '-1/2', y_r: '-2', t3_r: '0', groups: ['fermion', 'lepton', 'gen3'], interactions: ['em', 'weak', 'higgs', 'gravity'], color: 'var(--lepton-color)', cardClass: 'lepton-card', summary: 'A much heavier, very unstable version of the electron, about 3,500 times more massive. It decays very rapidly into other particles.', massRatio: 3500, longLived: false, discovered: 1975, info: { discovery: 'Discovered between 1974 and 1977 by Martin Perl and his colleagues at SLAC.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-tau.pdf' } },
             electron_neutrino: { name: 'Electron Neutrino', antiName: 'Electron Antineutrino', symbol: 'νe', antiSymbol: 'ν̅e', type: 'Lepton', family: 'fermion', generation: 1, mass: '< 1 eV/c²', massVal: 1e-6, charge: '0', spin: '1/2', y_l: '-1', t3_l: '+1/2', y_r: '0', t3_r: '0', groups: ['fermion', 'lepton', 'gen1'], interactions: ['weak', 'gravity'], color: 'var(--lepton-color)', cardClass: 'lepton-card', summary: 'An almost massless "ghost" particle that rarely interacts with anything. Trillions pass through you every second, mostly from the Sun.', massRatio: 0.000002, longLived: true, theorized: 1930, discovered: 1956, info: { discovery: 'Postulated by Wolfgang Pauli in 1930 to explain conservation of energy in beta decay, first detected in the Cowan–Reines neutrino experiment in 1956.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-neutrino-properties.pdf' } },
-            muon_neutrino: { name: 'Muon Neutrino', antiName: 'Muon Antineutrino', symbol: 'νμ', antiSymbol: 'ν̅μ', type: 'Lepton', family: 'fermion', generation: 2, mass: '< 0.17 MeV/c²', massVal: 0.17, charge: '0', spin: '1/2', y_l: '-1', t3_l: '+1/2', y_r: '0', t3_r: '0', groups: ['fermion', 'lepton', 'gen2'], interactions: ['weak', 'gravity'], color: 'var(--lepton-color)', cardClass: 'lepton-card', summary: 'A second-generation neutrino associated with the muon. It was the first type of neutrino discovered to be distinct from the electron neutrino.', massRatio: 0.33, longLived: true, discovered: 1962, info: { discovery: 'Discovered in 1962 by Lederman, Schwartz, and Steinberger, which earned them the 1988 Nobel Prize in Physics.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-neutrino-properties.pdf' } },
-            tau_neutrino: { name: 'Tau Neutrino', antiName: 'Tau Antineutrino', symbol: 'ντ', antiSymbol: 'ν̅τ', type: 'Lepton', family: 'fermion', generation: 3, mass: '< 18.2 MeV/c²', massVal: 18.2, charge: '0', spin: '1/2', y_l: '-1', t3_l: '+1/2', y_r: '0', t3_r: '0', groups: ['fermion', 'lepton', 'gen3'], interactions: ['weak', 'gravity'], color: 'var(--lepton-color)', cardClass: 'lepton-card', summary: 'The third and heaviest type of neutrino, associated with the tau lepton. Its existence was confirmed long after its charged partner.', massRatio: 35616, longLived: true, discovered: 2000, info: { discovery: 'After the tau lepton was discovered in the mid-1970s, the tau neutrino was expected. It was directly observed by the DONUT collaboration at Fermilab in 2000.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-neutrino-properties.pdf' } },
+            muon_neutrino: { name: 'Muon Neutrino', antiName: 'Muon Antineutrino', symbol: 'νμ', antiSymbol: 'ν̅μ', type: 'Lepton', family: 'fermion', generation: 2, mass: '< 0.17 MeV/c²', massVal: 0.17, charge: '0', spin: '1/2', y_l: '-1', t3_l: '+1/2', y_r: '0', t3_r: '0', groups: ['fermion', 'lepton', 'gen2'], interactions: ['weak', 'gravity'], color: 'var(--lepton-color)', cardClass: 'lepton-card', summary: 'A second-generation neutrino associated with the muon. It was the first type of neutrino discovered to be distinct from the electron neutrino.', massRatio: 0.000002, longLived: true, discovered: 1962, info: { discovery: 'Discovered in 1962 by Lederman, Schwartz, and Steinberger, which earned them the 1988 Nobel Prize in Physics.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-neutrino-properties.pdf' } },
+            tau_neutrino: { name: 'Tau Neutrino', antiName: 'Tau Antineutrino', symbol: 'ντ', antiSymbol: 'ν̅τ', type: 'Lepton', family: 'fermion', generation: 3, mass: '< 18.2 MeV/c²', massVal: 18.2, charge: '0', spin: '1/2', y_l: '-1', t3_l: '+1/2', y_r: '0', t3_r: '0', groups: ['fermion', 'lepton', 'gen3'], interactions: ['weak', 'gravity'], color: 'var(--lepton-color)', cardClass: 'lepton-card', summary: 'The third and heaviest type of neutrino, associated with the tau lepton. Its existence was confirmed long after its charged partner.', massRatio: 0.000002, longLived: true, discovered: 2000, info: { discovery: 'After the tau lepton was discovered in the mid-1970s, the tau neutrino was expected. It was directly observed by the DONUT collaboration at Fermilab in 2000.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-neutrino-properties.pdf' } },
             // Bosons
             gluon: { name: 'Gluon', antiName: 'Gluon', symbol: 'g', type: 'Gauge Boson', family: 'boson', mass: '0', massVal: 0, charge: '0', spin: '1', y_l: '0', t3_l: '0', y_r: '0', t3_r: '0', groups: ['boson', 'gauge'], interactions: ['strong'], color: 'var(--gauge-boson-color)', cardClass: 'gauge-boson-card boson-card-bg', summary: 'The force carrier for the strong nuclear force, it "glues" quarks together inside protons and neutrons. Gluons also interact with each other.', massRatio: 0, longLived: true, theorized: 1960, discovered: 1979, info: { discovery: 'The concept of gluons emerged with the theory of quantum chromodynamics (QCD) in the 1960s. Evidence was first seen in three-jet events at the DESY collider in 1979.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-gluon.pdf' } },
             photon: { name: 'Photon', antiName: 'Photon', symbol: 'γ', type: 'Gauge Boson', family: 'boson', mass: '0', massVal: 0, charge: '0', spin: '1', y_l: '0', t3_l: '0', y_r: '0', t3_r: '0', groups: ['boson', 'gauge'], interactions: ['em'], color: 'var(--gauge-boson-color)', cardClass: 'gauge-boson-card boson-card-bg', summary: 'The particle of light and the carrier for the electromagnetic force. It is a massless packet of energy that travels at the speed of light.', massRatio: 0, longLived: true, theorized: 1905, discovered: 1923, info: { discovery: 'The concept was developed by Albert Einstein between 1905-1917 to explain phenomena like the photoelectric effect. The particle nature was confirmed by Arthur Compton in 1923.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-photon.pdf' } },
-            z_boson: { name: 'Z Boson', antiName: 'Z Boson', symbol: 'Z', type: 'Gauge Boson', family: 'boson', mass: '~91.2 GeV/c²', massVal: 91200, charge: '0', spin: '1', y_l: '0', t3_l: '0', y_r: '0', t3_r: '0', groups: ['boson', 'gauge'], interactions: ['weak', 'gravity'], color: 'var(--gauge-boson-color)', cardClass: 'gauge-boson-card boson-card-bg', summary: 'A carrier of the weak nuclear force that mediates "neutral current" interactions. Unlike photons, it is very massive.', massRatio: 178473, longLived: false, theorized: 1968, discovered: 1983, info: { discovery: 'Predicted by the electroweak theory of Glashow, Weinberg, and Salam. Discovered at CERN in 1983 by the UA1 and UA2 collaborations.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-z-boson.pdf' } },
-            w_boson: { name: 'W Boson', antiName: 'W Boson', symbol: 'W±', antiSymbol: 'W∓', type: 'Gauge Boson', family: 'boson', mass: '~80.4 GeV/c²', massVal: 80400, charge: '±1', spin: '1', y_l: '0', t3_l: '±1', y_r: '0', t3_r: '0', groups: ['boson', 'gauge'], interactions: ['weak', 'gravity'], color: 'var(--gauge-boson-color)', cardClass: 'gauge-boson-card boson-card-bg', summary: 'A carrier of the weak nuclear force responsible for radioactive decay. Its charge allows it to change the flavor of other particles.', massRatio: 157338, longLived: false, theorized: 1968, discovered: 1983, info: { discovery: 'Also predicted by electroweak theory and discovered at CERN in 1983.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-w-boson.pdf' } },
-            higgs_boson: { name: 'Higgs Boson', antiName: 'Higgs Boson', symbol: 'H', type: 'Scalar Boson', family: 'boson', mass: '~125 GeV/c²', massVal: 125000, charge: '0', spin: '0', y_l: '-1', t3_l: '-1/2', y_r: 'n/a', t3_r: 'n/a', groups: ['boson', 'scalar'], interactions: ['higgs', 'gravity'], color: 'var(--scalar-boson-color)', cardClass: 'scalar-boson-card boson-card-bg', summary: 'The particle associated with the Higgs field, which gives other fundamental particles their mass. It is the only elementary particle with zero spin.', massRatio: 244618, longLived: false, theorized: 1964, discovered: 2012, info: { discovery: 'The Higgs mechanism was proposed in 1964 by several physicists. The particle was finally discovered at the LHC at CERN in 2012.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-h-boson.pdf' } },
+            z_boson: { name: 'Z Boson', antiName: 'Z Boson', symbol: 'Z', type: 'Gauge Boson', family: 'boson', mass: '~91.2 GeV/c²', massVal: 91200, charge: '0', spin: '1', y_l: '0', t3_l: '0', y_r: '0', t3_r: '0', groups: ['boson', 'gauge'], interactions: ['weak', 'gravity'], color: 'var(--gauge-boson-color)', cardClass: 'gauge-boson-card boson-card-bg', summary: 'A carrier of the weak nuclear force that mediates "neutral current" interactions. Unlike photons, it is very massive.', massRatio: 180000, longLived: false, theorized: 1968, discovered: 1983, info: { discovery: 'Predicted by the electroweak theory of Glashow, Weinberg, and Salam. Discovered at CERN in 1983 by the UA1 and UA2 collaborations.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-z-boson.pdf' } },
+            w_boson: { name: 'W Boson', antiName: 'W Boson', symbol: 'W±', antiSymbol: 'W∓', type: 'Gauge Boson', family: 'boson', mass: '~80.4 GeV/c²', massVal: 80400, charge: '±1', spin: '1', y_l: '0', t3_l: '±1', y_r: '0', t3_r: '0', groups: ['boson', 'gauge'], interactions: ['weak', 'gravity'], color: 'var(--gauge-boson-color)', cardClass: 'gauge-boson-card boson-card-bg', summary: 'A carrier of the weak nuclear force responsible for radioactive decay. Its charge allows it to change the flavor of other particles.', massRatio: 160000, longLived: false, theorized: 1968, discovered: 1983, info: { discovery: 'Also predicted by electroweak theory and discovered at CERN in 1983.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-w-boson.pdf' } },
+            higgs_boson: { name: 'Higgs Boson', antiName: 'Higgs Boson', symbol: 'H', type: 'Scalar Boson', family: 'boson', mass: '~125 GeV/c²', massVal: 125000, charge: '0', spin: '0', y_l: '-1', t3_l: '-1/2', y_r: 'n/a', t3_r: 'n/a', groups: ['boson', 'scalar'], interactions: ['higgs', 'gravity'], color: 'var(--scalar-boson-color)', cardClass: 'scalar-boson-card boson-card-bg', summary: 'The particle associated with the Higgs field, which gives other fundamental particles their mass. It is the only elementary particle with zero spin.', massRatio: 240000, longLived: false, theorized: 1964, discovered: 2012, info: { discovery: 'The Higgs mechanism was proposed in 1964 by several physicists. The particle was finally discovered at the LHC at CERN in 2012.', sourceURL: 'https://pdg.lbl.gov/2023/listings/rpp2023-list-h-boson.pdf' } },
             graviton: { name: 'Graviton', antiName: 'Graviton', symbol: 'G', type: 'Tensor Boson', family: 'boson', mass: '0', massVal: 0, charge: '0', spin: '2', y_l: '0', t3_l: '0', y_r: '0', t3_r: '0', groups: ['boson', 'tensor'], interactions: ['gravity'], color: 'var(--tensor-boson-color)', cardClass: 'tensor-boson-card boson-card-bg', summary: 'A hypothetical particle that mediates the force of gravity in quantum gravity theories. It has not yet been discovered.', massRatio: 0, longLived: true, theorized: 1930, info: { discovery: 'Postulated in the 1930s. As a quantum theory of gravity has not been successfully formulated, the graviton remains theoretical.', sourceURL: 'https://en.wikipedia.org/wiki/Graviton' } }
         };
 
@@ -1946,129 +1947,223 @@
 
             function generateNumberLine() {
                 const prop = propertySelect.value;
-                const isLog = prop.includes('mass');
+                const isLog = prop.includes('mass') || prop.includes('Ratio');
 
-                // Correctly parse the value and invert it for antimatter charge
-const rawValues = Object.entries(particleData).map(([id, p]) => {
-    let val = p[prop];
-    let numVal;
+                // Get all particles, including those with value 0
+                const allParticles = Object.entries(particleData).map(([id, p]) => {
+                    let val = p[prop];
+                    let numVal;
 
-    if (prop === 'theorized' || prop === 'discovered') {
-        numVal = Number(val);
-    } else if (typeof val === 'string' && val.includes('/')) {
-        numVal = eval(val);
-    } else if (typeof val === 'string' && val.includes('±')) {
-        numVal = parseFloat(val.substring(1));
-    } else {
-        numVal = Number(val);
-    }
-
-    // *** FIX: Invert the charge value if antimatter is toggled ***
-    if (prop === 'charge' && isAntimatter) {
-        numVal = -numVal;
-    }
-
-    return { id, value: numVal };
-}).filter(item => !isNaN(item.value) && (isLog ? item.value > 0 : true));
-
-                const valueMap = new Map();
-                rawValues.forEach(item => {
-                    const key = item.value;
-                    if (!valueMap.has(key)) valueMap.set(key, []);
-                    valueMap.get(key).push(item.id);
-                });
-
-                const values = Array.from(valueMap.keys());
-                let minVal = Math.min(...values);
-                let maxVal = Math.max(...values);
-
-                let ticks = [];
-if (prop === 'charge') {
-    minVal = -1; maxVal = 1;
-    ticks = [-1, -2 / 3, -1 / 3, 0, 1 / 3, 2 / 3, 1];
-} else if (prop === 'spin') {
-    minVal = 0; maxVal = 2;
-    ticks = [0, 0.5, 1, 2];
-} else if (prop === 'longLived') {   // PASTE THE NEW BLOCK HERE
-    minVal = 0; maxVal = 1;
-    ticks = [0, 1];
-} else if (prop === 'theorized' || prop === 'discovered') {
-    const startYear = Math.floor(minVal / 10) * 10;
-                    const endYear = Math.ceil(maxVal / 10) * 10;
-                    ticks.push(minVal);
-                    for (let year = startYear; year <= endYear; year += 10) {
-                        if (year > minVal && year < maxVal) ticks.push(year);
+                    if (prop === 'theorized' || prop === 'discovered') {
+                        numVal = Number(val);
+                    } else if (typeof val === 'string' && val.includes('/')) {
+                        numVal = eval(val);
+                    } else if (typeof val === 'string' && val.includes('±')) {
+                        numVal = parseFloat(val.substring(1));
+                    } else {
+                        numVal = Number(val);
                     }
-                    ticks.push(maxVal);
-                } else { // Mass
-                    const startPower = Math.floor(Math.log10(minVal));
-                    const endPower = Math.ceil(Math.log10(maxVal));
-                    ticks.push(minVal);
-                    for (let i = startPower; i <= endPower; i += 3) {
-                        const tickVal = Math.pow(10, i);
-                        if (tickVal > minVal && tickVal < maxVal) ticks.push(tickVal);
+
+                    if (prop === 'charge' && isAntimatter) {
+                        numVal = -numVal;
                     }
-                    ticks.push(maxVal);
-                }
+                    return { id, value: numVal };
+                }).filter(item => !isNaN(item.value));
 
-                ticks = [...new Set(ticks)].sort((a, b) => a - b);
+                // Clear previous state
+                numberLineContainer.innerHTML = '<div class="number-line-track"></div>';
+                numberLineLabels.innerHTML = '';
 
-                const range = (isLog ? Math.log10(maxVal) : maxVal) - (isLog ? Math.log10(minVal) : minVal);
-                if (range === 0) { // Avoid division by zero if all values are the same
-                    numberLineContainer.innerHTML = '<div class="number-line-track"></div>';
-                    numberLineLabels.innerHTML = `<div class="tick-label" style="left: 50%;">${minVal}</div>`;
-                    return;
-                }
+                if (isLog) {
+                    // --- SPECIAL LOGIC FOR LOG SCALE WITH ZERO ---
 
-                numberLineContainer.innerHTML = '<div class="number-line-track"></div>'; // Clear previous dots
+                    // 1. Separate massless and massive particles
+                    const masslessParticles = allParticles.filter(p => p.value === 0);
+                    const massiveParticles = allParticles.filter(p => p.value > 0);
 
-                for (const [value, ids] of valueMap.entries()) {
-                    const logVal = isLog ? Math.log10(value) : value;
-                    const logMin = isLog ? Math.log10(minVal) : minVal;
-                    const percent = ((logVal - logMin) / range) * 100;
+                    // 2. Group and place massless particles at the 0% mark
+                    const masslessMap = new Map();
+                    masslessParticles.forEach(item => {
+                        if (!masslessMap.has(0)) masslessMap.set(0, []);
+                        masslessMap.get(0).push(item.id);
+                    });
 
-                    ids.forEach((id, index) => {
-                        const particle = particleData[id];
-                        const dot = document.createElement('div');
-                        dot.className = 'particle-dot';
-                        dot.dataset.id = id;
-                        dot.style.left = `${percent}%`;
+                    if (masslessMap.has(0)) {
+                        const ids = masslessMap.get(0);
+                        ids.forEach((id, index) => {
+                            const particle = particleData[id];
+                            const dot = document.createElement('div');
+                            dot.className = 'particle-dot';
+                            dot.dataset.id = id;
+                            dot.style.left = `0%`; // Position at the very beginning
+                            const verticalOffset = (index - (ids.length - 1) / 2) * 15;
+                            dot.style.top = `calc(50% + ${verticalOffset}px)`;
+                            dot.style.transform = `translate(-50%, -50%)`;
+                            dot.style.backgroundColor = particle.color;
+                            dot.style.width = `12px`;
+                            dot.style.height = `12px`;
+                            dot.addEventListener('click', () => showModal(id));
+                            numberLineContainer.appendChild(dot);
+                        });
+                        // Add a "0" label for the massless group
+                        const zeroLabel = document.createElement('div');
+                        zeroLabel.className = 'tick-label';
+                        zeroLabel.style.left = '0%';
+                        zeroLabel.textContent = '0';
+                        numberLineLabels.appendChild(zeroLabel);
+                    }
 
-                        const verticalOffset = (index - (ids.length - 1) / 2) * 15;
-                        dot.style.top = `calc(50% + ${verticalOffset}px)`;
-                        dot.style.transform = `translate(-50%, -50%)`;
+                    // 3. Process massive particles on a logarithmic scale from 15% to 100%
+                    const valueMap = new Map();
+                    massiveParticles.forEach(item => {
+                        const key = item.value;
+                        if (!valueMap.has(key)) valueMap.set(key, []);
+                        valueMap.get(key).push(item.id);
+                    });
 
-                        dot.style.backgroundColor = particle.color;
-                        const size = 10 + (percent / 100) * 15;
-                        dot.style.width = `${size}px`;
-                        dot.style.height = `${size}px`;
-                        dot.addEventListener('click', () => showModal(id));
+                    const values = Array.from(valueMap.keys());
+                    if (values.length > 0) {
+                        let minVal = Math.min(...values);
+                        let maxVal = Math.max(...values);
+                        const range = Math.log10(maxVal) - Math.log10(minVal);
 
-                        numberLineContainer.appendChild(dot);
+                        for (const [value, ids] of valueMap.entries()) {
+                            const logVal = Math.log10(value);
+                            const logMin = Math.log10(minVal);
+                            // Scale percentage between 15% and 100%
+                            const percent = range === 0 ? 15 : 15 + (((logVal - logMin) / range) * 85);
+
+
+                            ids.forEach((id, index) => {
+                                const particle = particleData[id];
+                                const dot = document.createElement('div');
+                                dot.className = 'particle-dot';
+                                dot.dataset.id = id;
+                                dot.style.left = `${percent}%`;
+                                const verticalOffset = (index - (ids.length - 1) / 2) * 15;
+                                dot.style.top = `calc(50% + ${verticalOffset}px)`;
+                                dot.style.transform = `translate(-50%, -50%)`;
+                                dot.style.backgroundColor = particle.color;
+                                const size = 10 + (percent / 100) * 15;
+                                dot.style.width = `${size}px`;
+                                dot.style.height = `${size}px`;
+                                dot.addEventListener('click', () => showModal(id));
+                                numberLineContainer.appendChild(dot);
+                            });
+                        }
+                        
+                        // Add labels for the massive part of the scale
+                        const startPower = Math.floor(Math.log10(minVal));
+                        const endPower = Math.ceil(Math.log10(maxVal));
+                        let ticks = [minVal];
+                         for (let i = startPower; i <= endPower; i += 3) {
+                            const tickVal = Math.pow(10, i);
+                            if (tickVal > minVal && tickVal < maxVal) ticks.push(tickVal);
+                        }
+                        ticks.push(maxVal);
+                        ticks = [...new Set(ticks)].sort((a,b) => a - b);
+                        
+                        ticks.forEach(tick => {
+                            const percent = range === 0 ? 15 : 15 + (((Math.log10(tick) - Math.log10(minVal)) / range) * 85);
+                             if (percent >= 15 && percent <= 100) {
+                                const label = document.createElement('div');
+                                label.className = 'tick-label';
+                                label.style.left = `${percent}%`;
+                                
+                                // FIX: Adjust alignment for the last label
+                                if (percent > 98) {
+                                    label.style.transform = 'translateX(-100%)';
+                                } else {
+                                    label.style.transform = 'translateX(-50%)';
+                                }
+
+                                const parts = tick.toExponential(0).split('e');
+                                const exponent = parseInt(parts[1]);
+                                label.innerHTML = `${parts[0]} &times; 10<sup>${exponent}</sup>`;
+                                numberLineLabels.appendChild(label);
+                            }
+                        });
+                    }
+
+                } else {
+                    // --- ORIGINAL LOGIC FOR NON-LOG SCALES ---
+                    const valueMap = new Map();
+                    allParticles.forEach(item => {
+                        const key = item.value;
+                        if (!valueMap.has(key)) valueMap.set(key, []);
+                        valueMap.get(key).push(item.id);
+                    });
+
+                    const values = Array.from(valueMap.keys());
+                    let minVal = Math.min(...values);
+                    let maxVal = Math.max(...values);
+                    const range = maxVal - minVal;
+
+                    if (range === 0) {
+                        numberLineLabels.innerHTML = `<div class="tick-label" style="left: 50%;">${minVal}</div>`;
+                    }
+
+                    for (const [value, ids] of valueMap.entries()) {
+                        const percent = range === 0 ? 50 : ((value - minVal) / range) * 100;
+                        ids.forEach((id, index) => {
+                            const particle = particleData[id];
+                            const dot = document.createElement('div');
+                            dot.className = 'particle-dot';
+                            dot.dataset.id = id;
+                            dot.style.left = `${percent}%`;
+                            const verticalOffset = (index - (ids.length - 1) / 2) * 15;
+                            dot.style.top = `calc(50% + ${verticalOffset}px)`;
+                            dot.style.transform = `translate(-50%, -50%)`;
+                            dot.style.backgroundColor = particle.color;
+                            const size = 10 + (percent / 100) * 15;
+                            dot.style.width = `${size}px`;
+                            dot.style.height = `${size}px`;
+                            dot.addEventListener('click', () => showModal(id));
+                            numberLineContainer.appendChild(dot);
+                        });
+                    }
+
+                    let ticks = [];
+                    if (prop === 'charge') {
+                        ticks = [-1, -2 / 3, -1 / 3, 0, 1 / 3, 2 / 3, 1];
+                    } else if (prop === 'spin') {
+                        ticks = [0, 0.5, 1, 2];
+                    } else if (prop === 'longLived') {
+                        ticks = [0, 1];
+                    } else if (prop === 'theorized' || prop === 'discovered') {
+                        const startYear = Math.floor(minVal / 10) * 10;
+                        const endYear = Math.ceil(maxVal / 10) * 10;
+                        ticks.push(minVal);
+                        for (let year = startYear; year <= endYear; year += 10) {
+                            if (year > minVal && year < maxVal) ticks.push(year);
+                        }
+                        ticks.push(maxVal);
+                    }
+                    ticks = [...new Set(ticks)].sort((a, b) => a - b);
+
+                    ticks.forEach(tick => {
+                        const percent = range === 0 ? 50 : ((tick - minVal) / range) * 100;
+                        if (percent >= 0 && percent <= 100) {
+                            const label = document.createElement('div');
+                            label.className = 'tick-label';
+                            label.style.left = `${percent}%`;
+                             // FIX: Adjust alignment for the last label
+                            if (percent > 98) {
+                                label.style.transform = 'translateX(-100%)';
+                            } else {
+                                label.style.transform = 'translateX(-50%)';
+                            }
+                            if (prop === 'charge') {
+                                if (Math.abs(Math.abs(tick) - 1 / 3) < 1e-9) label.textContent = (tick > 0 ? '' : '-') + '¹/₃';
+                                else if (Math.abs(Math.abs(tick) - 2 / 3) < 1e-9) label.textContent = (tick > 0 ? '' : '-') + '²/₃';
+                                else label.textContent = tick.toFixed(0);
+                            } else if (prop === 'spin') label.textContent = tick === 0.5 ? '¹/₂' : tick;
+                            else if (prop === 'longLived') label.textContent = tick === 0 ? 'No' : 'Yes';
+                            else label.textContent = Math.round(tick);
+                            numberLineLabels.appendChild(label);
+                        }
                     });
                 }
-
-                numberLineLabels.innerHTML = '';
-                ticks.forEach(tick => {
-                    const logTick = isLog ? Math.log10(tick) : tick;
-                    const logMin = isLog ? Math.log10(minVal) : minVal;
-                    const percent = ((logTick - logMin) / range) * 100;
-                    if (percent >= 0 && percent <= 100) {
-                        const label = document.createElement('div');
-                        label.className = 'tick-label';
-                        label.style.left = `${percent}%`;
-                        if (prop === 'charge') {
-     if (Math.abs(Math.abs(tick) - 1/3) < 1e-9) label.textContent = (tick > 0 ? '' : '-') + '¹/₃';
-     else if (Math.abs(Math.abs(tick) - 2/3) < 1e-9) label.textContent = (tick > 0 ? '' : '-') + '²/₃';
-     else label.textContent = tick.toFixed(0);
-}
-                        else if (prop === 'spin') label.textContent = tick === 0.5 ? '¹/₂' : tick;
-else if (prop === 'longLived') label.textContent = tick === 0 ? 'No' : 'Yes'; // Add this new line
-else if (isLog) label.innerHTML = `10<sup>${Math.round(Math.log10(tick))}</sup>`;
-else label.textContent = Math.round(tick);
-                        numberLineLabels.appendChild(label);
-                    }
-                });
             }
 
             const scaleParticleSelect = document.getElementById('scale-particle-select');
