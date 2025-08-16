@@ -190,7 +190,7 @@
                 </header>
                 <main>
                     <div class="flex justify-center mb-8">
-                         <img src="pear-logo.jpg" alt="Spinning Pear Logo" class="w-24 h-24 animate-spin" style="animation-duration: 3s;">
+                         <img src="https://i.imgur.com/8F2Ab3B.png" alt="Spinning Pear Logo" class="w-24 h-24 animate-spin" style="animation-duration: 3s;" onerror="this.onerror=null;this.src='https://placehold.co/96x96/000000/FFFFFF?text=Pear'"/>
                     </div>
                     <p class="text-green-400 text-xl mb-6">Click on a topic to explore!</p>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto items-start">
@@ -201,7 +201,7 @@
                             </div>
                             <div id="music-icon-nav" class="cursor-pointer transform group-hover:scale-110 transition-transform">
                                 <div class="bg-indigo-800 p-4 rounded-lg border-4 border-dashed border-pink-500">
-                                     <img src="music-icon.jpg" alt="Music Icon" class="w-full h-auto mx-auto rounded-md">
+                                     <img src="https://i.imgur.com/so57a7E.png" alt="Music Icon" class="w-full h-auto mx-auto rounded-md" onerror="this.onerror=null;this.src='https://placehold.co/128x128/4338CA/FFFFFF?text=Music'"/>
                                 </div>
                                 <p class="mt-2 text-xl font-vt323 text-white">Music Dissonance</p>
                             </div>
@@ -210,7 +210,7 @@
                         <div class="group relative text-center">
                             <div id="physics-icon-nav" class="cursor-pointer transform group-hover:scale-110 transition-transform">
                                 <div class="bg-indigo-800 p-4 rounded-lg border-4 border-dashed border-pink-500">
-                                    <img src="physics-icon.jpg" alt="Standard Model Icon" class="w-full h-auto mx-auto rounded-md">
+                                    <img src="https://i.imgur.com/xYgYfH7.png" alt="Standard Model Icon" class="w-full h-auto mx-auto rounded-md" onerror="this.onerror=null;this.src='https://placehold.co/128x128/4338CA/FFFFFF?text=Physics'"/>
                                 </div>
                                 <p class="mt-2 text-xl font-vt323 text-white">Quantum Physics</p>
                             </div>
@@ -337,7 +337,6 @@
         function initMusicExplorer() {
             const explorerContainer = document.getElementById('music-explorer-container');
             // This injects the modern UI for the music explorer into the page.
-            // *** CHANGE START: Added a new slider for the 4-tone "Scaled View" and clarified labels. ***
             explorerContainer.innerHTML = `
                 <div id="controls-sidebar"><h1>Tonal Dissonance Explorer</h1><div id="controls"><div class="control-group"><label for="baseFreq">Base Frequency (Hz)</label><input type="number" id="baseFreq" value="220"></div><div class="control-group"><label for="overtones">Overtones</label><input type="number" id="overtones" min="0" max="12" value="6"></div><div class="control-group"><label for="octaves">Octaves</label><input type="number" id="octaves" min="1" max="4" value="1"></div><div class="control-group"><label for="equation">Dissonance Model</label><select id="equation"><option value="sethares">Sethares</option><option value="dillon">Giorgio Dillon</option></select></div><div class="control-group"><label for="instrument">Instrument Timbre</label><select id="instrument"><option value="sine">Sine</option><option value="square">Square</option><option value="saw">Saw</option><option value="string" selected>String (Harmonic)</option><option value="piano">Piano (Harmonic)</option><option value="stretched_slendro">Slendro (Stretched 1.96)</option><option value="saron_sethares">Saron (Sethares)</option><option value="bonang_sethares">Bonang (Sethares)</option><option value="custom">Custom</option></select></div><div class="control-group"><label for="tones">Tones</label><select id="tones"><option value="2">2 Tones (Dyads)</option><option value="3" selected>3 Tones (Triads)</option><option value="4">4 Tones (Tetrads)</option></select></div><div class="control-group full-width"><label for="tuningSystem">Tuning System</label><select id="tuningSystem"></select></div>
                 
@@ -348,7 +347,6 @@
                 <div class="full-width" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; align-items: center;"><div class="control-group"><label for="volume">Volume</label><input type="range" id="volume" min="0" max="1" step="0.01" value="0.2"></div><div style="display: flex; justify-content: center;"><label style="display: flex; align-items: center; gap: 5px; cursor: pointer;"><input type="checkbox" id="invertRoughness" style="width: auto; margin: 0;">Invert Dissonance</label></div></div><details id="overtone-strength-details"><summary>Overtone Strength</summary><div class="overtone-panel-content"><div class="overtone-presets" id="overtone-presets"></div><div class="overtone-sliders-container" id="overtone-sliders-container"></div><button id="reset-overtones-btn">Reset Overtones</button><button id="test-overtone-btn">Test Tone</button></div></details><div class="bottom-controls-container"><div class="theme-switch-wrapper"><span>Dark Mode</span><label class="theme-switch"><input type="checkbox" id="theme-toggle"><span class="slider"></span></label></div><button id="resetBtn">Reset to Default</button></div></div></div>
                 <div id="main-content-wrapper"><div id="graph"></div><div id="tables-container"><table id="dyads-table"><thead><tr><th>Dyad Name</th><th>Ratio</th><th>Piano Notes</th><th>MIDI Notes</th><th class="sortable-header" data-sort-dir="asc">Roughness ⇅</th><th>Sound</th></tr></thead><tbody></tbody></table><table id="triads-table" style="display:none;"><thead><tr><th>Triad Name</th><th>Ratios</th><th>Piano Notes</th><th>MIDI Notes</th><th class="sortable-header" data-sort-dir="asc">Roughness ⇅</th><th>Sound</th></tr></thead><tbody></tbody></table><table id="tetrads-table" style="display:none;"><thead><tr><th>Tetrad Name</th><th>Ratios</th><th>Piano Notes</th><th>MIDI Notes</th><th class="sortable-header" data-sort-dir="asc">Roughness ⇅</th><th>Sound</th></tr></thead><tbody></tbody></table></div></div>
                 <div id="message-box"></div>`;
-            // *** CHANGE END ***
             
             // Cache DOM elements for performance
             const dom = {
@@ -358,12 +356,10 @@
                 dyadsTable: document.getElementById('dyads-table'), triadsTable: document.getElementById('triads-table'), tetradsTable: document.getElementById('tetrads-table'), dyadsTableBody: document.querySelector('#dyads-table tbody'), triadsTableBody: document.querySelector('#triads-table tbody'), tetradsTableBody: document.querySelector('#tetrads-table tbody'),
                 overtoneStrengthDetails: document.getElementById('overtone-strength-details'), overtoneSlidersContainer: document.getElementById('overtone-sliders-container'), overtonePresetsContainer: document.getElementById('overtone-presets'), resetOvertonesBtn: document.getElementById('reset-overtones-btn'),
                 testOvertoneBtn: document.getElementById('test-overtone-btn'), 
-                // *** CHANGE START: Added new slider elements to the DOM cache. ***
                 bubbleSizeGroup: document.getElementById('bubble-size-group'), 
                 bubbleSize: document.getElementById('bubbleSize'),
                 scaledViewSliderGroup: document.getElementById('scaled-view-slider-group'),
                 scaledViewSlider: document.getElementById('scaledViewSlider'),
-                // *** CHANGE END ***
             };
             let audioCtx; let activeOscillators = []; let activeFlagTimeout = null; let overtoneAmplitudes = [];
             const timbres = {
@@ -713,8 +709,12 @@ const TETRAD_DEFS = [
     { name: 'Major 7th (2nd inv)', steps: [0, 4, 5, 9] },
     { name: 'Major 7th (3rd inv)', steps: [0, 1, 5, 8] },
     { name: 'Dominant 7th (1st inv)', steps: [0, 3, 6, 8] },
+    { name: 'Dominant 7th (2nd inv)', steps: [0, 3, 7, 9] },
+    { name: 'Dominant 7th (3rd inv)', steps: [0, 2, 6, 9] },
+    { name: 'Minor 7th (1st inv)', steps: [0, 4, 7, 9] },
     { name: 'Minor 7th (2nd inv)', steps: [0, 3, 5, 8] },
     { name: 'Minor 7th (3rd inv)', steps: [0, 2, 5, 9] },
+    { name: 'Half-Diminished 7th (1st inv)', steps: [0, 3, 7, 9] }, // Same as Dom7(2nd inv)
     { name: 'Half-Diminished 7th (2nd inv)', steps: [0, 4, 6, 9] },
     { name: 'Half-Diminished 7th (3rd inv)', steps: [0, 2, 5, 8] },
     { name: 'Minor-Major 7th (1st inv)', steps: [0, 4, 8, 9] },
@@ -735,6 +735,7 @@ const TETRAD_DEFS = [
     { name: 'Major 7th sus4', steps: [0, 5, 7, 11] },
     { name: 'Dominant 7th sus2', steps: [0, 2, 7, 10] },
     { name: 'Major 7th sus2', steps: [0, 2, 7, 11] },
+    { name: '7sus4(b9) (no 5th)', steps: [0, 1, 5, 10] },
     { name: '13sus4 (shell)', steps: [0, 5, 9, 10] },
 
     // --- 9th Chords (4-note voicings) ---
@@ -791,6 +792,7 @@ const TETRAD_DEFS = [
     { name: 'Maj7 (Spread 1)', steps: [0, 4, 11, 19] },
     { name: 'Maj7 (Spread 2)', steps: [0, 7, 11, 16] },
     { name: 'm7 (Spread 1)', steps: [0, 3, 10, 19] },
+    { name: 'm7 (Spread 2)', steps: [0, 7, 10, 15] },
     { name: 'Dom7 (Spread 1)', steps: [0, 4, 10, 19] },
     { name: 'Dom7 (Spread 2)', steps: [0, 7, 10, 16] },
     { name: 'm7b5 (Spread)', steps: [0, 6, 10, 15] },
@@ -844,444 +846,583 @@ const TETRAD_DEFS = [
     // To keep the response usable, the full exhaustive list is truncated here.
     // The provided named chords cover all musically significant combinations.
 ];
-            const PSEUDO_DYAD_DEFS = [{ name: 'Pseudo Octave', partials: [0, 1] }, { name: 'Pseudo Fifth', partials: [1, 2] }]; const PSEUDO_TRIAD_DEFS = [{ name: 'Pseudo Major Triad', partials: [3, 4, 5] }, { name: 'Pseudo Minor Triad', partials: [9, 11, 14] }]; const PSEUDO_TETRAD_DEFS = [{ name: 'Pseudo Dom 7th', partials: [3, 4, 5, 6] }];
-            function centsToRatio(cents) { return 2 ** (cents / 1200); }
-            function getTuningByKey(key) { for (const group in TUNING_SYSTEMS) { if (TUNING_SYSTEMS[group][key]) { return TUNING_SYSTEMS[group][key]; } } return null; }
-            function getPseudoChords() { const instrumentType = dom.instrument.value; const isHarmonic = ['sine', 'square', 'saw', 'string', 'piano'].includes(instrumentType); if (isHarmonic) return { dyads: [], triads: [], tetrads: [] }; const partialFn = getPartialFunction(instrumentType); const calculatePseudoRatios = (partialIndices) => { const basePartial = partialFn(partialIndices[0]); if (basePartial === null || typeof basePartial === 'undefined') return null; const ratios = partialIndices.map(p_idx => { const p_val = partialFn(p_idx); return (p_val === null || typeof p_val === 'undefined') ? null : p_val / basePartial; }); return ratios.some(r => r === null) ? null : ratios; }; const dyads = PSEUDO_DYAD_DEFS.map(def => { const ratios = calculatePseudoRatios(def.partials); return ratios ? { name: def.name, ratioText: ratios.slice(1).map(r => r.toFixed(3)).join(', '), ratios: ratios } : null; }).filter(Boolean); const triads = PSEUDO_TRIAD_DEFS.map(def => { const ratios = calculatePseudoRatios(def.partials); return ratios ? { name: def.name, ratioText: ratios.slice(1).map(r => r.toFixed(3)).join(', '), ratios: ratios } : null; }).filter(Boolean); const tetrads = PSEUDO_TETRAD_DEFS.map(def => { const ratios = calculatePseudoRatios(def.partials); return ratios ? { name: def.name, ratioText: ratios.slice(1).map(r => r.toFixed(3)).join(', '), ratios: ratios } : null; }).filter(Boolean); return { dyads, triads, tetrads }; }
+            const PSEUDO_DYAD_DEFS = [{ name: 'Pseudo Octave', partials: [0, 1] }, { name: 'Pseudo Fifth', partials: [1, 2] }]; const PSEUDO_TRIAD_DEFS = [{ name: 'Pseudo Major Triad', partials: [3, 4, 5] }, { name: 'Pseudo Minor Triad', partials: [9, 11, 14] }]; const PSEUDO_TETRAD_DEFS = [{ name: 'Pseudo Dom 7th', partials: [3, 4, 5, 6] }];
+            function centsToRatio(cents) { return 2 ** (cents / 1200); }
+            function getTuningByKey(key) { for (const group in TUNING_SYSTEMS) { if (TUNING_SYSTEMS[group][key]) { return TUNING_SYSTEMS[group][key]; } } return null; }
+            function getPseudoChords() { const instrumentType = dom.instrument.value; const isHarmonic = ['sine', 'square', 'saw', 'string', 'piano'].includes(instrumentType); if (isHarmonic) return { dyads: [], triads: [], tetrads: [] }; const partialFn = getPartialFunction(instrumentType); const calculatePseudoRatios = (partialIndices) => { const basePartial = partialFn(partialIndices[0]); if (basePartial === null || typeof basePartial === 'undefined') return null; const ratios = partialIndices.map(p_idx => { const p_val = partialFn(p_idx); return (p_val === null || typeof p_val === 'undefined') ? null : p_val / basePartial; }); return ratios.some(r => r === null) ? null : ratios; }; const dyads = PSEUDO_DYAD_DEFS.map(def => { const ratios = calculatePseudoRatios(def.partials); return ratios ? { name: def.name, ratioText: ratios.slice(1).map(r => r.toFixed(3)).join(', '), ratios: ratios } : null; }).filter(Boolean); const triads = PSEUDO_TRIAD_DEFS.map(def => { const ratios = calculatePseudoRatios(def.partials); return ratios ? { name: def.name, ratioText: ratios.slice(1).map(r => r.toFixed(3)).join(', '), ratios: ratios } : null; }).filter(Boolean); const tetrads = PSEUDO_TETRAD_DEFS.map(def => { const ratios = calculatePseudoRatios(def.partials); return ratios ? { name: def.name, ratioText: ratios.slice(1).map(r => r.toFixed(3)).join(', '), ratios: ratios } : null; }).filter(Boolean); return { dyads, triads, tetrads }; }
 
-            function updateTuningData() {
-                const tuningKey = dom.tuningSystem.value;
-                const tuning = getTuningByKey(tuningKey);
-                if (!tuning) return;
+            function updateTuningData() {
+                const tuningKey = dom.tuningSystem.value;
+                const tuning = getTuningByKey(tuningKey);
+                if (!tuning) return;
 
-                const octavesValue = parseInt(dom.octaves.value, 10);
-                const numStepsInOctave = tuning.cents.length;
+                const octavesValue = parseInt(dom.octaves.value, 10);
+                const numStepsInOctave = tuning.cents.length;
 
-                currentDyadData = DYAD_DEFS.map(def => {
-                    if (typeof def.step === 'number' && def.step > 12 && octavesValue < 2) {
-                        return null;
-                    }
+                currentDyadData = DYAD_DEFS.map(def => {
+                    if (typeof def.step === 'number' && def.step > 12 && octavesValue < 2) {
+                        return null;
+                    }
 
-                    if (def.fixedCents) {
-                        const ratio = centsToRatio(def.fixedCents);
-                        return { name: def.name, ratioText: ratio.toFixed(3), ratios: [1, ratio] };
-                    }
-                    if (def.step === 'wolf' && tuning.wolf) {
-                        const ratio = centsToRatio(tuning.wolf);
-                        return { name: def.name, ratioText: ratio.toFixed(3), ratios: [1, ratio] };
-                    }
-                    
-                    if (typeof def.step === 'number') {
-                        const octaves = Math.floor(def.step / numStepsInOctave);
-                        const scaleDegree = def.step % numStepsInOctave;
-                        const baseCents = tuning.cents[scaleDegree];
-                        if (typeof baseCents === 'undefined') return null;
-                        
-                        const totalCents = baseCents + (octaves * 1200);
-                        const ratio = centsToRatio(totalCents);
-                        return { name: def.name, ratioText: ratio.toFixed(3), ratios: [1, ratio] };
-                    }
-                    return null;
-                }).filter(item => item !== null);
+                    if (def.fixedCents) {
+                        const ratio = centsToRatio(def.fixedCents);
+                        return { name: def.name, ratioText: ratio.toFixed(3), ratios: [1, ratio] };
+                    }
+                    if (def.step === 'wolf' && tuning.wolf) {
+                        const ratio = centsToRatio(tuning.wolf);
+                        return { name: def.name, ratioText: ratio.toFixed(3), ratios: [1, ratio] };
+                    }
+                    
+                    if (typeof def.step === 'number') {
+                        const octaves = Math.floor(def.step / numStepsInOctave);
+                        const scaleDegree = def.step % numStepsInOctave;
+                        const baseCents = tuning.cents[scaleDegree];
+                        if (typeof baseCents === 'undefined') return null;
+                        
+                        const totalCents = baseCents + (octaves * 1200);
+                        const ratio = centsToRatio(totalCents);
+                        return { name: def.name, ratioText: ratio.toFixed(3), ratios: [1, ratio] };
+                    }
+                    return null;
+                }).filter(item => item !== null);
 
-                if (numStepsInOctave >= 12) {
-                    currentDyadData.push({ name: 'Octave', ratioText: '2.000', ratios: [1, 2.0] });
-                }
+                if (numStepsInOctave >= 12) {
+                    currentDyadData.push({ name: 'Octave', ratioText: '2.000', ratios: [1, 2.0] });
+                }
 
-                currentTriadData = TRIAD_DEFS.map(def => {
-                    const maxStep = Math.max(...def.steps);
-                    if (maxStep > 12 && octavesValue < 2) {
-                        return null;
-                    }
+                currentTriadData = TRIAD_DEFS.map(def => {
+                    const maxStep = Math.max(...def.steps);
+                    if (maxStep > 12 && octavesValue < 2) {
+                        return null;
+                    }
 
-                    if (!def.steps.every(s => typeof s === 'number') || !tuning || !tuning.cents) return null;
-                    
-                    const ratios = def.steps.map(step => {
-                        const octaves = Math.floor(step / numStepsInOctave);
-                        const scaleDegree = step % numStepsInOctave;
-                        const baseCents = tuning.cents[scaleDegree];
-                        if (typeof baseCents === 'undefined') return null;
-                        const totalCents = baseCents + (octaves * 1200);
-                        return centsToRatio(totalCents);
-                    });
+                    if (!def.steps.every(s => typeof s === 'number') || !tuning || !tuning.cents) return null;
+                    
+                    const ratios = def.steps.map(step => {
+                        const octaves = Math.floor(step / numStepsInOctave);
+                        const scaleDegree = step % numStepsInOctave;
+                        const baseCents = tuning.cents[scaleDegree];
+                        if (typeof baseCents === 'undefined') return null;
+                        const totalCents = baseCents + (octaves * 1200);
+                        return centsToRatio(totalCents);
+                    });
 
-                    if (ratios.some(r => r === null)) return null;
-                    return { name: def.name, ratioText: ratios.slice(1).map(r => r.toFixed(3)).join(', '), ratios: ratios, steps: def.steps };
-                }).filter(item => item !== null);
+                    if (ratios.some(r => r === null)) return null;
+                    return { name: def.name, ratioText: ratios.slice(1).map(r => r.toFixed(3)).join(', '), ratios: ratios, steps: def.steps };
+                }).filter(item => item !== null);
 
-                currentTetradData = TETRAD_DEFS.map(def => {
-                    const maxStep = Math.max(...def.steps);
-                    if (maxStep > 12 && octavesValue < 2) {
-                        return null;
-                    }
+                currentTetradData = TETRAD_DEFS.map(def => {
+                    const maxStep = Math.max(...def.steps);
+                    if (maxStep > 12 && octavesValue < 2) {
+                        return null;
+                    }
 
-                    if (!def.steps.every(s => typeof s === 'number') || !tuning || !tuning.cents) return null;
+                    if (!def.steps.every(s => typeof s === 'number') || !tuning || !tuning.cents) return null;
 
-                    const ratios = def.steps.map(step => {
-                        const octaves = Math.floor(step / numStepsInOctave);
-                        const scaleDegree = step % numStepsInOctave;
-                        const baseCents = tuning.cents[scaleDegree];
-                        if (typeof baseCents === 'undefined') return null;
-                        const totalCents = baseCents + (octaves * 1200);
-                        return centsToRatio(totalCents);
-                    });
-                    
-                    if (ratios.some(r => r === null)) return null;
-                    return { name: def.name, ratioText: ratios.slice(1).map(r => r.toFixed(3)).join(', '), ratios: ratios, steps: def.steps };
-                }).filter(item => item !== null);
+                    const ratios = def.steps.map(step => {
+                        const octaves = Math.floor(step / numStepsInOctave);
+                        const scaleDegree = step % numStepsInOctave;
+                        const baseCents = tuning.cents[scaleDegree];
+                        if (typeof baseCents === 'undefined') return null;
+                        const totalCents = baseCents + (octaves * 1200);
+                        return centsToRatio(totalCents);
+                    });
+                    
+                    if (ratios.some(r => r === null)) return null;
+                    return { name: def.name, ratioText: ratios.slice(1).map(r => r.toFixed(3)).join(', '), ratios: ratios, steps: def.steps };
+                }).filter(item => item !== null);
+                
+                const pseudoChords = getPseudoChords();
+                if (pseudoChords.dyads.length > 0) {
+                    const pseudoFifth = pseudoChords.dyads.find(d => d.name === 'Pseudo Fifth');
+                    if (pseudoFifth) {
+                        const p5Index = currentDyadData.findIndex(d => d.name === 'Perfect 5th');
+                        if (p5Index > -1) {
+                            currentDyadData.splice(p5Index + 1, 0, pseudoFifth);
+                        } else {
+                            currentDyadData.push(pseudoFifth);
+                        }
+                    }
+                    const pseudoOctave = pseudoChords.dyads.find(d => d.name === 'Pseudo Octave');
+                    if (pseudoOctave) {
+                        const octIndex = currentDyadData.findIndex(d => d.name === 'Octave');
+                        if (octIndex > -1) {
+                            currentDyadData.splice(octIndex + 1, 0, pseudoOctave);
+                        } else {
+                            currentDyadData.push(pseudoOctave);
+                        }
+                    }
+                }
+                currentTriadData.push(...pseudoChords.triads);
+                currentTetradData.push(...pseudoChords.tetrads);
+                
+                currentAllTones = [...currentDyadData, ...currentTriadData, ...currentTetradData].reduce((acc, curr) => {
+                    const uniqueName = curr.ratios.length > 2 ? `${curr.name} ${curr.ratios.length}-tone` : curr.name;
+                    acc[uniqueName] = { ratios: curr.ratios, ratioText: curr.ratioText, originalName: curr.name };
+                    return acc;
+                }, {});
+            }
+            function freqToMidi(freq) { return Math.round(69 + 12 * Math.log2(freq / 440)); } function midiToNoteName(midi) { const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']; const octave = Math.floor(midi / 12) - 1; return noteNames[midi % 12] + octave; }
+            function populateTables() { const settings = getSettings(); const model = settings.equation === 'dillon' ? dillonModel : setharesModel; const ampFunction = getAmpFunction(settings.instrument); const partialFn = getPartialFunction(settings.instrument); const baseFreq = +dom.baseFreq.value; const processData = (data, tableBody, isSortable) => { if (!data || data.length === 0) return; let itemsWithDissonance = data.map(item => { const freqs = item.ratios.map(r => r * baseFreq); const roughness = model(freqs, settings.overtones, ampFunction, partialFn); return { ...item, roughness }; }); if (isSortable) { const sortDir = tableBody.closest('table').querySelector('.sortable-header').dataset.sortDir; if (sortDir === 'asc') { itemsWithDissonance.sort((a, b) => a.roughness - b.roughness); } else { itemsWithDissonance.sort((a, b) => b.roughness - a.roughness); } } const allRoughnessValues = itemsWithDissonance.map(item => item.roughness).filter(r => isFinite(r)); const maxRoughness = Math.max(...allRoughnessValues); tableBody.innerHTML = ''; itemsWithDissonance.forEach(item => { const freqs = item.ratios.map(r => r * baseFreq); const normalizedRoughness = maxRoughness > 0 ? item.roughness / maxRoughness : 0; tableBody.innerHTML += createRow(item, freqs, item.roughness, normalizedRoughness); }); }; const createRow = (item, freqs, roughness, normalizedRoughness) => { const midiNotes = freqs.map(freqToMidi); const pianoNotes = midiNotes.map(midiToNoteName); const uniqueName = item.ratios.length > 2 ? `${item.name} ${item.ratios.length}-tone` : item.name; const bgColor = getColorForValue(normalizedRoughness, DISSONANCE_COLORSCALE); const textColor = getContrastColor(bgColor); return `<tr style="background-color: ${bgColor}; color: ${textColor};"><td>${item.name}</td><td>${item.ratioText}</td><td>${pianoNotes.join(', ')}</td><td>${midiNotes.join(', ')}</td><td>${roughness.toFixed(4)}</td><td><button class="play-only-btn" onclick="playSoundOnly('${uniqueName}')" style="color: var(--button-text-color); background-color: var(--button-bg-color);">Play</button></td></tr>`; }; processData(currentDyadData, dom.dyadsTableBody, true); processData(currentTriadData, dom.triadsTableBody, true); processData(currentTetradData, dom.tetradsTableBody, true); }
+            function getSettings() { 
+                return { 
+                    baseFreq: +dom.baseFreq.value, 
+                    overtones: +dom.overtones.value, 
+                    octaves: +dom.octaves.value, 
+                    equation: dom.equation.value, 
+                    instrument: dom.instrument.value, 
+                    volume: +dom.volume.value, 
+                    tones: +dom.tones.value, 
+                    chartType: dom.chartType.value, 
+                    invert: dom.invertRoughness.checked, 
+                    theme: dom.body.dataset.theme, 
+                    bubbleSize: +dom.bubbleSize.value, 
+                    scaledViewSlider: +dom.scaledViewSlider.value,
+                }; 
+            }
+            function updateChartTypeOptions() { 
+                const tones = +dom.tones.value; 
+                const chartTypeSelect = dom.chartType; 
+                const currentChartType = chartTypeSelect.value; 
+                chartTypeSelect.innerHTML = ''; 
                 
-                const pseudoChords = getPseudoChords();
-                if (pseudoChords.dyads.length > 0) {
-                    const pseudoFifth = pseudoChords.dyads.find(d => d.name === 'Pseudo Fifth');
-                    if (pseudoFifth) {
-                        const p5Index = currentDyadData.findIndex(d => d.name === 'Perfect 5th');
-                        if (p5Index > -1) {
-                            currentDyadData.splice(p5Index + 1, 0, pseudoFifth);
-                        } else {
-                            currentDyadData.push(pseudoFifth);
-                        }
-                    }
-                    const pseudoOctave = pseudoChords.dyads.find(d => d.name === 'Pseudo Octave');
-                    if (pseudoOctave) {
-                        const octIndex = currentDyadData.findIndex(d => d.name === 'Octave');
-                        if (octIndex > -1) {
-                            currentDyadData.splice(octIndex + 1, 0, pseudoOctave);
-                        } else {
-                            currentDyadData.push(pseudoOctave);
-                        }
-                    }
-                }
-                currentTriadData.push(...pseudoChords.triads);
-                currentTetradData.push(...pseudoChords.tetrads);
-                
-                currentAllTones = [...currentDyadData, ...currentTriadData, ...currentTetradData].reduce((acc, curr) => {
-                    const uniqueName = curr.ratios.length > 2 ? `${curr.name} ${curr.ratios.length}-tone` : curr.name;
-                    acc[uniqueName] = { ratios: curr.ratios, ratioText: curr.ratioText, originalName: curr.name };
-                    return acc;
-                }, {});
-            }
-            function freqToMidi(freq) { return Math.round(69 + 12 * Math.log2(freq / 440)); } function midiToNoteName(midi) { const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']; const octave = Math.floor(midi / 12) - 1; return noteNames[midi % 12] + octave; }
-            function populateTables() { const settings = getSettings(); const model = settings.equation === 'dillon' ? dillonModel : setharesModel; const ampFunction = getAmpFunction(settings.instrument); const partialFn = getPartialFunction(settings.instrument); const baseFreq = +dom.baseFreq.value; const processData = (data, tableBody, isSortable) => { if (!data || data.length === 0) return; let itemsWithDissonance = data.map(item => { const freqs = item.ratios.map(r => r * baseFreq); const roughness = model(freqs, settings.overtones, ampFunction, partialFn); return { ...item, roughness }; }); if (isSortable) { const sortDir = tableBody.closest('table').querySelector('.sortable-header').dataset.sortDir; if (sortDir === 'asc') { itemsWithDissonance.sort((a, b) => a.roughness - b.roughness); } else { itemsWithDissonance.sort((a, b) => b.roughness - a.roughness); } } const allRoughnessValues = itemsWithDissonance.map(item => item.roughness).filter(r => isFinite(r)); const maxRoughness = Math.max(...allRoughnessValues); tableBody.innerHTML = ''; itemsWithDissonance.forEach(item => { const freqs = item.ratios.map(r => r * baseFreq); const normalizedRoughness = maxRoughness > 0 ? item.roughness / maxRoughness : 0; tableBody.innerHTML += createRow(item, freqs, item.roughness, normalizedRoughness); }); }; const createRow = (item, freqs, roughness, normalizedRoughness) => { const midiNotes = freqs.map(freqToMidi); const pianoNotes = midiNotes.map(midiToNoteName); const uniqueName = item.ratios.length > 2 ? `${item.name} ${item.ratios.length}-tone` : item.name; const bgColor = getColorForValue(normalizedRoughness, DISSONANCE_COLORSCALE); const textColor = getContrastColor(bgColor); return `<tr style="background-color: ${bgColor}; color: ${textColor};"><td>${item.name}</td><td>${item.ratioText}</td><td>${pianoNotes.join(', ')}</td><td>${midiNotes.join(', ')}</td><td>${roughness.toFixed(4)}</td><td><button class="play-only-btn" onclick="playSoundOnly('${uniqueName}')" style="color: var(--button-text-color); background-color: var(--button-bg-color);">Play</button></td></tr>`; }; processData(currentDyadData, dom.dyadsTableBody, true); processData(currentTriadData, dom.triadsTableBody, true); processData(currentTetradData, dom.tetradsTableBody, true); }
-            function getSettings() { 
-                return { 
-                    baseFreq: +dom.baseFreq.value, 
-                    overtones: +dom.overtones.value, 
-                    octaves: +dom.octaves.value, 
-                    equation: dom.equation.value, 
-                    instrument: dom.instrument.value, 
-                    volume: +dom.volume.value, 
-                    tones: +dom.tones.value, 
-                    chartType: dom.chartType.value, 
-                    invert: dom.invertRoughness.checked, 
-                    theme: dom.body.dataset.theme, 
-                    bubbleSize: +dom.bubbleSize.value, 
-                    // *** CHANGE START: Added new slider value to settings object. ***
-                    scaledViewSlider: +dom.scaledViewSlider.value,
-                    // *** CHANGE END ***
-                }; 
-            }
-            function updateChartTypeOptions() { const tones = +dom.tones.value; const chartTypeSelect = dom.chartType; const currentChartType = chartTypeSelect.value; chartTypeSelect.innerHTML = ''; if (tones === 3) { chartTypeSelect.innerHTML = `<option value="surface">3D Surface</option><option value="heatmap">2D Heatmap</option>`; chartTypeSelect.value = (currentChartType === 'surface' || currentChartType === 'heatmap') ? currentChartType : 'surface'; } else if (tones === 4) { chartTypeSelect.innerHTML = `<option value="scaled">3D Scatter</option><option value="spherical">3D Spherical Model</option>`; const validOptions = ['scaled', 'spherical']; chartTypeSelect.value = validOptions.includes(currentChartType) ? currentChartType : 'scaled'; } }
-            function generateAndPlot() { 
-                const lastCamera = (dom.graph.layout && dom.graph.layout.scene && dom.graph.layout.scene.camera) ? JSON.parse(JSON.stringify(dom.graph.layout.scene.camera)) : null; 
-                const ampFunction = getAmpFunction(dom.instrument.value); // Note: direct value access before settings
-                const partialFn = getPartialFunction(dom.instrument.value); // Note: direct value access before settings
-                const model = dom.equation.value === 'dillon' ? dillonModel : setharesModel; // Note: direct value access before settings
-                
-                updateChartTypeOptions(); // This now runs BEFORE settings are gathered
-                
-                const settings = getSettings(); // Settings are now gathered AFTER dropdowns are updated
-                
-                dom.dyadsTable.style.display = settings.tones == 2 ? '' : 'none'; 
-                dom.triadsTable.style.display = settings.tones == 3 ? '' : 'none'; 
-                dom.tetradsTable.style.display = settings.tones == 4 ? '' : 'none'; 
-                dom.chartTypeGroup.style.display = settings.tones >= 3 ? 'flex' : 'none';
-                // *** CHANGE START: Updated slider visibility logic. ***
-                dom.scaledViewSliderGroup.style.display = (settings.tones == 4 && settings.chartType === 'scaled') ? 'flex' : 'none';
-                dom.bubbleSizeGroup.style.display = (settings.tones == 4 && settings.chartType === 'spherical') ? 'flex' : 'none';
+                // *** CHANGE START: Added options for 2 Tones ***
+                if (tones === 2) {
+                    chartTypeSelect.innerHTML = `<option value="line">Line Curve</option><option value="polar">Polar Area</option>`;
+                    chartTypeSelect.value = (currentChartType === 'line' || currentChartType === 'polar') ? currentChartType : 'line';
+                } 
                 // *** CHANGE END ***
-                if (settings.tones == 4) { if (settings.chartType === 'spherical') { plot4TonesSpherical(settings, ampFunction, partialFn, model, lastCamera); } else { plot4TonesScatter(settings, ampFunction, partialFn, model, lastCamera); } } else if (settings.tones == 2) { plot2D(settings, ampFunction, partialFn, model); } else { if (settings.chartType === 'heatmap') { plot3DHeatmap(settings, ampFunction, partialFn, model); } else { plot3DSurface(settings, ampFunction, partialFn, model, lastCamera); } } }
-            function getPlotlyThemeLayout(theme) { if (theme === 'dark') { return { font: { color: '#e0e0e0' }, paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)', gridcolor: 'rgba(255,255,255,0.3)' }; } return { font: { color: '#212529' }, paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)', gridcolor: 'rgba(0,0,0,0.1)' }; }
-            function hexToRgb(hex) { let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex); return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : null; }
-            function rgbStringToRgb(rgbString) { const result = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/.exec(rgbString); return result ? { r: +result[1], g: +result[2], b: +result[3] } : null; }
-            function getContrastColor(rgbString) { const rgb = rgbStringToRgb(rgbString); if (!rgb) return '#000000'; const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000; return brightness > 128 ? '#000000' : '#FFFFFF'; }
-            function getColorForValue(value, colorscale) { for (let i = 0; i < colorscale.length - 1; i++) { const c1 = colorscale[i], c2 = colorscale[i + 1]; if (value >= c1[0] && value <= c2[0]) { const t = (value - c1[0]) / (c2[0] - c1[0]); const color1 = hexToRgb(c1[1]), color2 = hexToRgb(c2[1]); if (!color1 || !color2) return 'rgb(0,0,0)'; const r = Math.round(color1.r + t * (color2.r - color1.r)); const g = Math.round(color1.g + t * (color2.g - color1.g)); const b = Math.round(color1.b + t * (color2.b - color1.b)); return `rgb(${r},${g},${b})`; } } return colorscale[colorscale.length - 1][1]; }
-            function plot2D(settings, ampFunction, partialFn, model) { const pointsPerOctave = 300, minRatio = 0.95; const maxRatio = Math.pow(2, settings.octaves); const totalOctaves = Math.log2(maxRatio) - Math.log2(minRatio); const numPoints = Math.ceil(totalOctaves * pointsPerOctave); const ratios = Array.from({length: numPoints + 1}, (_, i) => Math.pow(2, Math.log2(minRatio) + i * (totalOctaves / numPoints))); const dissonances = ratios.map(r => { return model([settings.baseFreq, settings.baseFreq * r], settings.overtones, ampFunction, partialFn); }); const maxDissonance = Math.max(...dissonances.filter(d => isFinite(d))); const normalizedDissonances = dissonances.map(d => maxDissonance > 0 ? d / maxDissonance : 0); dom.graph.maxDissonance = maxDissonance; const data = []; for (let i = 0; i < ratios.length - 1; i++) { const avgDissonance = (normalizedDissonances[i] + normalizedDissonances[i+1]) / 2; data.push({ x: [ratios[i], ratios[i+1]], y: [normalizedDissonances[i], normalizedDissonances[i+1]], type: 'scatter', mode: 'lines', line: { color: getColorForValue(avgDissonance, DISSONANCE_COLORSCALE), width: 5 }, hoverinfo: 'none' }); } const hoverBgColors = normalizedDissonances.map(d => getColorForValue(d, DISSONANCE_COLORSCALE)); data.push({ x: ratios, y: normalizedDissonances, type: 'scatter', mode: 'markers', hoverinfo: 'x+y', name: 'Dissonance', marker: { opacity: 0 }, hoverlabel: { bgcolor: hoverBgColors, font: { color: hoverBgColors.map(getContrastColor) }, bordercolor: '#000' } }); const dyadPoints = { x: [], y: [], text: [], name: [] }; currentDyadData.forEach(item => { if (item.ratios[1] <= maxRatio) { const dissonance = model([settings.baseFreq, settings.baseFreq * item.ratios[1]], settings.overtones, ampFunction, partialFn); const uniqueName = `${item.name}`; dyadPoints.x.push(item.ratios[1]); dyadPoints.y.push(maxDissonance > 0 ? dissonance / maxDissonance : 0); dyadPoints.text.push(`${item.name}<br>Ratio: ${item.ratioText}`); dyadPoints.name.push(uniqueName); } }); const dyadColors = dyadPoints.y.map(normalizedDissonance => getColorForValue(normalizedDissonance, DISSONANCE_COLORSCALE)); data.push({ x: dyadPoints.x, y: dyadPoints.y, type: 'scatter', mode: 'markers', hoverinfo: 'text', text: dyadPoints.text, customdata: dyadPoints.name, marker: { color: dyadColors, size: 8, line: { color: 'black', width: 1 } } }); const layout = { ...getPlotlyThemeLayout(settings.theme), title: `Dissonance Curve (${timbres[settings.instrument].name} timbre)`, xaxis: { title: 'Frequency Ratio', type: 'log', range: [Math.log10(minRatio), Math.log10(maxRatio)], tickvals: [1, ...currentDyadData.map(i => i.ratios[1])], ticktext: ['1:1', ...currentDyadData.map(i => i.ratioText)], gridcolor: getPlotlyThemeLayout(settings.theme).gridcolor }, yaxis: { title: settings.invert ? 'Dissonance' : 'Dissonance', range: [0, 1.05], autorange: settings.invert ? 'reversed' : false, gridcolor: getPlotlyThemeLayout(settings.theme).gridcolor }, margin: { l: 60, r: 30, b: 60, t: 50 }, showlegend: false, annotations: [], shapes: [] }; Plotly.react('graph', data, layout); dom.graph.removeAllListeners('plotly_click'); dom.graph.on('plotly_click', e => { if (e.points[0].data.mode === 'markers') { playFrequencies([settings.baseFreq, settings.baseFreq * e.points[0].x]); } }); }
-            function calculate3DData(settings, model, ampFunction, partialFn) { const steps = 80 * settings.octaves; const maxRatio = Math.pow(2, settings.octaves); const ratios = Array.from({ length: steps + 1 }, (_, i) => Math.pow(maxRatio, i / steps)); const x_values = ratios; const y_values = ratios; const z_values_raw = y_values.map(r2 => x_values.map(r1 => model([settings.baseFreq, settings.baseFreq * r1, settings.baseFreq * r2], settings.overtones, ampFunction, partialFn))); const z_flat_finite = z_values_raw.flat().filter(z => isFinite(z)); const maxZ = Math.max(...z_flat_finite); const minZ = Math.min(...z_flat_finite); dom.graph.maxZ = maxZ; dom.graph.minZ = minZ; const z_values = z_values_raw.map(row => row.map(val => maxZ > minZ ? Math.pow((val - minZ) / (maxZ - minZ), 0.7) : 0)); return { x_values, y_values, z_values }; }
-            function plot3DSurface(settings, ampFunction, partialFn, model, lastCamera) { const { x_values, y_values, z_values } = calculate3DData(settings, model, ampFunction, partialFn); const maxRatio = Math.pow(2, settings.octaves); const data = [{ x: x_values, y: y_values, z: z_values, type: 'surface', colorscale: DISSONANCE_COLORSCALE, cmin: 0, cmax: 1, showscale: true, colorbar: { title: "Dissonance", titleside: "right" }, contours: { z: { show: true, usecolormap: true, highlightcolor: "white", project: { z: true } } }, lighting: { ambient: settings.invert ? 0.8 : 0.4, diffuse: 0.8, fresnel: 0.3, specular: 0.2, roughness: 0.1 }, lightposition: { x: 100, y: 200, z: 2000 }, opacity: 1.0 }]; const triadPoints3D = { x: [], y: [], z: [], text: [], name: [] }; currentTriadData.forEach(c => { if (c.ratios[1] <= maxRatio && c.ratios[2] <= maxRatio) { const raw_z = model([settings.baseFreq, c.ratios[1] * settings.baseFreq, c.ratios[2] * settings.baseFreq], settings.overtones, ampFunction, partialFn); const norm_z = dom.graph.maxZ > dom.graph.minZ ? Math.pow((raw_z - dom.graph.minZ) / (dom.graph.maxZ - dom.graph.minZ), 0.7) : 0; const uniqueName = `${c.name} 3-tone`; triadPoints3D.x.push(c.ratios[1]); triadPoints3D.y.push(c.ratios[2]); triadPoints3D.z.push(norm_z + 0.01); triadPoints3D.text.push(`${c.name}<br>Ratios: ${c.ratioText}`); triadPoints3D.name.push(uniqueName); } }); const triadColors = triadPoints3D.z.map(norm_z => getColorForValue(norm_z, DISSONANCE_COLORSCALE)); data.push({ x: triadPoints3D.x, y: triadPoints3D.y, z: triadPoints3D.z, type: 'scatter3d', mode: 'markers', hoverinfo: 'text', text: triadPoints3D.text, customdata: triadPoints3D.name, marker: { color: triadColors, size: 5, line: { color: 'black', width: 1 } } }); const layout = { ...getPlotlyThemeLayout(settings.theme), title: `3-Tone Dissonance Surface (${timbres[settings.instrument].name} timbre)`, scene: { xaxis: { title: 'Freq2 Ratio', type: 'log', autorange: true, gridcolor: getPlotlyThemeLayout(settings.theme).gridcolor }, yaxis: { title: 'Freq3 Ratio', type: 'log', autorange: true, gridcolor: getPlotlyThemeLayout(settings.theme).gridcolor }, zaxis: { title: settings.invert ? 'Dissonance' : 'Dissonance', range: [0, 1.05], autorange: settings.invert ? 'reversed' : false, gridcolor: getPlotlyThemeLayout(settings.theme).gridcolor }, camera: lastCamera || { eye: { x: 1.2, y: 1.2, z: 0.8 }, center: { x: 0, y: 0, z: 0 } }, aspectmode: 'cube', annotations: [] }, margin: { l: 0, r: 0, b: 0, t: 40 }, showlegend: false }; Plotly.react('graph', data, layout); dom.graph.removeAllListeners('plotly_click'); dom.graph.on('plotly_click', e => { playFrequencies([settings.baseFreq, settings.baseFreq * e.points[0].x, settings.baseFreq * e.points[0].y]); }); }
-            function plot3DHeatmap(settings, ampFunction, partialFn, model) { const { x_values, y_values, z_values } = calculate3DData(settings, model, ampFunction, partialFn); const maxRatio = Math.pow(2, settings.octaves); const triadPoints = { x: [], y: [], text: [], name: [], color: [] }; currentTriadData.forEach(c => { if (c.ratios[1] <= maxRatio && c.ratios[2] <= maxRatio) { const uniqueName = `${c.name} 3-tone`; const raw_z = model([settings.baseFreq, c.ratios[1] * settings.baseFreq, c.ratios[2] * settings.baseFreq], settings.overtones, ampFunction, partialFn); const norm_z = dom.graph.maxZ > dom.graph.minZ ? Math.pow((raw_z - dom.graph.minZ) / (dom.graph.maxZ - dom.graph.minZ), 0.7) : 0; triadPoints.x.push(c.ratios[1]); triadPoints.y.push(c.ratios[2]); triadPoints.text.push(`${c.name}<br>Ratios: ${c.ratioText}`); triadPoints.name.push(uniqueName); triadPoints.color.push(getColorForValue(norm_z, DISSONANCE_COLORSCALE)); } }); const data = [{ x: x_values, y: y_values, z: z_values, type: 'heatmap', colorscale: DISSONANCE_COLORSCALE, reversescale: settings.invert, cmin: 0, cmax: 1, showscale: true, colorbar: { title: settings.invert ? 'Dissonance' : 'Dissonance', titleside: "right" }, transpose: true, hoverinfo: 'x+y+z' }, { x: triadPoints.x, y: triadPoints.y, type: 'scatter', mode: 'markers', hoverinfo: 'text', text: triadPoints.text, customdata: triadPoints.name, marker: { color: triadPoints.color, size: 10, line: { color: 'black', width: 1 } } }]; const layout = { ...getPlotlyThemeLayout(settings.theme), title: `3-Tone Dissonance Heatmap (${timbres[settings.instrument].name} timbre)`, xaxis: { title: 'Freq2 Ratio', type: 'log', autorange: true, gridcolor: getPlotlyThemeLayout(settings.theme).gridcolor }, yaxis: { title: 'Freq3 Ratio', type: 'log', autorange: true, gridcolor: getPlotlyThemeLayout(settings.theme).gridcolor }, margin: { l: 60, r: 30, b: 60, t: 50 }, showlegend: false, annotations: [], shapes: [] }; Plotly.react('graph', data, layout); dom.graph.removeAllListeners('plotly_click'); dom.graph.on('plotly_click', e => { const point = e.points[0]; const freqs = [settings.baseFreq, settings.baseFreq * point.x, settings.baseFreq * point.y]; playFrequencies(freqs); }); }
-            function calculate4DData(settings, model, ampFunction, partialFn) { const steps = 20; const maxRatio = Math.pow(2, settings.octaves); const ratios = Array.from({ length: steps + 1 }, (_, i) => Math.pow(maxRatio, i / steps)); let points = []; for (let i = 0; i < ratios.length; i++) { for (let j = i; j < ratios.length; j++) { for (let k = j; k < ratios.length; k++) { const freqs = [settings.baseFreq, settings.baseFreq * ratios[i], settings.baseFreq * ratios[j], settings.baseFreq * ratios[k]]; const dissonance = model(freqs, settings.overtones, ampFunction, partialFn); points.push({ x: ratios[i], y: ratios[j], z: ratios[k], dissonance }); } } } const dissonances = points.map(p => p.dissonance).filter(d => isFinite(d)); const maxD = Math.max(...dissonances); const minD = Math.min(...dissonances); dom.graph.maxD = maxD; dom.graph.minD = minD; points.forEach(p => { const normalizedDissonance = maxD > minD ? (p.dissonance - minD) / (maxD - minD) : 0; p.color = normalizedDissonance;
-                // *** CHANGE START: Invert size calculation when "Show Consonance" is checked. ***
-                const sizeValue = settings.invert ? normalizedDissonance : (1 - normalizedDissonance);
-                p.size = sizeValue * settings.scaledViewSlider + 5;
-                // *** CHANGE END ***
-            }); return { x: points.map(p => p.x), y: points.map(p => p.y), z: points.map(p => p.z), color: points.map(p => p.color), size: points.map(p => p.size) }; }
-            function plot4TonesScatter(settings, ampFunction, partialFn, model, lastCamera) { const { x, y, z, color, size } = calculate4DData(settings, model, ampFunction, partialFn); const trace = { x: x, y: y, z: z, mode: 'markers', type: 'scatter3d', hoverinfo: 'none', marker: { color: color, size: size, sizemode: 'diameter', colorscale: DISSONANCE_COLORSCALE, reversescale: settings.invert, opacity: 0.6, colorbar: { title: settings.invert ? 'Dissonance' : 'Dissonance' } } }; const data = [trace]; const tetradPoints = { x: [], y: [], z: [], text: [], name: [], color: [] }; const maxRatio = Math.pow(2, settings.octaves); currentTetradData.forEach(c => { if (c.ratios[1] <= maxRatio && c.ratios[2] <= maxRatio && c.ratios[3] <= maxRatio) { const uniqueName = `${c.name} 4-tone`; const dissonance = model(c.ratios.map(r => r * settings.baseFreq), settings.overtones, ampFunction, partialFn); const normalizedDissonance = dom.graph.maxD > dom.graph.minD ? (dissonance - dom.graph.minD) / (dom.graph.maxD - dom.graph.minD) : 0; tetradPoints.x.push(c.ratios[1]); tetradPoints.y.push(c.ratios[2]); tetradPoints.z.push(c.ratios[3]); tetradPoints.text.push(`${c.name}<br>Ratios: ${c.ratioText}`); tetradPoints.name.push(uniqueName); tetradPoints.color.push(getColorForValue(normalizedDissonance, DISSONANCE_COLORSCALE)); } }); data.push({ x: tetradPoints.x, y: tetradPoints.y, z: tetradPoints.z, type: 'scatter3d', mode: 'markers', hoverinfo: 'text', text: tetradPoints.text, customdata: tetradPoints.name, marker: { color: tetradPoints.color, size: 8, line: { color: 'black', width: 2 } } }); currentTetradData.forEach(c => { const uniqueName = `${c.name} 4-tone`; const index = tetradPoints.name.indexOf(uniqueName); if (index > -1) { c.plotCoords = { x: tetradPoints.x[index], y: tetradPoints.y[index], z: tetradPoints.z[index] }; } else { c.plotCoords = null; } }); const layout = { ...getPlotlyThemeLayout(settings.theme), title: `4-Tone Dissonance Space (${timbres[settings.instrument].name} timbre)`, scene: { xaxis: { title: 'Freq2 Ratio', type: 'log', autorange: true, gridcolor: getPlotlyThemeLayout(settings.theme).gridcolor }, yaxis: { title: 'Freq3 Ratio', type: 'log', autorange: true, gridcolor: getPlotlyThemeLayout(settings.theme).gridcolor }, zaxis: { title: 'Freq4 Ratio', type: 'log', autorange: true, gridcolor: getPlotlyThemeLayout(settings.theme).gridcolor }, camera: lastCamera || { eye: { x: 1.5, y: 1.5, z: 1.5 }, center: { x: 0, y: 0, z: 0 } }, aspectmode: 'cube' }, margin: { l: 0, r: 0, b: 0, t: 40 }, showlegend: false }; Plotly.react('graph', data, layout); dom.graph.removeAllListeners('plotly_click'); dom.graph.on('plotly_click', e => { const point = e.points[0]; playFrequencies([settings.baseFreq, settings.baseFreq * point.x, settings.baseFreq * point.y, settings.baseFreq * point.z]); }); }
-            function plot4TonesSpherical(settings, ampFunction, partialFn, model, lastCamera) {
-                const maxOctaveSteps = 12 * settings.octaves;
 
-                const namedChordDissonances = currentTetradData
-                    .map(c => model(c.ratios.map(r => r * settings.baseFreq), settings.overtones, ampFunction, partialFn))
-                    .filter(d => isFinite(d));
+                else if (tones === 3) { 
+                    chartTypeSelect.innerHTML = `<option value="surface">3D Surface</option><option value="heatmap">2D Heatmap</option>`; 
+                    chartTypeSelect.value = (currentChartType === 'surface' || currentChartType === 'heatmap') ? currentChartType : 'surface'; 
+                } else if (tones === 4) { 
+                    chartTypeSelect.innerHTML = `<option value="scaled">3D Scatter</option><option value="spherical">3D Spherical Model</option>`; 
+                    const validOptions = ['scaled', 'spherical']; 
+                    chartTypeSelect.value = validOptions.includes(currentChartType) ? currentChartType : 'scaled'; 
+                } 
+            }
+            function generateAndPlot() { 
+                const lastCamera = (dom.graph.layout && dom.graph.layout.scene && dom.graph.layout.scene.camera) ? JSON.parse(JSON.stringify(dom.graph.layout.scene.camera)) : null; 
+                const ampFunction = getAmpFunction(dom.instrument.value);
+                const partialFn = getPartialFunction(dom.instrument.value);
+                const model = dom.equation.value === 'dillon' ? dillonModel : setharesModel;
+                
+                updateChartTypeOptions();
+                
+                const settings = getSettings();
+                
+                dom.dyadsTable.style.display = settings.tones == 2 ? '' : 'none'; 
+                dom.triadsTable.style.display = settings.tones == 3 ? '' : 'none'; 
+                dom.tetradsTable.style.display = settings.tones == 4 ? '' : 'none'; 
+                dom.chartTypeGroup.style.display = settings.tones >= 2 ? 'flex' : 'none';
+                dom.scaledViewSliderGroup.style.display = (settings.tones == 4 && settings.chartType === 'scaled') ? 'flex' : 'none';
+                dom.bubbleSizeGroup.style.display = (settings.tones == 4 && settings.chartType === 'spherical') ? 'flex' : 'none';
+                
+                // *** CHANGE START: Added logic for new 2-Tone Polar chart ***
+                if (settings.tones == 4) { 
+                    if (settings.chartType === 'spherical') { 
+                        plot4TonesSpherical(settings, ampFunction, partialFn, model, lastCamera); 
+                    } else { 
+                        plot4TonesScatter(settings, ampFunction, partialFn, model, lastCamera); 
+                    } 
+                } else if (settings.tones == 2) { 
+                    if (settings.chartType === 'polar') {
+                        plot2DPolar(settings, ampFunction, partialFn, model);
+                    } else {
+                        plot2D(settings, ampFunction, partialFn, model); 
+                    }
+                } else { // This is for 3 tones
+                    if (settings.chartType === 'heatmap') { 
+                        plot3DHeatmap(settings, ampFunction, partialFn, model); 
+                    } else { 
+                        plot3DSurface(settings, ampFunction, partialFn, model, lastCamera); 
+                    } 
+                } 
+                // *** CHANGE END ***
+            }
+            function getPlotlyThemeLayout(theme) { if (theme === 'dark') { return { font: { color: '#e0e0e0' }, paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)', gridcolor: 'rgba(255,255,255,0.3)' }; } return { font: { color: '#212529' }, paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)', gridcolor: 'rgba(0,0,0,0.1)' }; }
+            function hexToRgb(hex) { let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex); return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : null; }
+            function rgbStringToRgb(rgbString) { const result = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/.exec(rgbString); return result ? { r: +result[1], g: +result[2], b: +result[3] } : null; }
+            function getContrastColor(rgbString) { const rgb = rgbStringToRgb(rgbString); if (!rgb) return '#000000'; const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000; return brightness > 128 ? '#000000' : '#FFFFFF'; }
+            function getColorForValue(value, colorscale) { for (let i = 0; i < colorscale.length - 1; i++) { const c1 = colorscale[i], c2 = colorscale[i + 1]; if (value >= c1[0] && value <= c2[0]) { const t = (value - c1[0]) / (c2[0] - c1[0]); const color1 = hexToRgb(c1[1]), color2 = hexToRgb(c2[1]); if (!color1 || !color2) return 'rgb(0,0,0)'; const r = Math.round(color1.r + t * (color2.r - color1.r)); const g = Math.round(color1.g + t * (color2.g - color1.g)); const b = Math.round(color1.b + t * (color2.b - color1.b)); return `rgb(${r},${g},${b})`; } } return colorscale[colorscale.length - 1][1]; }
+            function plot2DPolar(settings, ampFunction, partialFn, model) {
+                const pointsPerOctave = 300, minRatio = 1.0;
+                const maxRatio = Math.pow(2, settings.octaves);
+                const totalOctaves = Math.log2(maxRatio);
+                const numPoints = Math.ceil(totalOctaves * pointsPerOctave);
                 
-                const maxD = Math.max(...namedChordDissonances);
-                const minD = 0;
+                const ratios = Array.from({length: numPoints + 1}, (_, i) => Math.pow(2, i * (totalOctaves / numPoints)));
+                const dissonances = ratios.map(r => model([settings.baseFreq, settings.baseFreq * r], settings.overtones, ampFunction, partialFn));
+                const maxDissonance = Math.max(...dissonances.filter(d => isFinite(d)));
+                const normalizedDissonances = dissonances.map(d => maxDissonance > 0 ? d / maxDissonance : 0);
+                dom.graph.maxDissonance = maxDissonance;
 
-                let points = [];
-                for (let i2 = 1; i2 < maxOctaveSteps; i2++) {
-                    for (let i3 = i2 + 1; i3 < maxOctaveSteps; i3++) {
-                        for (let i4 = i3 + 1; i4 <= maxOctaveSteps; i4++) {
-                            const freqs = [settings.baseFreq, settings.baseFreq * centsToRatio(i2 * 100), settings.baseFreq * centsToRatio(i3 * 100), settings.baseFreq * centsToRatio(i4 * 100)];
-                            const dissonance = model(freqs, settings.overtones, ampFunction, partialFn);
-                            if (isFinite(dissonance)) {
-                                points.push({ i2, i3, i4, dissonance });
-                            }
+                // Map ratios to degrees for the polar chart's angular axis
+                const thetaValues = ratios.map(r => (Math.log2(r) / totalOctaves) * 360);
+                const barWidth = 360 / numPoints;
+
+                const barColors = normalizedDissonances.map(d => getColorForValue(d, DISSONANCE_COLORSCALE));
+
+                const data = [{
+                    r: normalizedDissonances,
+                    theta: thetaValues,
+                    width: barWidth,
+                    type: 'barpolar',
+                    hoverinfo: 'none',
+                    marker: {
+                        color: barColors,
+                        line: {
+                            color: 'rgba(0,0,0,0.5)',
+                            width: 0.5
                         }
                     }
-                }
+                }];
 
-                const plotPoints = { x: [], y: [], z: [], color: [], size: [], text: [], customdata: [] };
-                points.forEach(p => {
-                    const normalizedDissonance = maxD > minD ? (p.dissonance - minD) / (maxD) : 0;
-                    const rho = p.i4;
-                    const theta = (p.i2 / maxOctaveSteps) * 2 * Math.PI;
-                    const phi = (p.i3 / maxOctaveSteps) * Math.PI;
-                    plotPoints.x.push(rho * Math.sin(phi) * Math.cos(theta));
-                    plotPoints.y.push(rho * Math.sin(phi) * Math.sin(theta));
-                    plotPoints.z.push(rho * Math.cos(phi));
-                    plotPoints.color.push(normalizedDissonance);
-                    
-                    // *** CHANGE START: Invert size calculation when "Show Consonance" is checked. ***
-                    const clampedNormDissonance = Math.min(1, normalizedDissonance); // Clamp to prevent negative sizes
-                    const sizeValue = settings.invert ? clampedNormDissonance : (1 - clampedNormDissonance);
-                    plotPoints.size.push(sizeValue * settings.bubbleSize + 5);
-                    // *** CHANGE END ***
-                    
-                    plotPoints.text.push(`Intervals: 0, ${p.i2}, ${p.i3}, ${p.i4}<br>Dissonance: ${p.dissonance.toFixed(4)}`);
-                    plotPoints.customdata.push([p.i2, p.i3, p.i4]);
-                });
-
-                const data = [{ x: plotPoints.x, y: plotPoints.y, z: plotPoints.z, mode: 'markers', type: 'scatter3d', text: plotPoints.text, hoverinfo: 'text', customdata: plotPoints.customdata, marker: { color: plotPoints.color, size: plotPoints.size, sizemode: 'diameter', colorscale: DISSONANCE_COLORSCALE, cmin: 0, cmax: 1, reversescale: settings.invert, opacity: 0.8, colorbar: { title: settings.invert ? 'Dissonance' : 'Dissonance' } } }];
-                
-                const tetradPoints = { x: [], y: [], z: [], text: [], name: [], markerColor: [] };
-                currentTetradData.forEach(c => {
-                    const steps = c.steps;
-                    if (!steps || steps.length !== 4 || steps[3] > maxOctaveSteps) return;
-                    const dissonance = model(c.ratios.map(r => r * settings.baseFreq), settings.overtones, ampFunction, partialFn);
-                    const normalizedDissonance = maxD > minD ? (dissonance - minD) / (maxD) : 0;
-                    const rho = steps[3];
-                    const theta = (steps[1] / maxOctaveSteps) * 2 * Math.PI;
-                    const phi = (steps[2] / maxOctaveSteps) * Math.PI;
-                    tetradPoints.x.push(rho * Math.sin(phi) * Math.cos(theta));
-                    tetradPoints.y.push(rho * Math.sin(phi) * Math.sin(theta));
-                    tetradPoints.z.push(rho * Math.cos(phi));
-                    tetradPoints.text.push(`${c.name}<br>Ratios: ${c.ratioText}`);
-                    tetradPoints.name.push(`${c.name} 4-tone`);
-                    tetradPoints.markerColor.push(getColorForValue(normalizedDissonance, DISSONANCE_COLORSCALE));
-                });
-
-                data.push({ x: tetradPoints.x, y: tetradPoints.y, z: tetradPoints.z, type: 'scatter3d', mode: 'markers', hoverinfo: 'text', text: tetradPoints.text, customdata: tetradPoints.name, marker: { symbol: 'diamond', color: tetradPoints.markerColor, size: 12, line: { color: 'black', width: 2 } } });
-                
-                currentTetradData.forEach(c => {
-                    const uniqueName = `${c.name} 4-tone`;
-                    const index = tetradPoints.name.indexOf(uniqueName);
-                    if (index > -1) {
-                        c.plotCoords = { x: tetradPoints.x[index], y: tetradPoints.y[index], z: tetradPoints.z[index] };
-                    } else {
-                        c.plotCoords = null;
+                const dyadPoints = { r: [], theta: [], text: [], name: [], color: [] };
+                currentDyadData.forEach(item => {
+                    if (item.ratios[1] <= maxRatio) {
+                        const dissonance = model([settings.baseFreq, settings.baseFreq * item.ratios[1]], settings.overtones, ampFunction, partialFn);
+                        const normalizedD = maxDissonance > 0 ? dissonance / maxDissonance : 0;
+                        dyadPoints.r.push(normalizedD + 0.02); // slight offset to appear on top
+                        dyadPoints.theta.push((Math.log2(item.ratios[1]) / totalOctaves) * 360);
+                        dyadPoints.text.push(`${item.name}<br>Ratio: ${item.ratioText}`);
+                        dyadPoints.name.push(item.name);
+                        dyadPoints.color.push(getColorForValue(normalizedD, DISSONANCE_COLORSCALE));
                     }
                 });
 
-                const layout = { ...getPlotlyThemeLayout(settings.theme), title: `4-Tone Spherical Harmony Model (${timbres[settings.instrument].name} timbre)`, scene: { xaxis: { title: '', showgrid: false, zeroline: false, showticklabels: false, titlefont: { color: 'rgba(0,0,0,0)' } }, yaxis: { title: '', showgrid: false, zeroline: false, showticklabels: false, titlefont: { color: 'rgba(0,0,0,0)' } }, zaxis: { title: '', showgrid: false, zeroline: false, showticklabels: false, titlefont: { color: 'rgba(0,0,0,0)' } }, camera: lastCamera || { eye: { x: 1.5, y: 1.5, z: 1.5 } }, aspectmode: 'data' }, margin: { l: 0, r: 0, b: 0, t: 40 }, showlegend: false };
+                data.push({
+                    r: dyadPoints.r,
+                    theta: dyadPoints.theta,
+                    type: 'scatterpolar',
+                    mode: 'markers',
+                    hoverinfo: 'text',
+                    text: dyadPoints.text,
+                    customdata: dyadPoints.name,
+                    marker: {
+                        color: dyadPoints.color,
+                        size: 10,
+                        line: { color: 'black', width: 1 }
+                    }
+                });
+
+                const layout = {
+                    ...getPlotlyThemeLayout(settings.theme),
+                    title: `2-Tone Dissonance Polar Chart (${timbres[settings.instrument].name} timbre)`,
+                    polar: {
+                        radialaxis: {
+                            visible: true,
+                            range: [0, 1.1],
+                            title: { text: settings.invert ? 'Dissonance' : 'Dissonance' }
+                        },
+                        angularaxis: {
+                            tickvals: [0, ...currentDyadData.filter(d => d.ratios[1] <= maxRatio).map(d => (Math.log2(d.ratios[1]) / totalOctaves) * 360)],
+                            ticktext: ['1:1', ...currentDyadData.filter(d => d.ratios[1] <= maxRatio).map(d => d.ratioText)],
+                            direction: "clockwise"
+                        }
+                    },
+                    showlegend: false,
+                    margin: { l: 50, r: 50, b: 50, t: 80 },
+                };
+
                 Plotly.react('graph', data, layout);
                 dom.graph.removeAllListeners('plotly_click');
                 dom.graph.on('plotly_click', e => {
                     const point = e.points[0];
-                    if (point.customdata && Array.isArray(point.customdata) && point.customdata.length === 3) {
-                        const ratios = [1, centsToRatio(point.customdata[0] * 100), centsToRatio(point.customdata[1] * 100), centsToRatio(point.customdata[2] * 100)];
-                        const freqs = ratios.map(r => r * settings.baseFreq);
-                        playFrequencies(freqs);
+                    if (point.customdata) {
+                        playSoundOnly(point.customdata);
+                    } else if (point.theta !== undefined) {
+                        const ratio = Math.pow(maxRatio, point.theta / 360);
+                        playFrequencies([settings.baseFreq, settings.baseFreq * ratio]);
                     }
                 });
             }
-            
-            window.playSoundOnly = function(uniqueToneName) {
-                const toneData = currentAllTones[uniqueToneName];
-                if (!toneData) return;
-                const { ratios, ratioText } = toneData;
-                const settings = getSettings();
-                const freqs = ratios.map(r => r * settings.baseFreq);
-                const duration = 1.5;
-                playFrequencies(freqs, duration);
-                if (activeFlagTimeout) clearTimeout(activeFlagTimeout);
-                const ampFunction = getAmpFunction(settings.instrument);
-                const partialFn = getPartialFunction(settings.instrument);
-                const model = settings.equation === 'dillon' ? dillonModel : setharesModel;
-                let tempTrace;
-                let lastCamera;
-                if (dom.graph.layout && dom.graph.layout.scene) {
-                    lastCamera = JSON.parse(JSON.stringify(dom.graph.layout.scene.camera));
-                }
-                if (ratios.length === 2 && settings.tones == 2) {
-                    if (typeof dom.graph.maxDissonance === 'undefined') return;
-                    const ratio = ratios[1];
-                    const dissonance = model([settings.baseFreq, settings.baseFreq * ratio], settings.overtones, ampFunction, partialFn);
-                    const normalizedDissonance = dom.graph.maxDissonance > 0 ? dissonance / dom.graph.maxDissonance : 0;
-                    tempTrace = { x: [ratio], y: [normalizedDissonance], type: 'scatter', mode: 'markers', hoverinfo: 'none', marker: { color: '#ff9900', size: 12, line: { color: 'white', width: 2 } } };
-                } else if (ratios.length === 3 && settings.tones == 3) {
-                    if (settings.chartType === 'heatmap') {
-                        tempTrace = { x: [ratios[1]], y: [ratios[2]], type: 'scatter', mode: 'markers', hoverinfo: 'none', marker: { color: '#ff9900', size: 15, line: { color: 'white', width: 2 } } };
-                    } else if (settings.chartType === 'surface') {
-                        if (typeof dom.graph.maxZ === 'undefined' || typeof dom.graph.minZ === 'undefined') return;
-                        const raw_z = model([settings.baseFreq, ratios[1] * settings.baseFreq, ratios[2] * settings.baseFreq], settings.overtones, ampFunction, partialFn);
-                        const norm_z = dom.graph.maxZ > dom.graph.minZ ? Math.pow((raw_z - dom.graph.minZ) / (dom.graph.maxZ - dom.graph.minZ), 0.7) : 0;
-                        tempTrace = { x: [ratios[1]], y: [ratios[2]], z: [norm_z + 0.015], type: 'scatter3d', mode: 'markers', hoverinfo: 'none', marker: { color: '#ff9900', size: 8, line: { color: 'white', width: 2 } } };
-                    }
-                } else if (ratios.length === 4 && settings.tones == 4) {
-                     const chordData = currentTetradData.find(c => c.name === toneData.originalName && c.ratioText === toneData.ratioText);
-                    if (chordData && chordData.plotCoords) {
-                        if (settings.chartType === 'spherical') {
-                            tempTrace = { x: [chordData.plotCoords.x], y: [chordData.plotCoords.y], z: [chordData.plotCoords.z], type: 'scatter3d', mode: 'markers', hoverinfo: 'none', marker: { symbol: 'diamond', color: '#ff9900', size: 15, line: { color: 'white', width: 2 } } };
-                        } else {
-                             tempTrace = { x: [chordData.plotCoords.x], y: [chordData.plotCoords.y], z: [chordData.plotCoords.z], type: 'scatter3d', mode: 'markers', hoverinfo: 'none', marker: { color: '#ff9900', size: 12, line: { color: 'white', width: 2 } } };
-                        }
-                    }
-                }
-                if (tempTrace) {
-                    Plotly.addTraces('graph', tempTrace).then(() => {
-                        if (lastCamera) {
-                            Plotly.relayout('graph', { 'scene.camera': lastCamera });
-                        }
-                    });
-                    activeFlagTimeout = setTimeout(() => {
-                        const traceCount = dom.graph.data.length;
-                        if (traceCount > 1) {
-                            Plotly.deleteTraces('graph', traceCount - 1);
-                        }
-                    }, duration * 1000);
-                }
-            }
-            
-            function updateOvertoneControls(forceReset = false) {
-                const settings = getSettings();
-                const oldAmplitudes = [...overtoneAmplitudes];
-                dom.overtoneSlidersContainer.innerHTML = '';
-                overtoneAmplitudes = [];
-                if (settings.instrument === 'sine') {
-                    dom.overtoneStrengthDetails.setAttribute('disabled', true);
-                    dom.overtoneStrengthDetails.open = false;
-                    return;
-                }
-                dom.overtoneStrengthDetails.removeAttribute('disabled');
-                const ampFn = getAmpFunction(settings.instrument);
-                for (let i = 1; i <= settings.overtones; i++) {
-                    const overtoneIndex = i;
-                    const partialIndex = i - 1;
-                    let ampValue;
-                    if (forceReset || settings.instrument !== 'custom') {
-                        ampValue = ampFn(overtoneIndex);
-                    } else {
-                        if (oldAmplitudes[partialIndex] !== undefined) {
-                            ampValue = oldAmplitudes[partialIndex];
-                        } else {
-                            ampValue = 0.75;
-                        }
-                    }
-                    overtoneAmplitudes[partialIndex] = ampValue;
-                    const group = document.createElement('div');
-                    group.className = 'overtone-slider-group';
-                    const label = document.createElement('label');
-                    label.setAttribute('for', `overtone-${overtoneIndex}`);
-                    label.textContent = `Overtone ${overtoneIndex} Strength`;
-                    const slider = document.createElement('input');
-                    slider.type = 'range';
-                    slider.id = `overtone-${overtoneIndex}`;
-                    slider.min = 0;
-                    slider.max = 1.5;
-                    slider.step = 0.01;
-                    slider.value = ampValue;
-                    slider.addEventListener('input', () => {
-                        overtoneAmplitudes[partialIndex] = +slider.value;
-                        if (dom.instrument.value !== 'custom') {
-                            currentPartialFn = getPartialFunction(dom.instrument.value);
-                            dom.instrument.value = 'custom';
-                        }
-                        generateAndPlot();
-                        populateTables(); // Add this line to update the tables in real time
-                    });
-                    group.appendChild(label);
-                    group.appendChild(slider);
-                    dom.overtoneSlidersContainer.appendChild(group);
-                }
-            }
-            function applyOvertonePreset(presetName) { const preset = overtonePresets[presetName]; if (!preset) return; overtoneAmplitudes = preset.slice(0, dom.overtones.value); const sliders = dom.overtoneSlidersContainer.querySelectorAll('input[type="range"]'); sliders.forEach((slider, index) => { if (overtoneAmplitudes[index] !== undefined) { slider.value = overtoneAmplitudes[index]; } }); dom.instrument.value = 'custom'; currentPartialFn = getPartialFunction('string'); generateAndPlot(); }
-            function setupOvertonePresets() { dom.overtonePresetsContainer.innerHTML = ''; for (const presetName in overtonePresets) { const button = document.createElement('button'); button.textContent = presetName; button.className = 'preset-btn'; button.addEventListener('click', () => applyOvertonePreset(presetName)); dom.overtonePresetsContainer.appendChild(button); } }
-            function resetOvertoneStrengths() { const sliders = dom.overtoneSlidersContainer.querySelectorAll('input[type="range"]'); const midPoint = 0.75; sliders.forEach((slider, index) => { slider.value = midPoint; overtoneAmplitudes[index] = midPoint; }); currentPartialFn = getPartialFunction(dom.instrument.value); dom.instrument.value = 'custom'; generateAndPlot(); }
-            function resetToDefaults() { dom.baseFreq.value = 220; dom.overtones.value = 6; dom.octaves.value = 1; dom.equation.value = 'sethares'; dom.instrument.value = 'string'; dom.volume.value = 0.2; dom.tones.value = '3'; dom.chartType.value = 'surface'; dom.invertRoughness.checked = false; dom.tuningSystem.value = 'equal_12'; 
-                // *** CHANGE START: Reset the new slider to its default value. ***
-                dom.scaledViewSlider.value = 25; 
-                // *** CHANGE END ***
-                dom.bubbleSize.value = 25; updateTuningData(); updateOvertoneControls(true); populateTables(); generateAndPlot(); }
-            function showMessage(text, duration = 3000) { dom.messageBox.textContent = text; dom.messageBox.style.display = 'block'; setTimeout(() => { dom.messageBox.style.display = 'none'; }, duration); }
-            function populateTuningDropdown() { const select = dom.tuningSystem; select.innerHTML = ''; for (const groupName in TUNING_SYSTEMS) { const optgroup = document.createElement('optgroup'); optgroup.label = groupName; for (const key in TUNING_SYSTEMS[groupName]) { const option = document.createElement('option'); option.value = key; option.textContent = TUNING_SYSTEMS[groupName][key].name; optgroup.appendChild(option); } select.appendChild(optgroup); } select.value = 'equal_12'; }
-            function setupEventListeners() { [dom.octaves, dom.equation, dom.volume, dom.tones, dom.chartType, dom.invertRoughness].forEach(el => { el.addEventListener('change', () => { updateTuningData(); populateTables(); generateAndPlot(); }); }); 
-                // *** CHANGE START: Added event listener for the new slider. ***
-                dom.scaledViewSlider.addEventListener('input', generateAndPlot); 
-                // *** CHANGE END ***
-                dom.bubbleSize.addEventListener('input', generateAndPlot); dom.instrument.addEventListener('change', () => { const settings = getSettings(); currentPartialFn = getPartialFunction(settings.instrument); updateOvertoneControls(true); updateTuningData(); populateTables(); generateAndPlot(); }); dom.overtones.addEventListener('change', () => { updateOvertoneControls(false); generateAndPlot(); populateTables(); }); dom.baseFreq.addEventListener('change', () => { generateAndPlot(); populateTables(); }); dom.tuningSystem.addEventListener('change', () => { updateTuningData(); populateTables(); generateAndPlot(); }); dom.resetBtn.addEventListener('click', resetToDefaults); dom.resetOvertonesBtn.addEventListener('click', resetOvertoneStrengths); dom.testOvertoneBtn.addEventListener('click', () => { const settings = getSettings(); playFrequencies([settings.baseFreq], 0.5); }); dom.themeToggle.addEventListener('change', () => { dom.body.dataset.theme = dom.themeToggle.checked ? 'dark' : 'light'; generateAndPlot(); }); new ResizeObserver(() => { Plotly.Plots.resize(dom.graph); }).observe(dom.graph); document.querySelectorAll('#dyads-table .sortable-header, #triads-table .sortable-header, #tetrads-table .sortable-header').forEach(header => {
-  header.addEventListener('click', () => {
-    const currentDir = header.dataset.sortDir;
-    const newDir = currentDir === 'asc' ? 'desc' : 'asc';
-    header.dataset.sortDir = newDir;
-    populateTables();
-  });
+            function plot2D(settings, ampFunction, partialFn, model) { const pointsPerOctave = 300, minRatio = 0.95; const maxRatio = Math.pow(2, settings.octaves); const totalOctaves = Math.log2(maxRatio) - Math.log2(minRatio); const numPoints = Math.ceil(totalOctaves * pointsPerOctave); const ratios = Array.from({length: numPoints + 1}, (_, i) => Math.pow(2, Math.log2(minRatio) + i * (totalOctaves / numPoints))); const dissonances = ratios.map(r => { return model([settings.baseFreq, settings.baseFreq * r], settings.overtones, ampFunction, partialFn); }); const maxDissonance = Math.max(...dissonances.filter(d => isFinite(d))); const normalizedDissonances = dissonances.map(d => maxDissonance > 0 ? d / maxDissonance : 0); dom.graph.maxDissonance = maxDissonance; const data = []; for (let i = 0; i < ratios.length - 1; i++) { const avgDissonance = (normalizedDissonances[i] + normalizedDissonances[i+1]) / 2; data.push({ x: [ratios[i], ratios[i+1]], y: [normalizedDissonances[i], normalizedDissonances[i+1]], type: 'scatter', mode: 'lines', line: { color: getColorForValue(avgDissonance, DISSONANCE_COLORSCALE), width: 5 }, hoverinfo: 'none' }); } const hoverBgColors = normalizedDissonances.map(d => getColorForValue(d, DISSONANCE_COLORSCALE)); data.push({ x: ratios, y: normalizedDissonances, type: 'scatter', mode: 'markers', hoverinfo: 'x+y', name: 'Dissonance', marker: { opacity: 0 }, hoverlabel: { bgcolor: hoverBgColors, font: { color: hoverBgColors.map(getContrastColor) }, bordercolor: '#000' } }); const dyadPoints = { x: [], y: [], text: [], name: [] }; currentDyadData.forEach(item => { if (item.ratios[1] <= maxRatio) { const dissonance = model([settings.baseFreq, settings.baseFreq * item.ratios[1]], settings.overtones, ampFunction, partialFn); const uniqueName = `${item.name}`; dyadPoints.x.push(item.ratios[1]); dyadPoints.y.push(maxDissonance > 0 ? dissonance / maxDissonance : 0); dyadPoints.text.push(`${item.name}<br>Ratio: ${item.ratioText}`); dyadPoints.name.push(uniqueName); } }); const dyadColors = dyadPoints.y.map(normalizedDissonance => getColorForValue(normalizedDissonance, DISSONANCE_COLORSCALE)); data.push({ x: dyadPoints.x, y: dyadPoints.y, type: 'scatter', mode: 'markers', hoverinfo: 'text', text: dyadPoints.text, customdata: dyadPoints.name, marker: { color: dyadColors, size: 8, line: { color: 'black', width: 1 } } }); const layout = { ...getPlotlyThemeLayout(settings.theme), title: `Dissonance Curve (${timbres[settings.instrument].name} timbre)`, xaxis: { title: 'Frequency Ratio', type: 'log', range: [Math.log10(minRatio), Math.log10(maxRatio)], tickvals: [1, ...currentDyadData.map(i => i.ratios[1])], ticktext: ['1:1', ...currentDyadData.map(i => i.ratioText)], gridcolor: getPlotlyThemeLayout(settings.theme).gridcolor }, yaxis: { title: settings.invert ? 'Dissonance' : 'Dissonance', range: [0, 1.05], autorange: settings.invert ? 'reversed' : false, gridcolor: getPlotlyThemeLayout(settings.theme).gridcolor }, margin: { l: 60, r: 30, b: 60, t: 50 }, showlegend: false, annotations: [], shapes: [] }; Plotly.react('graph', data, layout); dom.graph.removeAllListeners('plotly_click'); dom.graph.on('plotly_click', e => { if (e.points[0].data.mode === 'markers') { playFrequencies([settings.baseFreq, settings.baseFreq * e.points[0].x]); } }); }
+            function calculate3DData(settings, model, ampFunction, partialFn) { const steps = 80 * settings.octaves; const maxRatio = Math.pow(2, settings.octaves); const ratios = Array.from({ length: steps + 1 }, (_, i) => Math.pow(maxRatio, i / steps)); const x_values = ratios; const y_values = ratios; const z_values_raw = y_values.map(r2 => x_values.map(r1 => model([settings.baseFreq, settings.baseFreq * r1, settings.baseFreq * r2], settings.overtones, ampFunction, partialFn))); const z_flat_finite = z_values_raw.flat().filter(z => isFinite(z)); const maxZ = Math.max(...z_flat_finite); const minZ = Math.min(...z_flat_finite); dom.graph.maxZ = maxZ; dom.graph.minZ = minZ; const z_values = z_values_raw.map(row => row.map(val => maxZ > minZ ? Math.pow((val - minZ) / (maxZ - minZ), 0.7) : 0)); return { x_values, y_values, z_values }; }
+            function plot3DSurface(settings, ampFunction, partialFn, model, lastCamera) { const { x_values, y_values, z_values } = calculate3DData(settings, model, ampFunction, partialFn); const maxRatio = Math.pow(2, settings.octaves); const data = [{ x: x_values, y: y_values, z: z_values, type: 'surface', colorscale: DISSONANCE_COLORSCALE, cmin: 0, cmax: 1, showscale: true, colorbar: { title: "Roughness", titleside: "right" }, contours: { z: { show: true, usecolormap: true, highlightcolor: "white", project: { z: true } } }, lighting: { ambient: settings.invert ? 0.8 : 0.4, diffuse: 0.8, fresnel: 0.3, specular: 0.2, roughness: 0.1 }, lightposition: { x: 100, y: 200, z: 2000 }, opacity: 1.0 }]; const triadPoints3D = { x: [], y: [], z: [], text: [], name: [] }; currentTriadData.forEach(c => { if (c.ratios[1] <= maxRatio && c.ratios[2] <= maxRatio) { const raw_z = model([settings.baseFreq, c.ratios[1] * settings.baseFreq, c.ratios[2] * settings.baseFreq], settings.overtones, ampFunction, partialFn); const norm_z = dom.graph.maxZ > dom.graph.minZ ? Math.pow((raw_z - dom.graph.minZ) / (dom.graph.maxZ - dom.graph.minZ), 0.7) : 0; const uniqueName = `${c.name} 3-tone`; triadPoints3D.x.push(c.ratios[1]); triadPoints3D.y.push(c.ratios[2]); triadPoints3D.z.push(norm_z + 0.01); triadPoints3D.text.push(`${c.name}<br>Ratios: ${c.ratioText}`); triadPoints3D.name.push(uniqueName); } }); const triadColors = triadPoints3D.z.map(norm_z => getColorForValue(norm_z, DISSONANCE_COLORSCALE)); data.push({ x: triadPoints3D.x, y: triadPoints3D.y, z: triadPoints3D.z, type: 'scatter3d', mode: 'markers', hoverinfo: 'text', text: triadPoints3D.text, customdata: triadPoints3D.name, marker: { color: triadColors, size: 5, line: { color: 'black', width: 1 } } }); const layout = { ...getPlotlyThemeLayout(settings.theme), title: `3-Tone Dissonance Surface (${timbres[settings.instrument].name} timbre)`, scene: { xaxis: { title: 'Freq2 Ratio', type: 'log', autorange: true, gridcolor: getPlotlyThemeLayout(settings.theme).gridcolor }, yaxis: { title: 'Freq3 Ratio', type: 'log', autorange: true, gridcolor: getPlotlyThemeLayout(settings.theme).gridcolor }, zaxis: { title: settings.invert ? 'Dissonance' : 'Dissonance', range: [0, 1.05], autorange: settings.invert ? 'reversed' : false, gridcolor: getPlotlyThemeLayout(settings.theme).gridcolor }, camera: lastCamera || { eye: { x: 1.2, y: 1.2, z: 0.8 }, center: { x: 0, y: 0, z: 0 } }, aspectmode: 'cube', annotations: [] }, margin: { l: 0, r: 0, b: 0, t: 40 }, showlegend: false }; Plotly.react('graph', data, layout); dom.graph.removeAllListeners('plotly_click'); dom.graph.on('plotly_click', e => { playFrequencies([settings.baseFreq, settings.baseFreq * e.points[0].x, settings.baseFreq * e.points[0].y]); }); }
+            function plot3DHeatmap(settings, ampFunction, partialFn, model) { const { x_values, y_values, z_values } = calculate3DData(settings, model, ampFunction, partialFn); const maxRatio = Math.pow(2, settings.octaves); const triadPoints = { x: [], y: [], text: [], name: [], color: [] }; currentTriadData.forEach(c => { if (c.ratios[1] <= maxRatio && c.ratios[2] <= maxRatio) { const uniqueName = `${c.name} 3-tone`; const raw_z = model([settings.baseFreq, c.ratios[1] * settings.baseFreq, c.ratios[2] * settings.baseFreq], settings.overtones, ampFunction, partialFn); const norm_z = dom.graph.maxZ > dom.graph.minZ ? Math.pow((raw_z - dom.graph.minZ) / (dom.graph.maxZ - dom.graph.minZ), 0.7) : 0; triadPoints.x.push(c.ratios[1]); triadPoints.y.push(c.ratios[2]); triadPoints.text.push(`${c.name}<br>Ratios: ${c.ratioText}`); triadPoints.name.push(uniqueName); triadPoints.color.push(getColorForValue(norm_z, DISSONANCE_COLORSCALE)); } }); const data = [{ x: x_values, y: y_values, z: z_values, type: 'heatmap', colorscale: DISSONANCE_COLORSCALE, reversescale: settings.invert, cmin: 0, cmax: 1, showscale: true, colorbar: { title: settings.invert ? 'Dissonance' : 'Dissonance', titleside: "right" }, transpose: true, hoverinfo: 'x+y+z' }, { x: triadPoints.x, y: triadPoints.y, type: 'scatter', mode: 'markers', hoverinfo: 'text', text: triadPoints.text, customdata: triadPoints.name, marker: { color: triadPoints.color, size: 10, line: { color: 'black', width: 1 } } }]; const layout = { ...getPlotlyThemeLayout(settings.theme), title: `3-Tone Dissonance Heatmap (${timbres[settings.instrument].name} timbre)`, xaxis: { title: 'Freq2 Ratio', type: 'log', autorange: true, gridcolor: getPlotlyThemeLayout(settings.theme).gridcolor }, yaxis: { title: 'Freq3 Ratio', type: 'log', autorange: true, gridcolor: getPlotlyThemeLayout(settings.theme).gridcolor }, margin: { l: 60, r: 30, b: 60, t: 50 }, showlegend: false, annotations: [], shapes: [] }; Plotly.react('graph', data, layout); dom.graph.removeAllListeners('plotly_click'); dom.graph.on('plotly_click', e => { const point = e.points[0]; const freqs = [settings.baseFreq, settings.baseFreq * point.x, settings.baseFreq * point.y]; playFrequencies(freqs); }); }
+            function calculate4DData(settings, model, ampFunction, partialFn) { const steps = 20; const maxRatio = Math.pow(2, settings.octaves); const ratios = Array.from({ length: steps + 1 }, (_, i) => Math.pow(maxRatio, i / steps)); let points = []; for (let i = 0; i < ratios.length; i++) { for (let j = i; j < ratios.length; j++) { for (let k = j; k < ratios.length; k++) { const freqs = [settings.baseFreq, settings.baseFreq * ratios[i], settings.baseFreq * ratios[j], settings.baseFreq * ratios[k]]; const dissonance = model(freqs, settings.overtones, ampFunction, partialFn); points.push({ x: ratios[i], y: ratios[j], z: ratios[k], dissonance }); } } } const dissonances = points.map(p => p.dissonance).filter(d => isFinite(d)); const maxD = Math.max(...dissonances); const minD = Math.min(...dissonances); dom.graph.maxD = maxD; dom.graph.minD = minD; points.forEach(p => { const normalizedDissonance = maxD > minD ? (p.dissonance - minD) / (maxD - minD) : 0; p.color = normalizedDissonance;
+                const sizeValue = settings.invert ? normalizedDissonance : (1 - normalizedDissonance);
+                p.size = sizeValue * settings.scaledViewSlider + 5;
+            }); return { x: points.map(p => p.x), y: points.map(p => p.y), z: points.map(p => p.z), color: points.map(p => p.color), size: points.map(p => p.size) }; }
+            function plot4TonesScatter(settings, ampFunction, partialFn, model, lastCamera) { const { x, y, z, color, size } = calculate4DData(settings, model, ampFunction, partialFn); const trace = { x: x, y: y, z: z, mode: 'markers', type: 'scatter3d', hoverinfo: 'none', marker: { color: color, size: size, sizemode: 'diameter', colorscale: DISSONANCE_COLORSCALE, reversescale: settings.invert, opacity: 0.6, colorbar: { title: settings.invert ? 'Dissonance' : 'Dissonance' } } }; const data = [trace]; const tetradPoints = { x: [], y: [], z: [], text: [], name: [], color: [] }; const maxRatio = Math.pow(2, settings.octaves); currentTetradData.forEach(c => { if (c.ratios[1] <= maxRatio && c.ratios[2] <= maxRatio && c.ratios[3] <= maxRatio) { const uniqueName = `${c.name} 4-tone`; const dissonance = model(c.ratios.map(r => r * settings.baseFreq), settings.overtones, ampFunction, partialFn); const normalizedDissonance = dom.graph.maxD > dom.graph.minD ? (dissonance - dom.graph.minD) / (dom.graph.maxD - dom.graph.minD) : 0; tetradPoints.x.push(c.ratios[1]); tetradPoints.y.push(c.ratios[2]); tetradPoints.z.push(c.ratios[3]); tetradPoints.text.push(`${c.name}<br>Ratios: ${c.ratioText}`); tetradPoints.name.push(uniqueName); const colorValue = settings.invert ? 1 - normalizedDissonance : normalizedDissonance; tetradPoints.color.push(getColorForValue(colorValue, DISSONANCE_COLORSCALE)); } }); data.push({ x: tetradPoints.x, y: tetradPoints.y, z: tetradPoints.z, type: 'scatter3d', mode: 'markers', hoverinfo: 'text', text: tetradPoints.text, customdata: tetradPoints.name, marker: { color: tetradPoints.color, size: 8, line: { color: 'black', width: 2 } } }); currentTetradData.forEach(c => { const uniqueName = `${c.name} 4-tone`; const index = tetradPoints.name.indexOf(uniqueName); if (index > -1) { c.plotCoords = { x: tetradPoints.x[index], y: tetradPoints.y[index], z: tetradPoints.z[index] }; } else { c.plotCoords = null; } }); const layout = { ...getPlotlyThemeLayout(settings.theme), title: `4-Tone Dissonance Space (${timbres[settings.instrument].name} timbre)`, scene: { xaxis: { title: 'Freq2 Ratio', type: 'log', autorange: true, gridcolor: getPlotlyThemeLayout(settings.theme).gridcolor }, yaxis: { title: 'Freq3 Ratio', type: 'log', autorange: true, gridcolor: getPlotlyThemeLayout(settings.theme).gridcolor }, zaxis: { title: 'Freq4 Ratio', type: 'log', autorange: true, gridcolor: getPlotlyThemeLayout(settings.theme).gridcolor }, camera: lastCamera || { eye: { x: 1.5, y: 1.5, z: 1.5 }, center: { x: 0, y: 0, z: 0 } }, aspectmode: 'cube' }, margin: { l: 0, r: 0, b: 0, t: 40 }, showlegend: false }; Plotly.react('graph', data, layout); dom.graph.removeAllListeners('plotly_click'); dom.graph.on('plotly_click', e => { const point = e.points[0]; playFrequencies([settings.baseFreq, settings.baseFreq * point.x, settings.baseFreq * point.y, settings.baseFreq * point.z]); }); }
+            function plot4TonesSpherical(settings, ampFunction, partialFn, model, lastCamera) {
+                const maxOctaveSteps = 12 * settings.octaves;
+
+                const namedChordDissonances = currentTetradData
+                    .map(c => model(c.ratios.map(r => r * settings.baseFreq), settings.overtones, ampFunction, partialFn))
+                    .filter(d => isFinite(d));
+                
+                const maxD = Math.max(...namedChordDissonances);
+                const minD = 0;
+
+                let points = [];
+                for (let i2 = 1; i2 < maxOctaveSteps; i2++) {
+                    for (let i3 = i2 + 1; i3 < maxOctaveSteps; i3++) {
+                        for (let i4 = i3 + 1; i4 <= maxOctaveSteps; i4++) {
+                            const freqs = [settings.baseFreq, settings.baseFreq * centsToRatio(i2 * 100), settings.baseFreq * centsToRatio(i3 * 100), settings.baseFreq * centsToRatio(i4 * 100)];
+                            const dissonance = model(freqs, settings.overtones, ampFunction, partialFn);
+                            if (isFinite(dissonance)) {
+                                points.push({ i2, i3, i4, dissonance });
+                            }
+                        }
+                    }
+                }
+
+                const plotPoints = { x: [], y: [], z: [], color: [], size: [], text: [], customdata: [] };
+                points.forEach(p => {
+                    const normalizedDissonance = maxD > minD ? (p.dissonance - minD) / (maxD) : 0;
+                    const rho = p.i4;
+                    const theta = (p.i2 / maxOctaveSteps) * 2 * Math.PI;
+                    const phi = (p.i3 / maxOctaveSteps) * Math.PI;
+                    plotPoints.x.push(rho * Math.sin(phi) * Math.cos(theta));
+                    plotPoints.y.push(rho * Math.sin(phi) * Math.sin(theta));
+                    plotPoints.z.push(rho * Math.cos(phi));
+                    plotPoints.color.push(normalizedDissonance);
+                    
+                    const clampedNormDissonance = Math.min(1, normalizedDissonance);
+                    const sizeValue = settings.invert ? clampedNormDissonance : (1 - clampedNormDissonance);
+                    plotPoints.size.push(sizeValue * settings.bubbleSize + 5);
+                    
+                    plotPoints.text.push(`Intervals: 0, ${p.i2}, ${p.i3}, ${p.i4}<br>Dissonance: ${p.dissonance.toFixed(4)}`);
+                    plotPoints.customdata.push([p.i2, p.i3, p.i4]);
+                });
+
+                const data = [{ x: plotPoints.x, y: plotPoints.y, z: plotPoints.z, mode: 'markers', type: 'scatter3d', text: plotPoints.text, hoverinfo: 'text', customdata: plotPoints.customdata, marker: { color: plotPoints.color, size: plotPoints.size, sizemode: 'diameter', colorscale: DISSONANCE_COLORSCALE, cmin: 0, cmax: 1, reversescale: settings.invert, opacity: 0.8, colorbar: { title: settings.invert ? 'Dissonance' : 'Dissonance' } } }];
+                
+                const tetradPoints = { x: [], y: [], z: [], text: [], name: [], markerColor: [] };
+                currentTetradData.forEach(c => {
+                    const steps = c.steps;
+                    if (!steps || steps.length !== 4 || steps[3] > maxOctaveSteps) return;
+                    const dissonance = model(c.ratios.map(r => r * settings.baseFreq), settings.overtones, ampFunction, partialFn);
+                    const normalizedDissonance = maxD > minD ? (dissonance - minD) / (maxD) : 0;
+                    const rho = steps[3];
+                    const theta = (steps[1] / maxOctaveSteps) * 2 * Math.PI;
+                    const phi = (steps[2] / maxOctaveSteps) * Math.PI;
+                    tetradPoints.x.push(rho * Math.sin(phi) * Math.cos(theta));
+                    tetradPoints.y.push(rho * Math.sin(phi) * Math.sin(theta));
+                    tetradPoints.z.push(rho * Math.cos(phi));
+                    tetradPoints.text.push(`${c.name}<br>Ratios: ${c.ratioText}`);
+                    tetradPoints.name.push(`${c.name} 4-tone`);
+                    const colorValue = settings.invert ? 1 - normalizedDissonance : normalizedDissonance;
+                    tetradPoints.markerColor.push(getColorForValue(colorValue, DISSONANCE_COLORSCALE));
+                });
+
+                data.push({ x: tetradPoints.x, y: tetradPoints.y, z: tetradPoints.z, type: 'scatter3d', mode: 'markers', hoverinfo: 'text', text: tetradPoints.text, customdata: tetradPoints.name, marker: { symbol: 'diamond', color: tetradPoints.markerColor, size: 12, line: { color: 'black', width: 2 } } });
+                
+                currentTetradData.forEach(c => {
+                    const uniqueName = `${c.name} 4-tone`;
+                    const index = tetradPoints.name.indexOf(uniqueName);
+                    if (index > -1) {
+              _Gg_fl_completion_line_marker_
+                        c.plotCoords = { x: tetradPoints.x[index], y: tetradPoints.y[index], z: tetradPoints.z[index] };
+                    } else {
+                        c.plotCoords = null;
+                    }
+                });
+
+                const layout = { ...getPlotlyThemeLayout(settings.theme), title: `4-Tone Spherical Harmony Model (${timbres[settings.instrument].name} timbre)`, scene: { xaxis: { title: '', showgrid: false, zeroline: false, showticklabels: false, titlefont: { color: 'rgba(0,0,0,0)' } }, yaxis: { title: '', showgrid: false, zeroline: false, showticklabels: false, titlefont: { color: 'rgba(0,0,0,0)' } }, zaxis: { title: '', showgrid: false, zeroline: false, showticklabels: false, titlefont: { color: 'rgba(0,0,0,0)' } }, camera: lastCamera || { eye: { x: 1.5, y: 1.5, z: 1.5 } }, aspectmode: 'data' }, margin: { l: 0, r: 0, b: 0, t: 40 }, showlegend: false };
+                Plotly.react('graph', data, layout);
+                dom.graph.removeAllListeners('plotly_click');
+                dom.graph.on('plotly_click', e => {
+                    const point = e.points[0];
+                    if (point.customdata && Array.isArray(point.customdata) && point.customdata.length === 3) {
+                        const ratios = [1, centsToRatio(point.customdata[0] * 100), centsToRatio(point.customdata[1] * 100), centsToRatio(point.customdata[2] * 100)];
+                        const freqs = ratios.map(r => r * settings.baseFreq);
+                        playFrequencies(freqs);
+                    }
+                });
+            }
+            
+            window.playSoundOnly = function(uniqueToneName) {
+                const toneData = currentAllTones[uniqueToneName];
+                if (!toneData) return;
+                const { ratios, ratioText } = toneData;
+                const settings = getSettings();
+                const freqs = ratios.map(r => r * settings.baseFreq);
+                const duration = 1.5;
+                playFrequencies(freqs, duration);
+                if (activeFlagTimeout) clearTimeout(activeFlagTimeout);
+                const ampFunction = getAmpFunction(settings.instrument);
+                const partialFn = getPartialFunction(settings.instrument);
+                const model = settings.equation === 'dillon' ? dillonModel : setharesModel;
+                let tempTrace;
+                let lastCamera;
+                if (dom.graph.layout && dom.graph.layout.scene) {
+                    lastCamera = JSON.parse(JSON.stringify(dom.graph.layout.scene.camera));
+                }
+                if (ratios.length === 2 && settings.tones == 2) {
+                    if (typeof dom.graph.maxDissonance === 'undefined') return;
+                    const ratio = ratios[1];
+                    const dissonance = model([settings.baseFreq, settings.baseFreq * ratio], settings.overtones, ampFunction, partialFn);
+                    const normalizedDissonance = dom.graph.maxDissonance > 0 ? dissonance / dom.graph.maxDissonance : 0;
+
+                    if (settings.chartType === 'polar') {
+                        const totalOctaves = Math.log2(Math.pow(2, settings.octaves));
+                        const theta = (Math.log2(ratio) / totalOctaves) * 360;
+                        tempTrace = {
+                            r: [normalizedDissonance + 0.02],
+                            theta: [theta],
+                            type: 'scatterpolar',
+                            mode: 'markers',
+                            hoverinfo: 'none',
+                            marker: { color: '#ff9900', size: 12, line: { color: 'white', width: 2 } }
+                        };
+                    } else { // This is for the line chart
+                        tempTrace = { x: [ratio], y: [normalizedDissonance], type: 'scatter', mode: 'markers', hoverinfo: 'none', marker: { color: '#ff9900', size: 12, line: { color: 'white', width: 2 } } };
+                    }
+                } else if (ratios.length === 3 && settings.tones == 3) {
+                    if (settings.chartType === 'heatmap') {
+                        tempTrace = { x: [ratios[1]], y: [ratios[2]], type: 'scatter', mode: 'markers', hoverinfo: 'none', marker: { color: '#ff9900', size: 15, line: { color: 'white', width: 2 } } };
+                    } else if (settings.chartType === 'surface') {
+                        if (typeof dom.graph.maxZ === 'undefined' || typeof dom.graph.minZ === 'undefined') return;
+                        const raw_z = model([settings.baseFreq, ratios[1] * settings.baseFreq, ratios[2] * settings.baseFreq], settings.overtones, ampFunction, partialFn);
+                        const norm_z = dom.graph.maxZ > dom.graph.minZ ? Math.pow((raw_z - dom.graph.minZ) / (dom.graph.maxZ - dom.graph.minZ), 0.7) : 0;
+                        tempTrace = { x: [ratios[1]], y: [ratios[2]], z: [norm_z + 0.015], type: 'scatter3d', mode: 'markers', hoverinfo: 'none', marker: { color: '#ff9900', size: 8, line: { color: 'white', width: 2 } } };
+                    }
+                } else if (ratios.length === 4 && settings.tones == 4) {
+                     const chordData = currentTetradData.find(c => c.name === toneData.originalName && c.ratioText === toneData.ratioText);
+                    if (chordData && chordData.plotCoords) {
+                        if (settings.chartType === 'spherical') {
+                            tempTrace = { x: [chordData.plotCoords.x], y: [chordData.plotCoords.y], z: [chordData.plotCoords.z], type: 'scatter3d', mode: 'markers', hoverinfo: 'none', marker: { symbol: 'diamond', color: '#ff9900', size: 15, line: { color: 'white', width: 2 } } };
+                        } else {
+                             tempTrace = { x: [chordData.plotCoords.x], y: [chordData.plotCoords.y], z: [chordData.plotCoords.z], type: 'scatter3d', mode: 'markers', hoverinfo: 'none', marker: { color: '#ff9900', size: 12, line: { color: 'white', width: 2 } } };
+                        }
+                    }
+                }
+                if (tempTrace) {
+                    Plotly.addTraces('graph', tempTrace).then(() => {
+                        if (lastCamera) {
+                            Plotly.relayout('graph', { 'scene.camera': lastCamera });
+                        }
+                    });
+                    activeFlagTimeout = setTimeout(() => {
+                        const traceCount = dom.graph.data.length;
+                        if (traceCount > 1) {
+                            Plotly.deleteTraces('graph', traceCount - 1);
+                        }
+                    }, duration * 1000);
+                }
+            }
+            
+            function updateOvertoneControls(forceReset = false) {
+                const settings = getSettings();
+                const oldAmplitudes = [...overtoneAmplitudes];
+                dom.overtoneSlidersContainer.innerHTML = '';
+                overtoneAmplitudes = [];
+                if (settings.instrument === 'sine') {
+                    dom.overtoneStrengthDetails.setAttribute('disabled', true);
+                    dom.overtoneStrengthDetails.open = false;
+                    return;
+                }
+                dom.overtoneStrengthDetails.removeAttribute('disabled');
+                const ampFn = getAmpFunction(settings.instrument);
+                for (let i = 1; i <= settings.overtones; i++) {
+                    const overtoneIndex = i;
+                    const partialIndex = i - 1;
+                    let ampValue;
+                    if (forceReset || settings.instrument !== 'custom') {
+                        ampValue = ampFn(overtoneIndex);
+                    } else {
+                        if (oldAmplitudes[partialIndex] !== undefined) {
+                            ampValue = oldAmplitudes[partialIndex];
+                        } else {
+                            ampValue = 0.75;
+                        }
+                    }
+                    overtoneAmplitudes[partialIndex] = ampValue;
+                    const group = document.createElement('div');
+                    group.className = 'overtone-slider-group';
+                    const label = document.createElement('label');
+                    label.setAttribute('for', `overtone-${overtoneIndex}`);
+                    label.textContent = `Overtone ${overtoneIndex} Strength`;
+                    const slider = document.createElement('input');
+                    slider.type = 'range';
+                    slider.id = `overtone-${overtoneIndex}`;
+                    slider.min = 0;
+                    slider.max = 1.5;
+                    slider.step = 0.01;
+                    slider.value = ampValue;
+                    slider.addEventListener('input', () => {
+                        overtoneAmplitudes[partialIndex] = +slider.value;
+                        if (dom.instrument.value !== 'custom') {
+                            currentPartialFn = getPartialFunction(dom.instrument.value);
+                            dom.instrument.value = 'custom';
+                        }
+                        generateAndPlot();
+                        populateTables(); // Add this line to update the tables in real time
+                    });
+                    group.appendChild(label);
+                    group.appendChild(slider);
+                    dom.overtoneSlidersContainer.appendChild(group);
+                }
+            }
+            function applyOvertonePreset(presetName) { const preset = overtonePresets[presetName]; if (!preset) return; overtoneAmplitudes = preset.slice(0, dom.overtones.value); const sliders = dom.overtoneSlidersContainer.querySelectorAll('input[type="range"]'); sliders.forEach((slider, index) => { if (overtoneAmplitudes[index] !== undefined) { slider.value = overtoneAmplitudes[index]; } }); dom.instrument.value = 'custom'; currentPartialFn = getPartialFunction('string'); generateAndPlot(); }
+            function setupOvertonePresets() { dom.overtonePresetsContainer.innerHTML = ''; for (const presetName in overtonePresets) { const button = document.createElement('button'); button.textContent = presetName; button.className = 'preset-btn'; button.addEventListener('click', () => applyOvertonePreset(presetName)); dom.overtonePresetsContainer.appendChild(button); } }
+            function resetOvertoneStrengths() { const sliders = dom.overtoneSlidersContainer.querySelectorAll('input[type="range"]'); const midPoint = 0.75; sliders.forEach((slider, index) => { slider.value = midPoint; overtoneAmplitudes[index] = midPoint; }); currentPartialFn = getPartialFunction(dom.instrument.value); dom.instrument.value = 'custom'; generateAndPlot(); }
+            function resetToDefaults() { dom.baseFreq.value = 220; dom.overtones.value = 6; dom.octaves.value = 1; dom.equation.value = 'sethares'; dom.instrument.value = 'string'; dom.volume.value = 0.2; dom.tones.value = '3'; dom.chartType.value = 'surface'; dom.invertRoughness.checked = false; dom.tuningSystem.value = 'equal_12'; 
+                dom.scaledViewSlider.value = 25; 
+                dom.bubbleSize.value = 25; updateTuningData(); updateOvertoneControls(true); populateTables(); generateAndPlot(); }
+            function showMessage(text, duration = 3000) { dom.messageBox.textContent = text; dom.messageBox.style.display = 'block'; setTimeout(() => { dom.messageBox.style.display = 'none'; }, duration); }
+            function populateTuningDropdown() { const select = dom.tuningSystem; select.innerHTML = ''; for (const groupName in TUNING_SYSTEMS) { const optgroup = document.createElement('optgroup'); optgroup.label = groupName; for (const key in TUNING_SYSTEMS[groupName]) { const option = document.createElement('option'); option.value = key; option.textContent = TUNING_SYSTEMS[groupName][key].name; optgroup.appendChild(option); } select.appendChild(optgroup); } select.value = 'equal_12'; }
+            function setupEventListeners() { [dom.octaves, dom.equation, dom.volume, dom.tones, dom.chartType, dom.invertRoughness].forEach(el => { el.addEventListener('change', () => { updateTuningData(); populateTables(); generateAndPlot(); }); }); 
+                dom.scaledViewSlider.addEventListener('input', generateAndPlot); 
+                dom.bubbleSize.addEventListener('input', generateAndPlot); dom.instrument.addEventListener('change', () => { const settings = getSettings(); currentPartialFn = getPartialFunction(settings.instrument); updateOvertoneControls(true); updateTuningData(); populateTables(); generateAndPlot(); }); dom.overtones.addEventListener('change', () => { updateOvertoneControls(false); generateAndPlot(); populateTables(); }); dom.baseFreq.addEventListener('change', () => { generateAndPlot(); populateTables(); }); dom.tuningSystem.addEventListener('change', () => { updateTuningData(); populateTables(); generateAndPlot(); }); dom.resetBtn.addEventListener('click', resetToDefaults); dom.resetOvertonesBtn.addEventListener('click', resetOvertoneStrengths); dom.testOvertoneBtn.addEventListener('click', () => { const settings = getSettings(); playFrequencies([settings.baseFreq], 0.5); }); dom.themeToggle.addEventListener('change', () => { dom.body.dataset.theme = dom.themeToggle.checked ? 'dark' : 'light'; generateAndPlot(); }); new ResizeObserver(() => { Plotly.Plots.resize(dom.graph); }).observe(dom.graph); document.querySelectorAll('#dyads-table .sortable-header, #triads-table .sortable-header, #tetrads-table .sortable-header').forEach(header => {
+  header.addEventListener('click', () => {
+    const currentDir = header.dataset.sortDir;
+    const newDir = currentDir === 'asc' ? 'desc' : 'asc';
+    header.dataset.sortDir = newDir;
+    populateTables();
+  });
 }); }
-            
-            if (typeof Plotly === 'undefined') {
-                dom.graph.innerHTML = '<div style="padding: 20px; text-align: center; color: red;">Error: Plotly library failed to load.</div>';
-                return;
-            }
-            populateTuningDropdown();
-            setupEventListeners();
-            setupOvertonePresets();
-            updateTuningData();
-            updateOvertoneControls(true);
-            generateAndPlot();
-            populateTables();
-        }
-    </script>
+            
+            if (typeof Plotly === 'undefined') {
+                dom.graph.innerHTML = '<div style="padding: 20px; text-align: center; color: red;">Error: Plotly library failed to load.</div>';
+                return;
+            }
+            populateTuningDropdown();
+            setupEventListeners();
+            setupOvertonePresets();
+            updateTuningData();
+            updateOvertoneControls(true);
+            generateAndPlot();
+            populateTables();
+        }
+    </script>
 
-    <!-- Physics Module Wiring (non-destructive) -->
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const homePage = document.getElementById('home-page');
-        const musicPage = document.getElementById('music-page');
-        const howItWorksPage = document.getElementById('how-it-works-page');
-        const physicsPage = document.getElementById('physics-page');
+    <!-- Physics Module Wiring (non-destructive) -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const homePage = document.getElementById('home-page');
+        const musicPage = document.getElementById('music-page');
+        const howItWorksPage = document.getElementById('how-it-works-page');
+        const physicsPage = document.getElementById('physics-page');
 
-        const physicsIconNav = document.getElementById('physics-icon-nav');
-        const backFromPhysics = document.getElementById('back-from-physics');
+        const physicsIconNav = document.getElementById('physics-icon-nav');
+        const backFromPhysics = document.getElementById('back-from-physics');
 
-        function switchPage(target) {
-            const pages = [homePage, musicPage, howItWorksPage, physicsPage].filter(Boolean);
-            pages.forEach(p => {
-                p.classList.add('hidden');
-                p.classList.remove('flex');
-            });
-            if (target) {
-                target.classList.remove('hidden');
-                 if (target !== homePage) {
-                     target.classList.add('flex');
-                }
-            }
-            // If going back home, ensure it's visible even if it wasn't flex before
-            if (target === homePage) {
-                homePage.classList.remove('hidden');
-            }
-        }
+        function switchPage(target) {
+            const pages = [homePage, musicPage, howItWorksPage, physicsPage].filter(Boolean);
+            pages.forEach(p => {
+                p.classList.add('hidden');
+                p.classList.remove('flex');
+            });
+            if (target) {
+                target.classList.remove('hidden');
+                 if (target !== homePage) {
+                     target.classList.add('flex');
+                }
+            }
+            // If going back home, ensure it's visible even if it wasn't flex before
+            if (target === homePage) {
+                homePage.classList.remove('hidden');
+            }
+        }
 
-        if (physicsIconNav) physicsIconNav.addEventListener('click', () => switchPage(physicsPage));
-        if (backFromPhysics) backFromPhysics.addEventListener('click', () => switchPage(homePage));
-    });
-    </script>
+        if (physicsIconNav) physicsIconNav.addEventListener('click', () => switchPage(physicsPage));
+        if (backFromPhysics) backFromPhysics.addEventListener('click', () => switchPage(homePage));
+    });
+    </script>
 </body>
 </html>
