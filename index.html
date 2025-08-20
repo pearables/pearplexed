@@ -327,7 +327,7 @@
         <div class="grid md:grid-cols-2 gap-6 items-center">
             <div>
                 <h4 class="text-xl font-vt323 text-yellow-300">Line Curve</h4>
-                <p><strong>In a nutshell:</strong> Valleys are harmonious intervals. The x-axis is the pitch relationship; y-axis is roughness.</p>
+                <p><strong>In a nutshell:</strong> Valleys are harmonious intervals. The x-axis is the pitch relationship of the 2nd tone to the base frequency. The y-axis is the amount of dissonance or 'roughness' of the combined tones.</p>
             </div>
             <img src="line-curve.jpg" alt="Line Curve Chart Screenshot" class="border border-teal-500 rounded">
         </div>
@@ -335,7 +335,7 @@
             <img src="polar-area.jpg" alt="Polar Area Chart Screenshot" class="border border-teal-500 rounded">
             <div>
                 <h4 class="text-xl font-vt323 text-yellow-300">Polar Area</h4>
-                <p><strong>In a nutshell:</strong> The same data wrapped in a circle. Closer to the center is more harmonious.</p>
+                <p><strong>In a nutshell:</strong> The same data wrapped in a circle. Closer to the center is more harmonious. Different tuning methods give you a different "ticks" to the "musical clock" or scale. </p>
             </div>
         </div>
     </div>
@@ -353,7 +353,7 @@
             <img src="2d-heatmap.jpg" alt="2D Heatmap Chart Screenshot" class="border border-teal-500 rounded">
             <div>
                  <h4 class="text-xl font-vt323 text-yellow-300">2D Heatmap</h4>
-                <p><strong>In a nutshell:</strong> A top-down view of the 3D surface. The blue spots are your "islands of harmony."</p>
+                <p><strong>In a nutshell:</strong> A top-down view of the 3D surface. The faint light streaks are your "highways of harmony." These "roads" are directly influenced by the number and strength of overtones. </p>
             </div>
         </div>
     </div>
@@ -411,38 +411,6 @@
 </div>
 </div>
 
-<div>
-    <h2 class="text-3xl font-vt323 text-green-400 mb-4">[[ The Data Readout ]]</h2>
-    <p class="mb-6">
-        The table below the graph lists all standard musical chords and intervals. Use it to quickly find and listen to the most important sounds. Here's what each column means:
-    </p>
-    <dl class="space-y-3 text-base">
-        <div class="flex items-start">
-            <dt class="w-40 text-cyan-300 font-semibold text-right pr-4 shrink-0">Name:</dt>
-            <dd>The common musical name for the chord or interval (e.g., "Major Triad").</dd>
-        </div>
-        <div class="flex items-start">
-            <dt class="w-40 text-cyan-300 font-semibold text-right pr-4 shrink-0">Ratios:</dt>
-            <dd>The mathematical pitch relationship of each note to the base frequency.</dd>
-        </div>
-        <div class="flex items-start">
-            <dt class="w-40 text-cyan-300 font-semibold text-right pr-4 shrink-0">Piano Notes:</dt>
-            <dd>The notes of the chord as they would appear on a standard piano.</dd>
-        </div>
-        <div class="flex items-start">
-            <dt class="w-40 text-cyan-300 font-semibold text-right pr-4 shrink-0">MIDI Notes:</dt>
-            <dd>A numeric representation of the notes, where 60 is Middle C.</dd>
-        </div>
-        <div class="flex items-start">
-            <dt class="w-40 text-cyan-300 font-semibold text-right pr-4 shrink-0">Roughness:</dt>
-            <dd>The calculated dissonance score. Click this header to sort from most harmonious (lowest number) to most dissonant (highest).</dd>
-        </div>
-        <div class="flex items-start">
-            <dt class="w-40 text-cyan-300 font-semibold text-right pr-4 shrink-0">Sound:</dt>
-            <dd>Click the <strong>Play</strong> button to hear the chord.</dd>
-        </div>
-    </dl>
-</div>
 
 </div>
 
@@ -1596,7 +1564,7 @@ const TETRAD_DEFS = [
                      target.classList.add('flex');
                 }
             }
-            // If going back home, ensure it's visible even if it wasn't flex before this
+            // If going back home, ensure it's visible even if it wasn't flex before
             if (target === homePage) {
                 homePage.classList.remove('hidden');
             }
