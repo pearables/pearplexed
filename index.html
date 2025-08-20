@@ -274,10 +274,178 @@
                     <button id="back-to-music-button" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg pixel-border transition-colors">&lt; Back to Graph</button>
                 </header>
                 <main class="bg-black bg-opacity-50 p-6 rounded-lg border-2 border-cyan-400 flex-grow text-white">
-                    <div id="how-it-works-content">
-                        <h2 class="text-3xl font-vt323 text-green-400 mb-4">Coming Soon!</h2>
-                        <p>This section will explain the fascinating science and art behind the music graph. Get ready to dive into a rabbit hole of sound!</p>
-                    </div>
+                    <div id="how-it-works-content" class="text-lg space-y-10">
+
+    <!-- Introduction -->
+    <div>
+        <h2 class="text-3xl font-vt323 text-green-400 mb-3">[[ What Is This? ]]</h2>
+        <p>This interactive graph visualizes <strong class="text-yellow-300">musical harmony</strong>-the science of why some notes sound better together.</p>
+		<ul class="list-disc list-inside space-y-2 mt-4">
+                                <li>The <span class="text-blue-400">cool-colored</span> "valleys" on the graphs show you which note combinations sound pleasant, or <strong>consonant</strong>.</li>
+                                <li>The <span class="text-red-400">warm-colored</span> "peaks" show which combinations sound less pleasant, or <strong>dissonant</strong>.</li></p>
+                            </ul>It's all based on how the hidden frequencies in every natural sound—called <strong class="text-yellow-300">overtones</strong>—interact with each other.</p>
+    </div>
+
+    <!-- The Controls -->
+    <div>
+        <h2 class="text-3xl font-vt323 text-green-400 mb-4">[[ The Control Deck ]]</h2>
+        <p class="mb-6">A quick guide to the lab controls. The <strong class="text-yellow-300">highlighted</strong> ones have the biggest impact.</p>
+<dl class="grid grid-cols-[max-content,1fr] gap-x-4 gap-y-3 text-base">
+    <dt class="text-cyan-300 font-semibold text-right">Base Frequency:</dt>
+    <dd>The starting note's pitch in Hertz (Hz). A higher value means a higher pitch. An octave is twice as high as its base frequency. "Middle C" is 261.63 Hz.</dd>
+
+    <dt class="text-yellow-300 font-semibold text-right">Overtones:</dt>
+    <dd>The higher pitched, hidden tones that give a sound its character. More overtones create a richer sound and a more complex graph (zero overtones is a pure sine wave).</dd>
+
+    <dt class="text-cyan-300 font-semibold text-right">Octaves:</dt>
+    <dd>The range of notes to display on the graph's axes, from one octave up to four.</dd>
+
+    <dt class="text-cyan-300 font-semibold text-right">Dissonance Model:</dt>
+    <dd>The equation used to calculate roughness. <strong>Sethares</strong> is the standard model. <strong>Dillon</strong> is more sensitive and amplifies the harshest-sounding frequency interactions.</dd>
+
+    <dt class="text-yellow-300 font-semibold text-right">Instrument Timbre:</dt>
+    <dd>Presets for overtone patterns. Instruments sound different because their overtones have unique strengths. A piano's pattern differs from a bell's, changing the graph.</dd>
+
+    <dt class="text-yellow-300 font-semibold text-right">Tones:</dt>
+    <dd>Sets how many notes are compared against the base note, changing the graph's dimensions: <strong>2</strong>=2D curve, <strong>3</strong>=3D surface, <strong>4</strong>=4D scatter plot.</dd>
+
+    <dt class="text-yellow-300 font-semibold text-right">Tuning System:</dt>
+    <dd>There are different ways to tune an instrument, each with their own pros and cons. This changes how the musical scale is tuned, which determines the exact placement of the <strong>labeled dots</strong> (the chords and intervals) on the dissonance curve.</dd>
+
+    <dt class="text-yellow-300 font-semibold text-right">Chart Type:</dt>
+    <dd>Selects how the data is visualized. Each <strong>Tone</strong> setting offers two different chart types to view the same data from a new perspective. See below for more.</dd>
+</dl>
+    </div>
+
+    <!-- Interpreting the Graphs -->
+    <div>
+    <h2 class="text-3xl font-vt323 text-green-400 mb-4">[[ Reading the Scans ]]</h2>
+    <p class="mb-6">The graph is your map. You can zoom in and out, rotate (if the chart is 3D), and click to make sound. Look for the <span class="text-blue-400">blue valleys</span> and <span class="text-red-400">red peaks</span>. Blue = Harmony. Red = Tension.</p>
+
+    <div class="mt-6 p-4 border border-cyan-400 rounded-lg bg-black bg-opacity-20">
+        <h3 class="text-2xl font-vt323 text-teal-300 mb-3">>> 2 Tones (Dyads)</h3>
+        <div class="grid md:grid-cols-2 gap-6 items-center">
+            <div>
+                <h4 class="text-xl font-vt323 text-yellow-300">Line Curve</h4>
+                <p><strong>In a nutshell:</strong> Valleys are harmonious intervals. The x-axis is the pitch relationship; y-axis is roughness.</p>
+            </div>
+            <img src="line-curve.jpg" alt="Line Curve Chart Screenshot" class="border border-teal-500 rounded">
+        </div>
+        <div class="grid md:grid-cols-2 gap-6 items-center mt-6">
+            <img src="polar-area.jpg" alt="Polar Area Chart Screenshot" class="border border-teal-500 rounded">
+            <div>
+                <h4 class="text-xl font-vt323 text-yellow-300">Polar Area</h4>
+                <p><strong>In a nutshell:</strong> The same data wrapped in a circle. Closer to the center is more harmonious.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-6 p-4 border border-cyan-400 rounded-lg bg-black bg-opacity-20">
+        <h3 class="text-2xl font-vt323 text-teal-300 mb-3">>> 3 Tones (Triads)</h3>
+          <div class="grid md:grid-cols-2 gap-6 items-center">
+            <div>
+                <h4 class="text-xl font-vt323 text-yellow-300">3D Surface</h4>
+                <p><strong>In a nutshell:</strong> A landscape of harmony. The deep blue "canyons" are stable chords like Major and Minor.</p>
+            </div>
+            <img src="3d-surface.jpg" alt="3D Surface Chart Screenshot" class="border border-teal-500 rounded">
+        </div>
+          <div class="grid md:grid-cols-2 gap-6 items-center mt-6">
+            <img src="2d-heatmap.jpg" alt="2D Heatmap Chart Screenshot" class="border border-teal-500 rounded">
+            <div>
+                 <h4 class="text-xl font-vt323 text-yellow-300">2D Heatmap</h4>
+                <p><strong>In a nutshell:</strong> A top-down view of the 3D surface. The blue spots are your "islands of harmony."</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-6 p-4 border border-cyan-400 rounded-lg bg-black bg-opacity-20">
+        <h3 class="text-2xl font-vt323 text-teal-300 mb-3">>> 4 Tones (Tetrads)</h3>
+        <div class="grid md:grid-cols-2 gap-6 items-center">
+            <div>
+                <h4 class="text-xl font-vt323 text-yellow-300">3D Scatter</h4>
+                <p><strong>In a nutshell:</strong> A 4D model where each axis is a note. The size and color of the dots show the harmony of the chord—bigger, bluer dots are more consonant.</p>
+            </div>
+            <img src="3d-scatter.jpg" alt="3D Scatter Chart Screenshot" class="border border-teal-500 rounded">
+        </div>
+        <div class="grid md:grid-cols-2 gap-6 items-center mt-6">
+            <img src="3d-spherical.jpg" alt="3D Spherical Model Chart Screenshot" class="border border-teal-500 rounded">
+            <div>
+                <h4 class="text-xl font-vt323 text-yellow-300">3D Spherical Model</h4>
+                <p><strong>In a nutshell:</strong> An abstract map of harmony. This view organizes chords based on their geometric relationships rather than their exact frequency ratios.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <h2 class="text-3xl font-vt323 text-green-400 mb-4">[[ The Data Readout ]]</h2>
+    <p class="mb-6">
+        The table below the graph lists all standard musical chords and intervals. Use it to quickly find and listen to the most important sounds. Here's what each column means:
+    </p>
+    <dl class="space-y-3 text-base">
+        <div class="flex items-start">
+            <dt class="w-40 text-cyan-300 font-semibold text-right pr-4 shrink-0">Name:</dt>
+            <dd>The common musical name for the chord or interval (e.g., "Major Triad").</dd>
+        </div>
+        <div class="flex items-start">
+            <dt class="w-40 text-cyan-300 font-semibold text-right pr-4 shrink-0">Ratios:</dt>
+            <dd>The mathematical pitch relationship of each note to the base frequency.</dd>
+        </div>
+        <div class="flex items-start">
+            <dt class="w-40 text-cyan-300 font-semibold text-right pr-4 shrink-0">Piano Notes:</dt>
+            <dd>The notes of the chord as they would appear on a standard piano.</dd>
+        </div>
+        <div class="flex items-start">
+            <dt class="w-40 text-cyan-300 font-semibold text-right pr-4 shrink-0">MIDI Notes:</dt>
+            <dd>A numeric representation of the notes, where 60 is Middle C.</dd>
+        </div>
+        <div class="flex items-start">
+            <dt class="w-40 text-cyan-300 font-semibold text-right pr-4 shrink-0">Roughness:</dt>
+            <dd>The calculated dissonance score. Click this header to sort from most harmonious (lowest number) to most dissonant (highest).</dd>
+        </div>
+        <div class="flex items-start">
+            <dt class="w-40 text-cyan-300 font-semibold text-right pr-4 shrink-0">Sound:</dt>
+            <dd>Click the <strong>Play</strong> button to hear the chord.</dd>
+        </div>
+    </dl>
+</div>
+</div>
+
+<div>
+    <h2 class="text-3xl font-vt323 text-green-400 mb-4">[[ The Data Readout ]]</h2>
+    <p class="mb-6">
+        The table below the graph lists all standard musical chords and intervals. Use it to quickly find and listen to the most important sounds. Here's what each column means:
+    </p>
+    <dl class="space-y-3 text-base">
+        <div class="flex items-start">
+            <dt class="w-40 text-cyan-300 font-semibold text-right pr-4 shrink-0">Name:</dt>
+            <dd>The common musical name for the chord or interval (e.g., "Major Triad").</dd>
+        </div>
+        <div class="flex items-start">
+            <dt class="w-40 text-cyan-300 font-semibold text-right pr-4 shrink-0">Ratios:</dt>
+            <dd>The mathematical pitch relationship of each note to the base frequency.</dd>
+        </div>
+        <div class="flex items-start">
+            <dt class="w-40 text-cyan-300 font-semibold text-right pr-4 shrink-0">Piano Notes:</dt>
+            <dd>The notes of the chord as they would appear on a standard piano.</dd>
+        </div>
+        <div class="flex items-start">
+            <dt class="w-40 text-cyan-300 font-semibold text-right pr-4 shrink-0">MIDI Notes:</dt>
+            <dd>A numeric representation of the notes, where 60 is Middle C.</dd>
+        </div>
+        <div class="flex items-start">
+            <dt class="w-40 text-cyan-300 font-semibold text-right pr-4 shrink-0">Roughness:</dt>
+            <dd>The calculated dissonance score. Click this header to sort from most harmonious (lowest number) to most dissonant (highest).</dd>
+        </div>
+        <div class="flex items-start">
+            <dt class="w-40 text-cyan-300 font-semibold text-right pr-4 shrink-0">Sound:</dt>
+            <dd>Click the <strong>Play</strong> button to hear the chord.</dd>
+        </div>
+    </dl>
+</div>
+
+</div>
+
                 </main>
             </div>
         </div>
