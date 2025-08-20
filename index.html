@@ -328,7 +328,7 @@
             <div>
                 <h4 class="text-xl font-vt323 text-yellow-300">Line Curve</h4>
                 <p><strong>In a nutshell:</strong> Valleys are harmonious intervals. The x-axis is the pitch relationship of the 2nd tone to the base frequency. The y-axis is the amount of dissonance or 'roughness' of the combined tones. The shape of this curve changes as overtones increase/decrease in number and in strength.</p>
-		<p> The <strong>dots</strong> on the curve represent commonly used intervals in music (e.g., perfect fifth) - different tunings place the dot in different places. In other words - there is more than one way to tune an instrument. </p>
+		<p> The <strong>dots</strong> on the curve represent commonly used intervals in music (e.g., perfect fifth) - different tunings place the dot in different places. In other words - there is more than one way to tune an instrument. Despite the different tuning methods, notice how the dots tend to fall more in valleys than peaks. </p>
             </div>
             <img src="line-curve.jpg" alt="Line Curve Chart Screenshot" class="border border-teal-500 rounded">
         </div>
@@ -336,7 +336,7 @@
             <img src="polar-area.jpg" alt="Polar Area Chart Screenshot" class="border border-teal-500 rounded">
             <div>
                 <h4 class="text-xl font-vt323 text-yellow-300">Polar Area</h4>
-                <p><strong>In a nutshell:</strong> The same data wrapped in a circle. Closer to the center is more harmonious. Different tuning methods give you a different "ticks" to the "musical clock" or scale. </p>
+                <p><strong>In a nutshell:</strong> The same data wrapped in a circle. Closer to the center is more harmonious. Different tuning methods give you a different "ticks" to the "musical clock" or scale. Notice how some tuning methods have more equal spacing than others, making it easier/harder to place music in different "keys" (base frequencies). Most music today uses 12-TET, but that has changed over time. </p>
             </div>
         </div>
     </div>
@@ -346,7 +346,7 @@
           <div class="grid md:grid-cols-2 gap-6 items-center">
             <div>
                 <h4 class="text-xl font-vt323 text-yellow-300">3D Surface</h4>
-                <p><strong>In a nutshell:</strong> A landscape of harmony. The deep blue "canyons" are stable chords like Major and Minor.</p>
+                <p><strong>In a nutshell:</strong> A landscape of harmony. The deep blue "canyons" are stable chords like Major and Minor. Notice how most chords typically correspond to different valleys. </p>
             </div>
             <img src="3d-surface.jpg" alt="3D Surface Chart Screenshot" class="border border-teal-500 rounded">
         </div>
@@ -1582,7 +1582,7 @@ const TETRAD_DEFS = [
                      target.classList.add('flex');
                 }
             }
-            // If going back home, ensure it's visible even if it wasn't flex before 
+            // If going back home, ensure it's visible even if it wasn't flex before
             if (target === homePage) {
                 homePage.classList.remove('hidden');
             }
