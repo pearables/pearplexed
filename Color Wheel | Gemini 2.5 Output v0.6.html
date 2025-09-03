@@ -3107,13 +3107,13 @@
                         </div>
                     </div>`;
                 const compSelect = document.getElementById('stats-comparison-select'); 
-                const dataset = datasetToggle.value;
-                if(dataset === 'flags'){ compSelect.innerHTML = `<option value="region">by Region</option><option value="jurisdiction">by Jurisdiction</option>`; }
-                else if (dataset === 'worldFlags'){ compSelect.innerHTML = `<option value="continent">by Continent</option><option value="recognition">by Recognition</option>`; }
-                else if (dataset === 'sports'){ compSelect.innerHTML = `<option value="league">by League</option><option value="country">by Country</option>`; }
-                else if (dataset === 'transit'){ compSelect.innerHTML = `<option value="numberOfLines">by Line Count</option><option value="country">by Country</option>`; }
-                else if (dataset === 'universities'){ compSelect.innerHTML = `<option value="status">by Status</option><option value="country">by Country</option>`; }
-                else { compSelect.innerHTML = `<option value="industry">by Industry</option><option value="status">by Status</option><option value="decade">by Decade</option>`; }
+const dataset = datasetToggle.value;
+if(dataset === 'flags'){ compSelect.innerHTML = `<option value="region">by Region</option><option value="jurisdiction">by Jurisdiction</option>`; }
+else if (dataset === 'worldFlags'){ compSelect.innerHTML = `<option value="continent">by Continent</option><option value="recognition">by Recognition</option>`; }
+else if (dataset === 'sports'){ compSelect.innerHTML = `<option value="status">by League</option><option value="country">by Country</option>`; }
+else if (dataset === 'transit'){ compSelect.innerHTML = `<option value="lineCount">by Line Count</option><option value="country">by Country</option>`; }
+else if (dataset === 'universities'){ compSelect.innerHTML = `<option value="control">by Control Type</option><option value="country">by Country</option>`; }
+else { compSelect.innerHTML = `<option value="industry">by Industry</option><option value="status">by Status</option><option value="decade">by Decade</option>`; }
 
                 const compSort = document.getElementById('stats-comparison-sort'); compSort.innerHTML = `<option value="alphanumeric">Sort ABC</option><option value="greatest">Sort High-Low</option><option value="least">Sort Low-High</option>`; compSort.value = 'alphanumeric';
                 compSelect.addEventListener('change', () => renderComparisonChart(data)); compSort.addEventListener('change', (e) => { comparisonSortMode = e.target.value; renderComparisonChart(data); });
@@ -3129,7 +3129,13 @@
                 const container = d3.select("#comparison-chart");
                 container.html("");
                 const category = document.getElementById('stats-comparison-select').value;
-                const getCategoryValue = (d) => { if (category === 'decade') { return d.established ? `${Math.floor(d.established / 10) * 10}s` : 'N/A'; } if(category === 'jurisdiction'){  if (['South', 'West', 'Northeast', 'Midwest'].includes(d.region)) return 'States Only'; if (['Territory', 'District'].includes(d.region)) return 'Territories Only'; return 'N/A'; } if(category === 'recognition'){ if (d.recognition === 'UN-Recognized') return 'UN Member'; return 'Rest of World'; } return d[category] || 'N/A'; };
+                const getCategoryValue = (d) => { 
+    if (category === 'decade') { return d.established ? `${Math.floor(d.established / 10) * 10}s` : 'N/A'; } 
+    if (category === 'jurisdiction') { if (['South', 'West', 'Northeast', 'Midwest'].includes(d.region)) return 'States Only'; if (['Territory', 'District'].includes(d.region)) return 'Territories Only'; return 'N/A'; } 
+    if (category === 'recognition') { if (d.recognition === 'UN-Recognized') return 'UN Member'; return 'Rest of World'; } 
+    if (category === 'lineCount') { return d.colors.length; } // <-- Add this line
+    return d[category] || 'N/A'; 
+};
                 const groupedData = d3.group(data, getCategoryValue);
                 let plotData = [];
                 groupedData.forEach((companies, groupName) => { if(groupName === 'N/A' || companies.length === 0) return; const allGroupColors = companies.flatMap(c => c.colors); if (allGroupColors.length === 0) return; const groupResult = { group: groupName, n: companies.length, totalColors: allGroupColors.length, companies: companies }; HUE_ORDER.forEach(hue => { const colorsInHue = allGroupColors.filter(c => getHueCategory(c) === hue); groupResult[hue] = { count: colorsInHue.length, colors: colorsInHue }; }); plotData.push(groupResult); });
@@ -3217,4 +3223,3 @@
     </script>
 </body>
 </html>
-
