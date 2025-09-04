@@ -2273,6 +2273,10 @@ const sportsData = [
                 document.getElementById('connections-toggle-container').style.display = (currentView === 'grid') ? 'none' : 'flex';
                 document.getElementById('spectrum-controls-wrapper').style.display = (currentView === 'wheel') ? 'flex' : 'none';
                 
+                // --- CORRECTED FIX ---
+                // This line now correctly ensures the spectrum canvas only shows on the wheel view when its toggle is active.
+                document.getElementById('spectrum-canvas').style.display = (currentView === 'wheel' && spectrumBackgroundToggle.checked) ? 'block' : 'none';
+                
                 if (currentView === 'wheel') drawWheel(data);
                 else if (currentView === 'scatter') drawScatterPlot(data);
                 else if (currentView === 'grid') drawGridView(data);
