@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070b16">
+<title>Bridge Lights</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#070b16; --bg2:#0d1324; --card:#111830; --card2:#162040;
+    --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.14);
+    --text:#eef1fb; --muted:#97a0bd; --faint:#5f6886;
+    --accent:#ffd27a; --radius:18px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;background:var(--bg);color:var(--text)}
+  body{font:15px/1.45 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    padding:env(safe-area-inset-top) 0 calc(env(safe-area-inset-bottom) + 24px);
+    background:radial-gradient(120% 60% at 50% -10%,#1a2550 0%,var(--bg) 60%) fixed}
+  button,input,select{font:inherit;color:inherit}
+  button{cursor:pointer;border:0;background:none}
+  .wrap{max-width:520px;margin:0 auto;padding:0 16px}
+
+  header{display:flex;align-items:baseline;justify-content:space-between;padding:18px 2px 12px}
+  .brand h1{font:400 30px/1 "Instrument Serif",Georgia,serif;margin:0;letter-spacing:.2px}
+  .brand h1 em{color:var(--accent);font-style:italic}
+  .brand p{margin:4px 0 0;color:var(--muted);font-size:12.5px}
+  .todayBtn{font-size:13px;font-weight:600;padding:7px 12px;border-radius:999px;background:var(--card2);border:1px solid var(--line2)}
+  .todayBtn[hidden]{display:none}
+  /* when shown inside another page (e.g. the Pearplexed site), that page already shows the title */
+  .embedded .brand{display:none}
+  .embedded header{justify-content:flex-end;padding:12px 2px 10px}
+  .embedded header:has(#todayBtn[hidden]){display:none}
+  .embedded .hero{margin-top:12px}
+
+  /* hero */
+  .hero{background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+  .stage{position:relative;aspect-ratio:360/200;background:#050816;touch-action:pan-y}
+  .stage svg{display:block;width:100%;height:100%}
+  .tonight{position:absolute;top:10px;left:10px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+    padding:4px 9px;border-radius:999px;background:rgba(7,11,22,.6);backdrop-filter:blur(6px);color:var(--accent);border:1px solid rgba(255,210,122,.3)}
+  .daynav{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;gap:6px;padding:12px 10px 0}
+  .navBtn{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:var(--card2);border:1px solid var(--line)}
+  .navBtn:active{transform:scale(.95)}
+  .navBtn:disabled{opacity:.3}
+  .dateBtn{position:relative;text-align:center;padding:4px 0}
+  .dateBtn .dow{display:block;font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+  .dateBtn .dt{display:block;font-weight:600;font-size:17px}
+  .dateBtn input{position:absolute;inset:0;opacity:0;width:100%;height:100%}
+  .info{padding:10px 18px 18px}
+  .occ{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 2px}
+  .occ button{font-size:12px;padding:5px 10px;border-radius:999px;border:1px solid var(--line2);color:var(--muted)}
+  .occ button.on{background:var(--text);color:var(--bg);border-color:var(--text);font-weight:600}
+  .info h2{font:400 30px/1.08 "Instrument Serif",Georgia,serif;margin:8px 0 4px}
+  .sub{color:var(--muted);font-size:13.5px;margin:0}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 4px}
+  .chip{display:inline-flex;align-items:center;gap:7px;padding:6px 11px 6px 7px;border-radius:999px;background:var(--bg2);border:1px solid var(--line);font-size:13px;font-weight:500}
+  .dot{width:16px;height:16px;border-radius:50%;flex:none;box-shadow:0 0 10px var(--g,transparent),inset 0 0 0 1px rgba(255,255,255,.15)}
+  .badges{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+  .badge{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--muted);line-height:1.35}
+  .badge b{color:var(--text);font-weight:600}
+  .badge svg{flex:none;margin-top:1px}
+
+  /* tabs */
+  .tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin:18px 0 12px;padding:4px;background:var(--card);border:1px solid var(--line);border-radius:14px;position:sticky;top:8px;z-index:5;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+  .tabs button{padding:9px 0;border-radius:10px;font-size:14px;font-weight:500;color:var(--muted)}
+  .tabs button.on{background:var(--card2);color:var(--text);box-shadow:inset 0 0 0 1px var(--line2)}
+  .panel[hidden]{display:none}
+
+  /* list rows */
+  .row{display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:center;width:100%;text-align:left;padding:10px 12px;border-radius:14px;background:var(--card);border:1px solid var(--line);margin-bottom:8px}
+  .row:active{background:var(--card2)}
+  .row .d{text-align:center;line-height:1.05}
+  .row .d small{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .row .d strong{font-size:20px;font-weight:600}
+  .row .n{font-weight:500;font-size:14.5px}
+  .row .c{font-size:12px;color:var(--muted);margin-top:2px}
+  .bar{width:44px;height:8px;border-radius:99px;box-shadow:0 0 10px rgba(255,255,255,.08),inset 0 0 0 1px rgba(255,255,255,.12)}
+  .group{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:16px 4px 8px;font-weight:600}
+  .rel{font-size:11px;color:var(--accent);font-weight:600}
+
+  /* calendar */
+  .calHead{display:grid;grid-template-columns:40px 1fr 40px;align-items:center;margin-bottom:8px}
+  .calHead h3{margin:0;text-align:center;font:400 24px "Instrument Serif",Georgia,serif}
+  .calHead button{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--card);border:1px solid var(--line)}
+  .calHead button:disabled{opacity:.3}
+  .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+  .wd{text-align:center;font-size:11px;color:var(--faint);padding:4px 0;font-weight:600}
+  .cell{aspect-ratio:1/1.1;border-radius:12px;background:var(--card);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:7px 3px 6px;font-size:13.5px;position:relative}
+  .cell.empty{background:none;border:0}
+  .cell .mb{width:70%;height:5px;border-radius:9px}
+  .cell.special{background:var(--card2)}
+  .cell.today{box-shadow:inset 0 0 0 1.5px var(--accent)}
+  .cell.sel{background:var(--text);color:var(--bg);font-weight:600}
+  .cell.sel .mb{box-shadow:0 0 0 1.5px var(--bg)}
+  .cell .plus{position:absolute;top:3px;right:5px;font-size:9px;color:var(--accent)}
+  .legend{font-size:12px;color:var(--muted);margin:12px 4px 0;display:flex;gap:14px;flex-wrap:wrap}
+  .legend span{display:inline-flex;gap:6px;align-items:center}
+
+  /* browse */
+  .search{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line2);border-radius:14px;padding:0 12px}
+  .search input{flex:1;background:none;border:0;outline:0;padding:12px 0;font-size:16px}
+  .search input::placeholder{color:var(--faint)}
+  .flabel{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:600;margin:14px 2px 7px}
+  .scroller{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;margin:0 -16px;padding-left:16px;padding-right:16px}
+  .scroller::-webkit-scrollbar{display:none}
+  .fchip{flex:none;display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;border:1px solid var(--line2);font-size:13px;color:var(--muted);white-space:nowrap}
+  .fchip .dot{width:12px;height:12px}
+  .fchip.on{background:var(--text);color:var(--bg);border-color:var(--text);font-weight:600}
+  .count{font-size:12.5px;color:var(--muted);margin:14px 2px 0;display:flex;justify-content:space-between}
+  .count button{color:var(--accent);font-size:12.5px;font-weight:600}
+  .empty-state{text-align:center;color:var(--muted);padding:30px 10px;font-size:14px}
+
+  footer{margin:26px 4px 0;font-size:12px;color:var(--faint);line-height:1.5}
+  footer a{color:var(--muted)}
+  .approx{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <h1>Bridge <em>Lights</em></h1>
+      <p>Cuomo (Tappan Zee) Bridge · 2026</p>
+    </div>
+    <button class="todayBtn" id="todayBtn" hidden>Today</button>
+  </header>
+
+  <section class="hero" aria-live="polite">
+    <div class="stage" id="stage">
+      <div id="art"></div>
+      <span class="tonight" id="tonightTag">Tonight</span>
+    </div>
+    <div class="daynav">
+      <button class="navBtn" id="prevDay" aria-label="Previous day">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <label class="dateBtn">
+        <span class="dow" id="dow"></span>
+        <span class="dt" id="dt"></span>
+        <input type="date" id="datePick" min="2026-01-01" max="2026-12-31" aria-label="Pick a date">
+      </label>
+      <button class="navBtn" id="nextDay" aria-label="Next day">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+    <div class="info">
+      <div class="occ" id="occ"></div>
+      <h2 id="name"></h2>
+      <p class="sub" id="sub"></p>
+      <div class="chips" id="chips"></div>
+      <div class="badges" id="badges"></div>
+    </div>
+  </section>
+
+  <nav class="tabs" role="tablist">
+    <button class="on" data-tab="upcoming" role="tab">Upcoming</button>
+    <button data-tab="calendar" role="tab">Calendar</button>
+    <button data-tab="browse" role="tab">Browse</button>
+  </nav>
+
+  <section class="panel" id="p-upcoming"></section>
+
+  <section class="panel" id="p-calendar" hidden>
+    <div class="calHead">
+      <button id="prevMonth" aria-label="Previous month"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <h3 id="monthTitle"></h3>
+      <button id="nextMonth" aria-label="Next month"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="legend">
+      <span><i class="bar" style="width:18px;height:5px;background:linear-gradient(90deg,#ff3d4f,#f4f6ff,#3d6bff)"></i>Special lighting</span>
+      <span><i class="bar" style="width:18px;height:5px;background:transparent"></i>No bar = standard white</span>
+    </div>
+  </section>
+
+  <section class="panel" id="p-browse" hidden>
+    <div class="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#97a0bd" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Search holidays, causes…" autocomplete="off">
+    </div>
+    <div class="flabel">Color</div>
+    <div class="scroller" id="fColor"></div>
+    <div class="flabel">Type</div>
+    <div class="scroller" id="fCat"></div>
+    <div class="flabel">Month</div>
+    <div class="scroller" id="fMonth"></div>
+    <div class="count"><span id="count"></span><button id="clear" hidden>Clear filters</button></div>
+    <div id="results"></div>
+  </section>
+
+  <footer>
+    Dates come from the Thruway Authority's 2026 lighting calendar. The official calendar doesn't list colors, so colors are taken from its photos and news reports; ones marked <span class="approx">≈</span> are best estimates. Nights without a listed occasion use the standard white lighting. Community lightings approved by request aren't published ahead of time, so the bridge may occasionally differ.<br><br>
+    Official calendar: <a href="https://www.thruway.ny.gov/the-bridge/lighting" target="_blank" rel="noopener">thruway.ny.gov/the-bridge/lighting</a>
+  </footer>
+</div>
+
+<script>
+try{ if(window.self!==window.top) document.documentElement.classList.add('embedded'); }catch(e){ document.documentElement.classList.add('embedded'); }
+/* ---------- Palette ---------- */
+const P = {
+  red:{hex:"#ff3d4f",label:"Red",fam:"red"},
+  white:{hex:"#f4f6ff",label:"White",fam:"white"},
+  blue:{hex:"#3d6bff",label:"Blue",fam:"blue"},
+  lightblue:{hex:"#7cc6ff",label:"Light blue",fam:"blue"},
+  green:{hex:"#2fd17a",label:"Green",fam:"green"},
+  teal:{hex:"#1fc8b8",label:"Teal",fam:"teal"},
+  purple:{hex:"#a35bff",label:"Purple",fam:"purple"},
+  pink:{hex:"#ff6fb5",label:"Pink",fam:"pink"},
+  orange:{hex:"#ff8a2b",label:"Orange",fam:"orange"},
+  amber:{hex:"#ffad42",label:"Warm amber",fam:"orange"},
+  yellow:{hex:"#ffdf3b",label:"Yellow",fam:"yellow"},
+  gold:{hex:"#e9b949",label:"Gold",fam:"yellow"},
+  champagne:{hex:"#f5dfa3",label:"Champagne",fam:"yellow"},
+  black:{hex:"#2a3040",label:"Black (unlit)",fam:null},
+  off:{hex:"#1b2130",label:"Aesthetic lights off",fam:"off"},
+  rainbow:{hex:"linear-gradient(90deg,#ff3d4f,#ff8a2b,#ffdf3b,#2fd17a,#3d6bff,#a35bff)",label:"Rainbow",fam:"rainbow"}
+};
+const RAINBOW = ["red","orange","yellow","green","blue","purple"];
+const RWB = ["red","white","blue"];
+const CATS = {
+  holiday:"Holiday", patriotic:"Patriotic & military", religious:"Religious",
+  heritage:"Heritage & culture", awareness:"Awareness", seasonal:"Seasonal"
+};
+const FAMS = [
+  ["red","Red","#ff3d4f"],["pink","Pink","#ff6fb5"],["orange","Orange","#ff8a2b"],["yellow","Gold / yellow","#e9b949"],
+  ["green","Green","#2fd17a"],["teal","Teal","#1fc8b8"],["blue","Blue","#3d6bff"],["purple","Purple","#a35bff"],
+  ["white","White","#f4f6ff"],["rainbow","Rainbow",P.rainbow.hex],["off","Lights off","#1b2130"]
+];
+
+/* ---------- 2026 schedule ----------
+   [MM-DD, occasion, colors, category, sure(1)/estimated(0), note] */
+const RAW = [
+ ["01-01","New Year's Day",RWB,"holiday",1],
+ ["01-19","Martin Luther King Jr. Day",["red","black","green"],"heritage",0],
+ ["02-01","Black History Month",["red","black","green"],"heritage",1],
+ ["02-04","World Cancer Day",["blue","orange"],"awareness",1],
+ ["02-12","President Lincoln's Birthday",RWB,"patriotic",1],
+ ["02-14","Valentine's Day",["red"],"holiday",1],
+ ["02-16","Presidents' Day",RWB,"patriotic",1],
+ ["02-17","Lunar New Year",["red"],"heritage",1],
+ ["02-18","First Day of Ramadan",["green"],"religious",0],
+ ["02-28","Rare Disease Day",["pink","green","blue","purple"],"awareness",0],
+ ["03-03","Holi",["rainbow"],"religious",0],
+ ["03-17","St. Patrick's Day",["green"],"holiday",1],
+ ["03-20","First Day of Spring",["green","pink"],"seasonal",0],
+ ["03-20","Eid al-Fitr",["green"],"religious",0],
+ ["03-29","Vietnam Veterans Day",RWB,"patriotic",0],
+ ["04-01","Sexual Assault Awareness Month",["teal"],"awareness",1],
+ ["04-02","World Autism Day",["red"],"awareness",1],
+ ["04-02","First Day of Passover",["amber"],"religious",0],
+ ["04-03","Good Friday",["amber"],"religious",0],
+ ["04-05","Easter",["amber"],"religious",0],
+ ["04-06","Month of the Military Child",["purple"],"patriotic",1],
+ ["04-10","National Donate Life Day",["blue","green"],"awareness",1],
+ ["04-12","Orthodox Easter",["amber"],"religious",0],
+ ["04-22","Earth Day",["off"],"awareness",1,"All decorative lighting is switched off for the worldwide Earth Day observance; only roadway lights stay on."],
+ ["04-23","National Work Zone Awareness Week",["orange"],"awareness",1],
+ ["04-28","Workers' Memorial Day",["purple"],"awareness",1],
+ ["05-10","Mother's Day",["pink"],"holiday",0],
+ ["05-25","Memorial Day",RWB,"patriotic",1],
+ ["05-27","Eid al-Adha",["green"],"religious",0],
+ ["06-01","Pride Month",["rainbow"],"heritage",1],
+ ["06-14","Flag Day",RWB,"patriotic",1],
+ ["06-19","Juneteenth",["red","black","green"],"heritage",0],
+ ["06-21","Father's Day",["blue"],"holiday",1],
+ ["06-21","First Day of Summer",["yellow","orange"],"seasonal",0],
+ ["07-04","Independence Day",RWB,"patriotic",1],
+ ["07-26","Disability Independence Day",["yellow"],"awareness",1],
+ ["08-07","Purple Heart Day",["purple"],"patriotic",1],
+ ["08-26","Women's Equality Day",["purple","gold"],"heritage",1],
+ ["09-07","Labor Day",RWB,"holiday",1],
+ ["09-11","9/11 Memorial",["blue"],"patriotic",1],
+ ["09-12","Rosh Hashanah",["amber"],"religious",0],
+ ["09-20","Yom Kippur",["amber"],"religious",0],
+ ["09-21","First Day of Fall",["orange","gold"],"seasonal",0],
+ ["09-27","Gold Star Mother's & Family Day",["gold"],"patriotic",1],
+ ["10-01","Domestic Violence Awareness Month",["purple"],"awareness",1],
+ ["10-12","Columbus Day",RWB,"holiday",1],
+ ["10-16","Pregnancy & Infant Loss Remembrance Day",["pink","lightblue"],"awareness",1],
+ ["10-17","Move Over Day",["yellow"],"awareness",1],
+ ["10-31","Halloween",["orange","purple"],"holiday",0,"Some years this has been reported as all red."],
+ ["11-03","Election Day",RWB,"patriotic",1],
+ ["11-08","Diwali",["orange","gold"],"religious",0],
+ ["11-11","Veterans Day",RWB,"patriotic",1],
+ ["11-26","Thanksgiving",["orange","gold"],"holiday",0],
+ ["12-01","World AIDS Day",["red"],"awareness",1],
+ ["12-04","First Day of Hanukkah",["blue","white"],"religious",0],
+ ["12-07","Pearl Harbor Remembrance Day",RWB,"patriotic",1],
+ ["12-10","Human Rights Day",["blue"],"awareness",0],
+ ["12-21","First Day of Winter",["white"],"seasonal",1],
+ ["12-24","Christmas Eve",["red","green"],"holiday",1],
+ ["12-25","Christmas Day",["red","green"],"holiday",1],
+ ["12-26","Kwanzaa",["red","black","green"],"heritage",1],
+ ["12-31","New Year's Eve",["champagne"],"holiday",1]
+];
+const YEAR = 2026;
+const EVENTS = RAW.map((r,i)=>({id:i,key:`${YEAR}-${r[0]}`,name:r[1],colors:r[2],cat:r[3],sure:!!r[4],note:r[5]||""}));
+const BY_DAY = {};
+EVENTS.forEach(e=>{if(!BY_DAY[e.key]) BY_DAY[e.key]=[]; BY_DAY[e.key].push(e)});
+
+/* ---------- Date helpers ---------- */
+const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const DOW=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const pad=n=>String(n).padStart(2,"0");
+const keyOf=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const fromKey=k=>{const [y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d)};
+const addDays=(k,n)=>{const d=fromKey(k);d.setDate(d.getDate()+n);return keyOf(d)};
+const MIN=`${YEAR}-01-01`, MAX=`${YEAR}-12-31`;
+const clamp=k=>k<MIN?MIN:k>MAX?MAX:k;
+const realToday=keyOf(new Date());
+const TODAY=clamp(realToday);
+const isDimSeason=k=>{const d=fromKey(k),m=d.getMonth()+1,day=d.getDate();
+  return m===4||m===5||(m===8&&day>=15)||m===9||m===10||(m===11&&day<=15)};
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+const expand=cols=>cols.flatMap(c=>c==="rainbow"?RAINBOW:[c]);
+const hexOf=c=>P[c].hex;
+function stripe(cols){
+  const ex=expand(cols); if(ex[0]==="off") return "#1b2130";
+  if(ex.length===1) return hexOf(ex[0]);
+  const step=100/ex.length;
+  return "linear-gradient(90deg,"+ex.map((c,i)=>`${hexOf(c)} ${i*step}% ${(i+1)*step}%`).join(",")+")";
+}
+function relDays(k){
+  const diff=Math.round((fromKey(k)-fromKey(realToday))/864e5);
+  if(diff===0) return "Tonight"; if(diff===1) return "Tomorrow"; if(diff===-1) return "Last night";
+  if(diff>1&&diff<7) return `In ${diff} days`; return "";
+}
+
+/* ---------- Bridge illustration ---------- */
+function bridgeSVG(cols){
+  const off = cols[0]==="off";
+  const ex = off?["off"]:expand(cols);
+  const n = ex.length, multi=n>=4;
+  const c = i => off ? "#2a3142" : hexOf(ex[((i%n)+n)%n]);
+  const deckY=122, topY=34;
+  const towersX=[128,232];
+  let cables="", towers="", ci=0, fanIdx=0;
+  towersX.forEach((tx,t)=>{
+    // two fans per tower
+    [-1,1].forEach(side=>{
+      const len = (t===0&&side===1)||(t===1&&side===-1) ? 50 : 62;
+      const fanColor=c(fanIdx);
+      for(let k=0;k<8;k++){
+        const ay = topY+8+k*5.2;
+        const ax = tx + side*(4+ (ay-topY)*0.04);
+        const bx = tx + side*(14 + k*(len-14)/7);
+        cables += `<line x1="${ax.toFixed(1)}" y1="${ay.toFixed(1)}" x2="${bx.toFixed(1)}" y2="${deckY}" stroke="${multi?c(ci++):fanColor}" stroke-width="0.9"/>`;
+      }
+      fanIdx++;
+    });
+    // splayed tower legs
+    const lc=c(t+1), rc=c(t+ (n>2?2:1));
+    towers += `<line x1="${tx-3}" y1="${deckY+8}" x2="${tx-7.5}" y2="${topY}" stroke="${multi?c(t*3):lc}" stroke-width="3.6" stroke-linecap="round"/>`;
+    towers += `<line x1="${tx+3}" y1="${deckY+8}" x2="${tx+7.5}" y2="${topY}" stroke="${multi?c(t*3+2):(n>1?rc:lc)}" stroke-width="3.6" stroke-linecap="round"/>`;
+  });
+  // roadway lights + piers (always on)
+  let road="";
+  for(let x=2;x<360;x+=7) road+=`<circle cx="${x}" cy="${deckY-1.2}" r=".7" fill="#fff6dc" opacity=".85"/>`;
+  let piers="";
+  for(let x=12;x<360;x+=24){ if(Math.abs(x-128)<14||Math.abs(x-232)<14) continue;
+    piers+=`<line x1="${x}" y1="${deckY+1}" x2="${x}" y2="${deckY+9}" stroke="#2d3550" stroke-width="2"/>`; }
+  // stars
+  let stars=""; let s=7;
+  for(let i=0;i<34;i++){ s=(s*9301+49297)%233280; const x=s/233280*360; s=(s*9301+49297)%233280; const y=s/233280*70;
+    stars+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(i%5===0?.9:.5)}" fill="#fff" opacity="${(i%3?.35:.7)}"/>`; }
+  const glow = off ? "" : 'filter="url(#glow)"';
+  const bridge = `
+    <g ${glow}>${cables}${towers}</g>
+    <rect x="0" y="${deckY}" width="360" height="2.4" fill="#3a4466"/>
+    <rect x="0" y="${deckY+3.6}" width="360" height="1.6" fill="#252c45"/>
+    ${road}${piers}`;
+  return `<svg viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of the bridge lit in ${off?"no decorative lighting":ex.map(x=>P[x].label).join(", ")}">
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#050816"/><stop offset="1" stop-color="#121c3d"/></linearGradient>
+      <linearGradient id="water" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c1430"/><stop offset="1" stop-color="#04060f"/></linearGradient>
+      <filter id="glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <filter id="blur"><feGaussianBlur stdDeviation="1.6 2.6"/></filter>
+      <clipPath id="wclip"><rect x="0" y="131" width="360" height="69"/></clipPath>
+    </defs>
+    <rect width="360" height="200" fill="url(#sky)"/>
+    ${stars}
+    <path d="M0 108 C40 92 70 96 98 104 C120 110 150 100 180 106 L180 131 L0 131Z" fill="#0b1124"/>
+    <path d="M220 112 C260 96 300 90 360 100 L360 131 L220 131Z" fill="#0a1022"/>
+    <rect x="0" y="131" width="360" height="69" fill="url(#water)"/>
+    <g clip-path="url(#wclip)" opacity=".38" filter="url(#blur)"><g transform="translate(0,262) scale(1,-1)">${bridge}</g></g>
+    ${Array.from({length:9},(_,i)=>`<line x1="${(i*41)%300}" y1="${142+i*6}" x2="${(i*41)%300+60}" y2="${142+i*6}" stroke="#0c1430" stroke-width="1.2"/>`).join("")}
+    ${bridge}
+  </svg>`;
+}
+
+/* ---------- State ---------- */
+function readHash(){try{return (location.hash||"").slice(1)}catch(e){return ""}}
+let sel = readHash();
+sel = /^\d{4}-\d{2}-\d{2}$/.test(sel) ? clamp(sel) : TODAY;
+let occIdx=0;
+let calMonth = fromKey(sel).getMonth();
+const filt={q:"",color:"",cat:"",month:""};
+
+/* ---------- Hero ---------- */
+const $=id=>document.getElementById(id);
+function dimBadge(k){
+  return isDimSeason(k)
+   ? `<div class="badge"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#97a0bd" stroke-width="2" stroke-linecap="round"><path d="M16 7c-2 0-3.5 1-4 3-1-1.5-3-2-5-1.5 2 .5 3 2 3 4 0 2.5 2 4.5 4.5 4.5S19 15 19 12c0-1-.3-2-1-3"/><circle cx="16" cy="9" r=".6" fill="#97a0bd"/></svg><span><b>Bird migration season.</b> Decorative lights dim from 11 p.m. to dawn.</span></div>`
+   : "";
+}
+function renderHero(){
+  const d=fromKey(sel), evs=BY_DAY[sel]||[];
+  if(occIdx>=evs.length) occIdx=0;
+  const ev=evs[occIdx];
+  const cols= ev?ev.colors:["white"];
+  $("art").innerHTML=bridgeSVG(cols);
+  $("dow").textContent=DOW[d.getDay()];
+  $("dt").textContent=`${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+  $("datePick").value=sel;
+  $("prevDay").disabled = sel<=MIN; $("nextDay").disabled = sel>=MAX;
+  const rel=relDays(sel);
+  $("tonightTag").textContent = rel || (sel<realToday?"Past":"Upcoming");
+  $("todayBtn").hidden = sel===TODAY;
+
+  $("occ").innerHTML = evs.length>1
+    ? evs.map((e,i)=>`<button class="${i===occIdx?"on":""}" data-i="${i}">${esc(e.name)}</button>`).join("") : "";
+  $("occ").querySelectorAll("button").forEach(b=>b.onclick=()=>{occIdx=+b.dataset.i;renderHero()});
+
+  if(ev){
+    $("name").textContent=ev.name;
+    $("sub").textContent = CATS[ev.cat] + (evs.length>1?` · ${evs.length} occasions share this night`:"");
+  } else {
+    $("name").textContent="Classic white";
+    $("sub").textContent="Standard nightly lighting — no special occasion scheduled";
+  }
+  const ex = cols[0]==="off"?["off"]:cols;
+  $("chips").innerHTML = ex.map(c=>{
+    const p=P[c], bg=p.hex, g=c==="off"||c==="black"?"transparent":(c==="rainbow"?"#a35bff":p.hex);
+    return `<span class="chip"><i class="dot" style="background:${bg};--g:${g}"></i>${p.label}</span>`}).join("");
+
+  let b="";
+  if(ev && !ev.sure) b+=`<div class="badge"><span class="approx" style="font-weight:700">≈</span><span>Colors are a best estimate; the official calendar doesn't state them for this occasion.</span></div>`;
+  if(ev && ev.note) b+=`<div class="badge"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#97a0bd" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span>${esc(ev.note)}</span></div>`;
+  if(!ev) b+=`<div class="badge"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#97a0bd" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span>Community lightings approved by request aren't posted in advance, so a surprise color is possible.</span></div>`;
+  if(cols[0]!=="off") b+=dimBadge(sel);
+  if(realToday.slice(0,4)!==String(YEAR) && sel===TODAY) b+=`<div class="badge"><span>Showing the 2026 schedule.</span></div>`;
+  $("badges").innerHTML=b;
+}
+function go(k,{keepOcc=false,scroll=false}={}){
+  sel=clamp(k); if(!keepOcc) occIdx=0;
+  try{ history.replaceState(null,"","#"+sel); }catch(e){ /* preview frames block this; harmless */ }
+  calMonth=fromKey(sel).getMonth();
+  renderHero(); renderUpcoming(); renderCal();
+  if(scroll) window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* ---------- Rows ---------- */
+function row(e,showRel){
+  const d=fromKey(e.key), r=showRel?relDays(e.key):"";
+  const colNames = (e.colors[0]==="off"?["off"]:e.colors).map(c=>P[c].label).join(" · ");
+  return `<button class="row" data-k="${e.key}" data-i="${(BY_DAY[e.key]||[]).indexOf(e)}">
+    <span class="d"><small>${MONTHS[d.getMonth()].slice(0,3)}</small><strong>${d.getDate()}</strong></span>
+    <span><div class="n">${esc(e.name)}${e.sure?"":' <span class="approx">≈</span>'}</div>
+      <div class="c">${r?`<span class="rel">${r}</span> · `:""}${DOW[d.getDay()].slice(0,3)} · ${colNames}</div></span>
+    <i class="bar" style="background:${stripe(e.colors)}"></i></button>`;
+}
+function wireRows(root){
+  root.querySelectorAll(".row").forEach(b=>b.onclick=()=>{go(b.dataset.k,{scroll:true});occIdx=Math.max(0,+b.dataset.i);renderHero()});
+}
+
+/* ---------- Upcoming ---------- */
+function renderUpcoming(){
+  const from = sel>=realToday?sel:realToday;
+  const next = EVENTS.filter(e=>e.key>=from).slice(0,10);
+  const el=$("p-upcoming");
+  el.innerHTML = next.length
+    ? `<div class="group">Next special lightings${from===realToday?"":` from ${MONTHS[fromKey(from).getMonth()].slice(0,3)} ${fromKey(from).getDate()}`}</div>`+next.map(e=>row(e,true)).join("")
+    : `<div class="empty-state">No more scheduled lightings in ${YEAR}.</div>`;
+  wireRows(el);
+}
+
+/* ---------- Calendar ---------- */
+function renderCal(){
+  $("monthTitle").textContent=`${MONTHS[calMonth]} ${YEAR}`;
+  $("prevMonth").disabled=calMonth===0; $("nextMonth").disabled=calMonth===11;
+  const first=new Date(YEAR,calMonth,1), days=new Date(YEAR,calMonth+1,0).getDate();
+  let h=["S","M","T","W","T","F","S"].map(x=>`<div class="wd">${x}</div>`).join("");
+  for(let i=0;i<first.getDay();i++) h+=`<div class="cell empty"></div>`;
+  for(let d=1;d<=days;d++){
+    const k=`${YEAR}-${pad(calMonth+1)}-${pad(d)}`, evs=BY_DAY[k];
+    const cls=["cell"]; if(evs) cls.push("special"); if(k===realToday) cls.push("today"); if(k===sel) cls.push("sel");
+    h+=`<button class="${cls.join(" ")}" data-k="${k}" aria-label="${MONTHS[calMonth]} ${d}${evs?": "+esc(evs.map(e=>e.name).join(", ")):""}">
+      ${evs&&evs.length>1?'<span class="plus">+'+(evs.length-1)+'</span>':""}
+      <span>${d}</span>${evs?`<i class="mb" style="background:${stripe(evs[0].colors)}"></i>`:'<i class="mb"></i>'}</button>`;
+  }
+  $("grid").innerHTML=h;
+  $("grid").querySelectorAll(".cell[data-k]").forEach(b=>b.onclick=()=>go(b.dataset.k,{scroll:true}));
+}
+$("prevMonth").onclick=()=>{if(calMonth>0){calMonth--;renderCal()}};
+$("nextMonth").onclick=()=>{if(calMonth<11){calMonth++;renderCal()}};
+
+/* ---------- Browse ---------- */
+function chipRow(el,items,key){
+  el.innerHTML=`<button class="fchip ${filt[key]===""?"on":""}" data-v="">All</button>`+
+    items.map(([v,label,sw])=>`<button class="fchip ${filt[key]===v?"on":""}" data-v="${v}">${sw?`<i class="dot" style="background:${sw}"></i>`:""}${label}</button>`).join("");
+  el.querySelectorAll(".fchip").forEach(b=>b.onclick=()=>{filt[key]=b.dataset.v;renderBrowse()});
+}
+function matches(e){
+  if(filt.q){const q=filt.q.toLowerCase();
+    const hay=(e.name+" "+CATS[e.cat]+" "+e.colors.map(c=>P[c].label).join(" ")+" "+MONTHS[+e.key.slice(5,7)-1]).toLowerCase();
+    if(!q.split(/\s+/).every(t=>hay.includes(t))) return false;}
+  if(filt.color && !e.colors.some(c=>P[c].fam===filt.color)) return false;
+  if(filt.cat && e.cat!==filt.cat) return false;
+  if(filt.month!=="" && +e.key.slice(5,7)-1!==+filt.month) return false;
+  return true;
+}
+function renderBrowse(){
+  chipRow($("fColor"),FAMS,"color");
+  chipRow($("fCat"),Object.entries(CATS).map(([k,v])=>[k,v]),"cat");
+  chipRow($("fMonth"),MONTHS.map((m,i)=>[String(i),m.slice(0,3)]),"month");
+  const res=EVENTS.filter(matches);
+  const active=filt.q||filt.color||filt.cat||filt.month!=="";
+  $("count").textContent=`${res.length} lighting${res.length===1?"":"s"}`;
+  $("clear").hidden=!active;
+  let h="", lastM=-1;
+  res.forEach(e=>{const m=+e.key.slice(5,7)-1; if(m!==lastM){h+=`<div class="group">${MONTHS[m]}</div>`;lastM=m} h+=row(e,false)});
+  $("results").innerHTML = h || `<div class="empty-state">Nothing matches. Try a different color or clear the filters.</div>`;
+  wireRows($("results"));
+}
+$("q").addEventListener("input",e=>{filt.q=e.target.value.trim();renderBrowse()});
+$("clear").onclick=()=>{filt.q="";filt.color="";filt.cat="";filt.month="";$("q").value="";renderBrowse()};
+
+/* ---------- Tabs & nav ---------- */
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".tabs button").forEach(x=>x.classList.toggle("on",x===b));
+  ["upcoming","calendar","browse"].forEach(t=>$("p-"+t).hidden = t!==b.dataset.tab);
+  if(b.dataset.tab==="calendar"){calMonth=fromKey(sel).getMonth();renderCal()}
+});
+$("prevDay").onclick=()=>go(addDays(sel,-1));
+$("nextDay").onclick=()=>go(addDays(sel,1));
+$("todayBtn").onclick=()=>go(TODAY);
+$("datePick").addEventListener("change",e=>{if(e.target.value) go(e.target.value)});
+// swipe on the bridge to change day
+let sx=null,sy=null;
+$("stage").addEventListener("touchstart",e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+$("stage").addEventListener("touchend",e=>{if(sx===null)return;
+  const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)) go(addDays(sel,dx<0?1:-1)); sx=null},{passive:true});
+document.addEventListener("keydown",e=>{ if(e.target.tagName==="INPUT")return;
+  if(e.key==="ArrowLeft") go(addDays(sel,-1)); if(e.key==="ArrowRight") go(addDays(sel,1)); });
+window.addEventListener("hashchange",()=>{const k=readHash(); if(/^\d{4}-\d{2}-\d{2}$/.test(k)&&k!==sel) go(k)});
+
+try{ go(sel); }catch(e){ console.error(e); try{ renderHero(); renderUpcoming(); renderCal(); }catch(_){} }
+try{ renderBrowse(); }catch(e){ console.error(e); }
+</script>
+</body>
+</html>
