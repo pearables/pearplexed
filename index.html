@@ -190,7 +190,7 @@
                          <img src="pear-logo.jpg" alt="Spinning Pear Logo" class="w-24 h-24 animate-spin" style="animation-duration: 3s;">
                     </div>
                     <p class="text-green-400 text-xl mb-8">Click on a topic to explore!</p>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto items-start">
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-8 max-w-4xl mx-auto items-start">
                         <div class="group relative text-center">
                              <div class="absolute w-full -top-8 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                  <p id="how-it-works-link" class="text-teal-300 hover:text-yellow-300 font-vt333 text-lg cursor-pointer flicker-animation">How it Works</p>
@@ -225,7 +225,21 @@
                                 <p class="mt-2 text-xl font-vt323 text-white">Color Universe</p>
                             </div>
                         </div>
-    
+
+                        <!-- START: Bridge Lights tile -->
+                        <div class="group relative text-center">
+                            <div class="absolute w-full -top-8 left-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <p id="how-it-works-bridge-link" class="text-teal-300 hover:text-yellow-300 font-vt333 text-lg cursor-pointer flicker-animation">How it Works</p>
+                            </div>
+                            <div id="bridge-icon-nav" class="cursor-pointer transform group-hover:scale-110 transition-transform">
+                                <div class="bg-indigo-800 p-4 rounded-lg border-4 border-dashed border-pink-500">
+                                    <img src="bridge-icon.png" alt="Bridge Lights Icon" class="w-full h-auto mx-auto rounded-md">
+                                </div>
+                                <p class="mt-2 text-xl font-vt323 text-white">Bridge Lights</p>
+                            </div>
+                        </div>
+                        <!-- END: Bridge Lights tile -->
+
                         <div class="group"> <div class="bg-gray-700 p-4 rounded-lg border-4 border-dashed border-gray-500 opacity-50"> <img src="https://placehold.co/128x128/4B5563/FFFFFF?text=Coming+Soon" alt="Coming Soon" class="w-full h-auto mx-auto rounded-md"> </div> <p class="mt-2 text-xl font-vt323 text-gray-400">???</p> </div>
                     </div>
                 </main>
@@ -653,6 +667,83 @@
 <!-- END: New How It Works Page for Physics -->
 
 
+<!-- START: Bridge Lights page (loads bridge-lights.html from the same folder) -->
+<div id="bridge-page" class="hidden min-h-screen starry-background p-4 md:p-8 flex flex-col">
+    <div class="container mx-auto flex flex-col flex-grow">
+        <header class="flex flex-wrap justify-between items-center gap-3 mb-4 flex-shrink-0">
+            <h1 class="text-4xl md:text-6xl font-vt323 text-teal-300">Bridge Lights</h1>
+            <div class="flex items-center gap-4">
+                <button id="how-it-works-bridge-button" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg pixel-border transition-colors">How it Works</button>
+                <button id="back-from-bridge" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg pixel-border transition-colors">&lt; Back to Home</button>
+            </div>
+        </header>
+        <main class="bg-gray-800 rounded-lg shadow-lg border-2 border-blue-500 flex-grow relative">
+            <iframe id="bridge-lights-frame"
+                    src="bridge-lights.html"
+                    title="Cuomo (Tappan Zee) Bridge Lighting Calendar"
+                    style="width:100%; height:100vh; border:0; border-radius:0.5rem; background:#070b16;">
+            </iframe>
+        </main>
+    </div>
+</div>
+<!-- END: Bridge Lights page -->
+
+
+<!-- START: How It Works page for Bridge Lights -->
+<div id="how-it-works-bridge-page" class="hidden min-h-screen starry-background p-4 md:p-8 flex flex-col">
+    <div class="container mx-auto flex flex-col flex-grow">
+       <header class="flex flex-wrap justify-between items-center gap-3 mb-4 flex-shrink-0">
+           <h1 class="text-4xl md:text-6xl font-vt323 text-yellow-300 flicker-animation">How It All Works</h1>
+           <button id="back-to-bridge-button" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg pixel-border transition-colors">&lt; Back to Bridge</button>
+       </header>
+       <main class="bg-black bg-opacity-50 p-6 rounded-lg border-2 border-cyan-400 flex-grow text-white">
+           <div class="text-lg space-y-10">
+               <div>
+                   <h2 class="text-3xl font-vt323 text-green-400 mb-3">[[ What Is This? ]]</h2>
+                   <p>Every night, the <strong class="text-yellow-300">Governor Mario M. Cuomo Bridge</strong> (still the <strong class="text-yellow-300">Tappan Zee</strong> to most of us) lights up over the Hudson between Tarrytown and South Nyack. Most nights it glows white, but on holidays and awareness days its towers and cables switch to <span class="text-pink-400">c</span><span class="text-yellow-300">o</span><span class="text-green-400">l</span><span class="text-cyan-300">o</span><span class="text-purple-400">r</span>. This module shows what color the bridge is tonight, and on any other night of 2026.</p>
+               </div>
+
+               <div>
+                   <h2 class="text-3xl font-vt323 text-green-400 mb-4">[[ The Control Deck ]]</h2>
+                   <dl class="grid grid-cols-[max-content,1fr] gap-x-4 gap-y-3 text-base">
+                       <dt class="text-yellow-300 font-semibold text-right">Day View:</dt>
+                       <dd>The big bridge picture glows in that night's colors. Use the arrows, swipe the bridge on a phone, or tap the date to jump anywhere in the year. <strong>Today</strong> brings you back to tonight.</dd>
+                       <dt class="text-cyan-300 font-semibold text-right">Upcoming:</dt>
+                       <dd>The next ten special lightings, with "Tonight" and "Tomorrow" flagged.</dd>
+                       <dt class="text-cyan-300 font-semibold text-right">Calendar:</dt>
+                       <dd>A month grid. A color bar under a date means special lighting; no bar means classic white. A <strong>+1</strong> means two occasions share that night.</dd>
+                       <dt class="text-yellow-300 font-semibold text-right">Browse:</dt>
+                       <dd>Search by name, or filter by color, type (holiday, religious, awareness, and so on) and month. Tap any result to see it on the bridge.</dd>
+                   </dl>
+               </div>
+
+               <div>
+                   <h2 class="text-3xl font-vt323 text-green-400 mb-4">[[ Reading the Lights ]]</h2>
+                   <ul class="list-disc list-inside space-y-2">
+                       <li>The dates come from the Thruway Authority's official 2026 lighting calendar (62 occasions).</li>
+                       <li>The official calendar doesn't say what colors are used, so colors come from its photos and from news coverage. Colors marked <strong class="text-yellow-300">&asymp;</strong> are best estimates.</li>
+                       <li>On <strong class="text-green-400">Earth Day</strong>, all decorative lighting is switched off; only the roadway lights stay on.</li>
+                       <li>During bird migration season (about April&ndash;May and mid-August to mid-November), the decorative lights dim from 11 p.m. to dawn.</li>
+                       <li>Local groups can request lightings that aren't published ahead of time, so the bridge may sometimes surprise you.</li>
+                   </ul>
+               </div>
+
+               <div>
+                   <h2 class="text-3xl font-vt323 text-green-400 mb-4 mt-10">[[ Special Thanks!! ]]</h2>
+                   <ul class="list-disc list-inside space-y-2 text-base">
+                       <li><a href="https://www.thruway.ny.gov/the-bridge/lighting" target="_blank" class="text-teal-300 hover:text-yellow-300">NYS Thruway Authority: Bridge Lighting Calendar</a></li>
+                       <li><a href="https://www.aol.com/why-cuomo-bridge-color-tonight-100501146.html" target="_blank" class="text-teal-300 hover:text-yellow-300">The Journal News: Why is the Cuomo Bridge that color tonight?</a></li>
+                       <li><a href="https://www.sierraclub.org/atlantic/lower-hudson/protect-migratory-birds-cuomo-tappan-zee-bridge-lights-will-dim" target="_blank" class="text-teal-300 hover:text-yellow-300">Sierra Club: Bridge lights dim to protect migratory birds</a></li>
+                       <li><a href="https://thehudsonindependent.com/its-the-holiday-season-so-light-em-up/" target="_blank" class="text-teal-300 hover:text-yellow-300">The Hudson Independent: It's the Holiday Season, So Light 'Em Up</a></li>
+                   </ul>
+               </div>
+           </div>
+       </main>
+    </div>
+</div>
+<!-- END: How It Works page for Bridge Lights -->
+
+
 
     </div>
 
@@ -692,9 +783,18 @@ const howItWorksPhysicsLink = document.getElementById('how-it-works-physics-link
 const howItWorksPhysicsButton = document.getElementById('how-it-works-physics-button');
 const backToPhysicsButton = document.getElementById('back-to-physics-button');
 
+// Bridge Lights module
+const bridgePage = document.getElementById('bridge-page');
+const howItWorksBridgePage = document.getElementById('how-it-works-bridge-page');
+const bridgeIconNav = document.getElementById('bridge-icon-nav');
+const backFromBridge = document.getElementById('back-from-bridge');
+const howItWorksBridgeLink = document.getElementById('how-it-works-bridge-link');
+const howItWorksBridgeButton = document.getElementById('how-it-works-bridge-button');
+const backToBridgeButton = document.getElementById('back-to-bridge-button');
+
 
             function showPage(pageToShow) {
-                [homePage, musicPage, howItWorksPage, physicsPage, colorPage, howItWorksColorPage, howItWorksPhysicsPage].forEach(page => { // Add the new page here
+                [homePage, musicPage, howItWorksPage, physicsPage, colorPage, howItWorksColorPage, howItWorksPhysicsPage, bridgePage, howItWorksBridgePage].forEach(page => { // Add the new page here
                     if (page) {
                         page.classList.add('hidden');
                         page.classList.remove('flex');
@@ -736,6 +836,13 @@ if (backFromPhysics) backFromPhysics.addEventListener('click', () => showPage(ho
 if (howItWorksPhysicsLink) howItWorksPhysicsLink.addEventListener('click', () => showPage(howItWorksPhysicsPage));
 if (howItWorksPhysicsButton) howItWorksPhysicsButton.addEventListener('click', () => showPage(howItWorksPhysicsPage));
 if (backToPhysicsButton) backToPhysicsButton.addEventListener('click', () => showPage(physicsPage));
+
+// Click listeners for the Bridge Lights module
+if (bridgeIconNav) bridgeIconNav.addEventListener('click', () => showPage(bridgePage));
+if (backFromBridge) backFromBridge.addEventListener('click', () => showPage(homePage));
+if (howItWorksBridgeLink) howItWorksBridgeLink.addEventListener('click', () => showPage(howItWorksBridgePage));
+if (howItWorksBridgeButton) howItWorksBridgeButton.addEventListener('click', () => showPage(howItWorksBridgePage));
+if (backToBridgeButton) backToBridgeButton.addEventListener('click', () => showPage(bridgePage));
         });
 
         function initMusicExplorer() {
